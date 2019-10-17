@@ -1,0 +1,9 @@
+{
+  "name": "hatespeech_plugin",
+  "version": "1.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qtpham1998/h8bl-ck"
+  }
+}
