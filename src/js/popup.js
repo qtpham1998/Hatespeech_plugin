@@ -24,7 +24,7 @@ const formatNumber = function (count) {
  **/
 (function ()
 {
-    browser.tabs.query({ACTIVE_STR: true, LAST_FOCUSED_WINDOW: true}, function (tabs) {
+    browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
         browser.runtime.sendMessage(
             {
                 type: GET_REQUEST,

@@ -7,6 +7,10 @@
  **/
 const QUESTION_MARK_STR = '?';
 /**
+ * Constant representing a space
+ **/
+const SPACE_STR = ' ';
+/**
  * Constant representing number type
  **/
 const NUMBER_TYPE = 'number';
@@ -14,14 +18,6 @@ const NUMBER_TYPE = 'number';
  * Constant representing string type
  **/
 const STRING_TYPE = 'string';
-/**
- * Constant representing active status
- **/
-const ACTIVE_STR = 'active';
-/**
- * Constant representing last focused window
- **/
-const LAST_FOCUSED_WINDOW = 'lastFocusedWindow';
 /**
  * Constant representing the path to the csv file
  **/
@@ -34,10 +30,6 @@ const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span';
  * Constant representing the max number of elements to inspect
  **/
 const MAX_ELEMENTS = 5000;
-/**
- * Constant representing whitespace regex
- **/
-const WHITESPACE_REGEX = /\S*/;
 /**
  * Constant representing GET
  **/

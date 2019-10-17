@@ -32,7 +32,7 @@ const domInspector = (function ()
      **/
     const _hasOffensiveLanguage = function (text, wordBank)
     {
-        let wordsList = text.split(WHITESPACE_REGEX);
+        let wordsList = text.trim().split(SPACE_STR);
         return wordsList.some(function (word)
         {
             return wordBank.includes(word);
