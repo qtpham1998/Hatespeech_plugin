@@ -1,0 +1,45 @@
+{
+  "name" : "H8BL*CK",
+  "version" : "1.0",
+  "description" : "A hatespeech and offensive language remedial plugin.",
+  "permissions" : ["tabs", "storage"],
+  "background" : {
+    "page" : "background.html"
+  },
+  "browser_action" : {
+    "default_title" : "H8BL*CK",
+    "default_popup" : "popup.html",
+    "default_icon" : {
+      "16" : "/img/get_started16.png",
+      "32" : "/img/get_started32.png",
+      "48" : "/img/get_started48.png",
+      "128" : "/img/get_started128.png"
+    }
+  },
+  "content_scripts" : [
+    {
+      "matches" : [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js" : [
+        "/js/api.js",
+        "/js/lib/jquery-3.4.1.min.js",
+        "/js/contentScript.js"
+      ],
+      "run_at" : "document_idle",
+      "all_frames" : true
+    }
+  ],
+  "icons" : {
+    "16" : "/img/get_started16.png",
+    "32" : "/img/get_started32.png",
+    "48" : "/img/get_started48.png",
+    "128" : "/img/get_started128.png"
+  },
+  "web_accessible_resources" : [
+    "/words/*.csv",
+    "/js/lib/*"
+  ],
+  "manifest_version" : 2
+}
