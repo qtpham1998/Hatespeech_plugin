@@ -4,11 +4,6 @@
  *******************************************************************************/
 
 /**
- * Constant representing the path to the csv file
- **/
-const WORDS_FILE_PATH = '../words/smallOffensiveList.csv';
-
-/**
  * Parses the CSV file and saves data to chrome storage
  * @param data The CSV data
  **/
@@ -19,7 +14,7 @@ const loadWordBank = function(data)
     words.splice(0, 1);
     browser.storage.sync.set({wordBank: words}, function ()
     {
-        console.log('Words loaded: ' + words.toString())
+        console.info(INFO_LOADED_WORDS);
     });
 };
 

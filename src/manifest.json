@@ -25,6 +25,8 @@
       "js" : [
         "/js/api.js",
         "/js/lib/jquery-3.4.1.min.js",
+        "/js/constants.js",
+        "/js/messages.js",
         "/js/contentScript.js"
       ],
       "run_at" : "document_idle",

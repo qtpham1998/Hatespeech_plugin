@@ -6,38 +6,16 @@
 const domInspector = (function ()
 {
     /**
-     * Constant representing HTML tag to be inspected
-     **/
-    const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6';
-    /**
-     * Constant representing the max number of elements to inspect
-     **/
-    const MAX_ELEMENTS = 1000;
-    /**
-     * Constant representing whitespace regex
-     **/
-    const WHITESPACE_REGEX = /\S/;
-    /**
-     * Constant representing the query for active tab
-     **/
-    const ACTIVE_TAB_QUERY = '#tabs :visible';
-    /**
-     * Constant representing the number of offensive words found
-     **/
-    var offensiveWordsCount = 0;
-
-    /**
      * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
      * @return {Array} Array of DOM elements to inspect
      * @protected
      **/
     const _getDomElements = function ()
     {
-        let divElements = $(INSPECTED_TAGS).filter(function (elem)
-        {
-            return WHITESPACE_REGEX.test(elem);
-        }).toArray();
-
+        let divElements = $(INSPECTED_TAGS).toArray();
+        divElements = divElements.filter(function (elem) {
+            return elem.innerText.trim();
+        });
         if (divElements.length > MAX_ELEMENTS)
         {
             divElements.length = MAX_ELEMENTS;
@@ -54,7 +32,7 @@ const domInspector = (function ()
      **/
     const _hasOffensiveLanguage = function (text, wordBank)
     {
-        let wordsList = text.split(' ');
+        let wordsList = text.split(WHITESPACE_REGEX);
         return wordsList.some(function (word)
         {
             return wordBank.includes(word);
@@ -68,14 +46,11 @@ const domInspector = (function ()
      **/
     const _updateTabContextManager = function (offensiveWordsCount)
     {
-        browser.tabs.getCurrent(function (tab) {
-            browser.runtime.sendMessage(
-                {
-                    type: 'setTabData',
-                    value: tab.id,
-                    blocked: offensiveWordsCount
-                })
-        });
+        browser.runtime.sendMessage(
+            {
+                type: POST_REQUEST,
+                value: offensiveWordsCount
+            })
     };
 
     /**
@@ -87,13 +62,13 @@ const domInspector = (function ()
         let divElements = _getDomElements();
         browser.storage.sync.get(['wordBank'], function (result)
         {
-            offensiveWordsCount = 0;
+            var offensiveWordsCount = 0;
             for (var i = divElements.length - 1; i >= 0; i--) {
                 let innerText = divElements[i].innerText;
                 if (_hasOffensiveLanguage(innerText, result.wordBank))
                 {
+                    console.info(INFO_FOUND_TEXT, innerText);
                     offensiveWordsCount++;
-                    console.log("DEBUG - Found word in: " + innerText);
                     // Function call to hide word
                 }
             }
@@ -101,6 +76,7 @@ const domInspector = (function ()
         });
     };
 
-    return _inspectElements()
-})();
+    return _inspectElements();
+});
 
+domInspector();

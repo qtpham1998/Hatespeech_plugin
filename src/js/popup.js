@@ -4,34 +4,38 @@
  *******************************************************************************/
 
 /**
- * Constant representing the query for active tab
+ * Formats number to a string
+ * @param count The number to be formatted
+ * @return {string} The string representing the given number
  **/
-const ACTIVE_TAB_QUERY = '#tabs :visible';
-
 const formatNumber = function (count) {
-    return (typeof count === 'number') ? count.toLocaleString() : count;
+    switch (typeof count) {
+        case NUMBER_TYPE:
+            return count.toLocaleString();
+        case STRING_TYPE:
+            return count;
+        default:
+            return QUESTION_MARK_STR;
+    }
 };
 
 /**
  * Gets the data for given tab ID
- * @param tabId The ID of the current tab
  **/
-const getTabData = async function (tabId)
+(function ()
 {
-    browser.runtime.sendMessage(
-    {
-        type: 'getTabData',
-        value: tabId
-    },
-        function (resp)
-    {
-        const $blockedStats = $('#blocked-num');
-        const message = $blockedStats.html().replace('?', formatNumber(resp.blocked));
-        $blockedStats.html(message);
-    })
-};
-
-(function () {
-    const tabId = $(ACTIVE_TAB_QUERY).attr('id');
-    getTabData(tabId)
+    browser.tabs.query({ACTIVE_STR: true, LAST_FOCUSED_WINDOW: true}, function (tabs) {
+        browser.runtime.sendMessage(
+            {
+                type: GET_REQUEST,
+                value: tabs[0].id
+            },
+            function (resp)
+            {
+                const $blockedStats = $('#blocked-num');
+                const message = $blockedStats.html().replace(QUESTION_MARK_STR, formatNumber(resp.blocked));
+                $blockedStats.html(message);
+            }
+        );
+    });
 })();
