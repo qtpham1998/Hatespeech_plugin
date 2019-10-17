@@ -38,3 +38,11 @@ const GET_REQUEST = 'GET';
  * Constant representing POST
  **/
 const POST_REQUEST = 'POST';
+/**
+ * Constant representing 'offensiveWarning' class for CSS
+ **/
+const OFFENSIVE_WARNING = 'offensiveWarning';
+/**
+ * Constant representing the data attribute key for hiding
+ **/
+const INITIAL_DATA_ATTR = 'data-initial';

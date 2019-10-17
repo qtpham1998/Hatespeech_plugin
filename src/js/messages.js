@@ -32,3 +32,7 @@ const INFO_SET_DATA = 'INFO: Setting data for tab %d, with offensive word count 
  * </ul>
  **/
 const INFO_FOUND_TEXT = 'INFO: Found offensive word in following \"%s\"';
+/**
+ * Message warning about offensive content
+ **/
+const WARN_OFFENSIVE_TEXT = '[Text contains offensive language]';

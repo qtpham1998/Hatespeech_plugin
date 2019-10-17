@@ -35,7 +35,7 @@ const domInspector = (function ()
         let wordsList = text.trim().split(SPACE_STR);
         return wordsList.some(function (word)
         {
-            return wordBank.includes(word);
+            return wordBank.includes(word.toLowerCase());
         });
     };
 
@@ -54,6 +54,17 @@ const domInspector = (function ()
     };
 
     /**
+     * Hides the element in the page
+     * @param $elem The jQuey element to hide
+     **/
+    const _hideDomELement = function ($elem)
+    {
+        $elem.attr(INITIAL_DATA_ATTR, $elem.html());
+        $elem.html(WARN_OFFENSIVE_TEXT);
+        $elem.addClass(OFFENSIVE_WARNING);
+    };
+
+    /**
      * Iterates over the web page's elements and inspects them
      * @return {int} The number of offensive words found in the page
      **/
@@ -69,7 +80,7 @@ const domInspector = (function ()
                 {
                     console.info(INFO_FOUND_TEXT, innerText);
                     offensiveWordsCount++;
-                    // Function call to hide word
+                    _hideDomELement($(divElements[i]));
                 }
             }
             _updateTabContextManager(offensiveWordsCount);

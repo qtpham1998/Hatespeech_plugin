@@ -8,6 +8,7 @@
     margin-bottom: 10px;
 }
 
+/* To change the colour of the popup to red */
 #blocked-num {
     color: red;
 }
