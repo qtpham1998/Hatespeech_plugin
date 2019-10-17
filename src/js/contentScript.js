@@ -49,7 +49,7 @@ const domInspector = (function ()
         browser.runtime.sendMessage(
             {
                 type: POST_REQUEST,
-                value: offensiveWordsCount
+                blocked: offensiveWordsCount
             })
     };
 

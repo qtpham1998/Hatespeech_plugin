@@ -34,19 +34,40 @@ const hBlock = {
 };
 
 /**
+ * Changes the plugin icon depending on whether offensive words were detected or not
+ **/
+const updateToolbarIcon = function(blocked)
+{
+    const imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
+    browser.browserAction.setIcon({path: imagePath});
+};
+
+/**
  * Listener for tab data queries, calls function according to the message type
  **/
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
+    var blocked;
     switch (req.type)
     {
         case GET_REQUEST:
-            resp({blocked: hBlock.lookUp(req.value)});
-            return;
+            blocked = hBlock.lookUp(req.tabId);
+            resp({blocked: blocked});
+            break;
         case POST_REQUEST:
-            hBlock.setData(sender.tab.id, req.value);
-            return;
+            blocked = req.blocked;
+            hBlock.setData(sender.tab.id, req.blocked);
+            break;
         default:
-            return;
+            break;
     }
+    updateToolbarIcon(blocked);
+});
+
+/**
+ * Listener for when active tab changes, updated toolbar icon
+ **/
+browser.tabs.onActivated.addListener(function (activeInfo)
+{
+    updateToolbarIcon(hBlock.lookUp(activeInfo.tabId));
 });

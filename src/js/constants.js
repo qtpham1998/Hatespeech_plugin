@@ -23,6 +23,14 @@ const STRING_TYPE = 'string';
  **/
 const WORDS_FILE_PATH = '../words/smallOffensiveList.csv';
 /**
+ * Constant representing the path to the blue icon image
+ **/
+const BLUE_ICON_PATH = '/img/plugin_blue_icon.png';
+/**
+ * Constant representing the path to the red icon image
+ **/
+const RED_ICON_PATH = '/img/plugin_darkred_icon.png';
+/**
  * Constant representing HTML tag to be inspected
  **/
 const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span';

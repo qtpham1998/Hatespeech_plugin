@@ -28,7 +28,7 @@ const formatNumber = function (count) {
         browser.runtime.sendMessage(
             {
                 type: GET_REQUEST,
-                value: tabs[0].id
+                tabId: tabs[0].id
             },
             function (resp)
             {

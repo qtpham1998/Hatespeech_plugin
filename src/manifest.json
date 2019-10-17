@@ -9,12 +9,7 @@
   "browser_action" : {
     "default_title" : "H8BL*CK",
     "default_popup" : "popup.html",
-    "default_icon" : {
-      "16" : "/img/get_started16.png",
-      "32" : "/img/get_started32.png",
-      "48" : "/img/get_started48.png",
-      "128" : "/img/get_started128.png"
-    }
+    "default_icon" : "/img/plugin_darkred_icon.png"
   },
   "content_scripts" : [
     {
@@ -36,10 +31,10 @@
     }
   ],
   "icons" : {
-    "16" : "/img/get_started16.png",
-    "32" : "/img/get_started32.png",
-    "48" : "/img/get_started48.png",
-    "128" : "/img/get_started128.png"
+    "16" : "/img/plugin_darkred_icon.png",
+    "32" : "/img/plugin_darkred_icon.png",
+    "48" : "/img/plugin_darkred_icon.png",
+    "128" : "/img/plugin_darkred_icon.png"
   },
   "web_accessible_resources" : [
     "/words/*.csv",
