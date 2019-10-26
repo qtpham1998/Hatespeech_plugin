@@ -8,6 +8,12 @@
  **/
 const INFO_LOADED_WORDS = 'INFO: Loaded words into storage.';
 
+
+/**
+ * Message indicating power is set to off
+ **/
+const INFO_POWER_OFF = 'INFO: Power is switched On.';
+
 /**
  * Message indicating the tab's data is being fetched
  * <ul>

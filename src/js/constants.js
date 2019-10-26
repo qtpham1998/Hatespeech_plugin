@@ -31,6 +31,10 @@ const BLUE_ICON_PATH = '/img/plugin_blue_icon.png';
  **/
 const RED_ICON_PATH = '/img/plugin_darkred_icon.png';
 /**
+ * Constant representing the path to the grey icon image
+ **/
+const GREY_ICON_PATH = '/img/plugin_grey_icon.png';
+/**
  * Constant representing HTML tag to be inspected
  **/
 const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span';
@@ -54,3 +58,11 @@ const OFFENSIVE_WARNING = 'offensiveWarning';
  * Constant representing the data attribute key for hiding
  **/
 const INITIAL_DATA_ATTR = 'data-initial';
+/*
+*Constant sending command to switch off plugin
+*/
+const SWITCH_OFF = 'switch-off'
+/*
+*Constant sending command to switch on plugin
+*/
+const SWITCH_ON = 'switch-on'

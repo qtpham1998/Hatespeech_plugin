@@ -9,14 +9,25 @@
 </head>
 <body>
 <div class="ui basic segment">
+    <div class = "Row">
+      <div class = "Column" style="display: inline-block;">
     <h2 class="ui header">
         <div class="content">
             H8BL*CK
             <div class="sub header">Protecting you from hate</div>
         </div>
-    </h2>
+            </h2>
+      </div>
+    <div class = "Column" style="display: inline-block; padding-left: 50px">
+      <div class="overlay">
+      <a id = "link">
+      <img id="power-button" src="/img/red_button.png" style="width: 50px; height: 43px; display: inline-block;">
+    </a>
+    </div>
+    </div>
+  </div>
 </div>
-<div class="ui container center aligned">
+<div id="blocked-words" class="ui container center aligned">
     <div class="ui statistic">
         <div class="value" id="blocked-num">
             <i class="ban icon"></i> ?
@@ -30,4 +41,5 @@
 <script src="js/api.js"></script>
 <script src="js/lib/semantic.min.js"></script>
 <script src="js/popup.js"></script>
+<script src="js/revert.js"></script>
 </html>

@@ -34,12 +34,19 @@ const hBlock = {
 };
 
 /**
- * Changes the plugin icon depending on whether offensive words were detected or not
+ * Changes the plugin icon depending on whether the plugin is switched on and if offensive words were detected or not
  **/
 const updateToolbarIcon = function(blocked)
 {
-    const imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
-    browser.browserAction.setIcon({path: imagePath});
+    browser.storage.sync.get(['powerOff'], function(result){
+      var imagePath;
+      if(result.powerOff){
+        imagePath = GREY_ICON_PATH;
+      }else{
+        imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
+      }
+      browser.browserAction.setIcon({path: imagePath});
+    });
 };
 
 /**
@@ -48,6 +55,7 @@ const updateToolbarIcon = function(blocked)
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
     var blocked;
+    console.info('Im hereeeeeeeeeeeeeee');
     switch (req.type)
     {
         case GET_REQUEST:
