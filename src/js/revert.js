@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
    chrome.tabs.sendMessage(tabs[0].id, {command: SWITCH_OFF}, function(response){
-     console.log(response.result);
+     console.log(INFO_POWER_OFF);
    });
  });
 }else{
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
   $("#blocked-words").removeAttr("style");
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 chrome.tabs.sendMessage(tabs[0].id, {command: SWITCH_ON}, function(response){
- console.log(response.result);
+ console.log(INFO_POWER_ON);
 });
 });
 

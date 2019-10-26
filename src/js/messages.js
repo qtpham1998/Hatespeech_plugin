@@ -12,7 +12,12 @@ const INFO_LOADED_WORDS = 'INFO: Loaded words into storage.';
 /**
  * Message indicating power is set to off
  **/
-const INFO_POWER_OFF = 'INFO: Power is switched On.';
+const INFO_POWER_OFF = 'INFO: Power is switched Off.';
+
+/**
+ * Message indicating power is set to on
+ **/
+const INFO_POWER_ON = 'INFO: Power is switched On.';
 
 /**
  * Message indicating the tab's data is being fetched
