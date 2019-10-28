@@ -34,12 +34,19 @@ const hBlock = {
 };
 
 /**
- * Changes the plugin icon depending on whether offensive words were detected or not
+ * Changes the plugin icon depending on whether the plugin is switched on and if offensive words were detected or not
  **/
 const updateToolbarIcon = function(blocked)
 {
-    const imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
-    browser.browserAction.setIcon({path: imagePath});
+    browser.storage.sync.get(['power'], function(result){
+      var imagePath;
+      if(!result.power){
+        imagePath = GREY_ICON_PATH;
+      }else{
+        imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
+      }
+      browser.browserAction.setIcon({path: imagePath});
+    });
 };
 
 /**

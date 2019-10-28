@@ -3,6 +3,11 @@
     margin: 0;
 }
 
+/*reduce brightness of power button when hover above*/
+#power-button:hover {
+  filter: brightness(50%);
+}
+
 /* To add some space between statistic and bottom border */
 .ui.container.center.aligned {
     margin-bottom: 10px;

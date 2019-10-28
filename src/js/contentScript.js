@@ -3,25 +3,42 @@
  *  JavaScript file to be injected into specified pages
  *******************************************************************************/
 
+ /**
+  * Iterates over the web page's offensive word and show them
+  **/
+ const _revertElements = function ()
+ {
+     $(OFFENSIVE_WARNING_CLASS).each(function(i, dom){
+       var oldText = $(dom).attr(INITIAL_DATA_ATTR);
+       $(dom).removeAttr(INITIAL_DATA_ATTR);
+       $(dom).html(oldText);
+       $(dom).removeClass(OFFENSIVE_WARNING);
+     })
+ };
+
+
 const domInspector = (function ()
 {
+
+
     /**
-     * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
-     * @return {Array} Array of DOM elements to inspect
-     * @protected
-     **/
+    * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
+    * @return {Array} Array of DOM elements to inspect
+    * @protected
+    **/
     const _getDomElements = function ()
     {
         let divElements = $(INSPECTED_TAGS).toArray();
         divElements = divElements.filter(function (elem) {
             return elem.innerText.trim();
-        });
-        if (divElements.length > MAX_ELEMENTS)
-        {
+          });
+          if (divElements.length > MAX_ELEMENTS)
+          {
             divElements.length = MAX_ELEMENTS;
-        }
-        return divElements;
-    };
+          }
+          return divElements;
+        };
+
 
     /**
      * Checks whether the given string contains offensive languages
@@ -90,4 +107,25 @@ const domInspector = (function ()
     return _inspectElements();
 });
 
-domInspector();
+/*
+* Receive request from plugin to power on or power off and hide or show hate speech
+*/
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
+     if(request.command === SWITCH_OFF){
+         _revertElements();
+     }else if (request.command === SWITCH_ON){
+         domInspector();
+     }
+     sendResponse({result: "success"});
+ });
+
+
+/*
+* On opening a new tab, check if the plugin if switched on before blocking the words
+*/
+ browser.storage.sync.get(['power'], function (result)
+ {
+    if(result.power){
+        domInspector();
+ }
+ });

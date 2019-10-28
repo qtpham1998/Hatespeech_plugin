@@ -19,6 +19,18 @@ const loadWordBank = function(data)
 };
 
 /**
+ * Turn on the plugin on installation
+ **/
+const setPowerOn = function()
+{
+  browser.storage.sync.set({power: true}, function ()
+  {
+      console.info(INFO_POWER_ON);
+  });
+}
+
+
+/**
  * Loads CSV file on installation/update
  **/
 browser.runtime.onInstalled.addListener(function()
@@ -28,7 +40,10 @@ browser.runtime.onInstalled.addListener(function()
             type: 'GET',
             url: browser.runtime.getURL(WORDS_FILE_PATH),
             dataType: 'text',
-            success: function (response) {loadWordBank(response);}
+            success: function (response){
+                          loadWordBank(response);
+                          setPowerOn();
+                          }
         });
     }
 );
