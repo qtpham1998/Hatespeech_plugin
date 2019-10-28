@@ -3,36 +3,39 @@ add listener to the power button and send request to tab based on power on or po
 */
 
 document.addEventListener('DOMContentLoaded', function() {
-    var link = document.getElementById('link');
+
     // onClick's logic below:
-    link.addEventListener('click', function() {
+    $(LINK).click(function() {
 
-      browser.storage.sync.get(['powerOff'], function(result){
+      browser.storage.sync.get(['power'], function(result){
 
-      if(!result.powerOff){
-      browser.browserAction.setIcon({path: GREY_ICON_PATH});
-      $("#power-button").attr('src',"/img/green_button.png");
-      $("#blocked-words").css({"display":"none"});
+      if(result.power){
+        browser.browserAction.setIcon({path: GREY_ICON_PATH});
+        $(POWER_BUTTON).attr(SRC,GREEN_BUTTON_PATH);
+        $(BLOCKED_WORDS).css({"display":"none"});
 
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-   chrome.tabs.sendMessage(tabs[0].id, {command: SWITCH_OFF}, function(response){
-     console.log(INFO_POWER_OFF);
-   });
- });
-}else{
+        browser.tabs.getAllInWindow(null, function(tabs) {
+        for(var i = 0; i < tabs.length; i++){
+           browser.tabs.sendMessage(tabs[i].id, {command: SWITCH_OFF}, function(response){
+           });
+         }
+       });
+     }else{
 
-  $("#power-button").attr('src',"/img/red_button.png");
-  $("#blocked-words").removeAttr("style");
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-chrome.tabs.sendMessage(tabs[0].id, {command: SWITCH_ON}, function(response){
- console.log(INFO_POWER_ON);
-});
-});
+       $(POWER_BUTTON).attr(SRC,RED_BUTTON_PATH);
+       $(BLOCKED_WORDS).removeAttr("style");
 
-}
+       browser.tabs.getAllInWindow(null, function(tabs) {
+         for(var i = 0; i < tabs.length; i++){
+           browser.tabs.sendMessage(tabs[i].id, {command: SWITCH_ON}, function(response){
+           });
+         }
+       });
 
-browser.storage.sync.set({powerOff: !result.powerOff}, function (){});
+     }
 
-});
+     browser.storage.sync.set({power: !result.power}, function (){});
+
     });
+      });
 });

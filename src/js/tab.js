@@ -38,9 +38,9 @@ const hBlock = {
  **/
 const updateToolbarIcon = function(blocked)
 {
-    browser.storage.sync.get(['powerOff'], function(result){
+    browser.storage.sync.get(['power'], function(result){
       var imagePath;
-      if(result.powerOff){
+      if(!result.power){
         imagePath = GREY_ICON_PATH;
       }else{
         imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
@@ -55,7 +55,6 @@ const updateToolbarIcon = function(blocked)
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
     var blocked;
-    console.info('Im hereeeeeeeeeeeeeee');
     switch (req.type)
     {
         case GET_REQUEST:

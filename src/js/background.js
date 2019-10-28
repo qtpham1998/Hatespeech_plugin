@@ -21,11 +21,11 @@ const loadWordBank = function(data)
 /**
  * Turn on the plugin on installation
  **/
-const setPowerOff = function()
+const setPowerOn = function()
 {
-  browser.storage.sync.set({powerOff: false}, function ()
+  browser.storage.sync.set({power: true}, function ()
   {
-      console.info(INFO_POWER_OFF);
+      console.info(INFO_POWER_ON);
   });
 }
 
@@ -40,7 +40,10 @@ browser.runtime.onInstalled.addListener(function()
             type: 'GET',
             url: browser.runtime.getURL(WORDS_FILE_PATH),
             dataType: 'text',
-            success: function (response) {loadWordBank(response); setPowerOff();}
+            success: function (response){
+                          loadWordBank(response);
+                          setPowerOn();
+                          }
         });
     }
 );

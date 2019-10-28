@@ -41,13 +41,13 @@ const formatNumber = function (count) {
 })();
 
 /**
- * On startUp, Change the power button to green
-  and hide hateblock words if the plugin is switched off
- **/
-browser.storage.sync.get(['powerOff'], function(result){
-  if(result.powerOff){ 
-  $("#power-button").attr('src',"/img/green_button.png");
-  $("#blocked-words").css({"display":"none"});
-}
+* On startUp, change the power button to green
+* and hide hateblock words if the plugin is switched off
+**/
+browser.storage.sync.get(['power'], function(result){
+  if(!result.power){
+    $(POWER_BUTTON).attr(SRC,GREEN_BUTTON_PATH);
+    $(BLOCKED_WORDS).css({"display":"none"});
+  }
 
 });

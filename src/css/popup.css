@@ -1,10 +1,11 @@
 /*To make the gap between the title and the statistic smaller*/
-.overlay:hover {
-  filter: brightness(50%);
-}
-
 .ui.basic.segment {
     margin: 0;
+}
+
+/*reduce brightness of power button when hover above*/
+#power-button:hover {
+  filter: brightness(50%);
 }
 
 /* To add some space between statistic and bottom border */
