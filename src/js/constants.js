@@ -94,3 +94,11 @@ const BLOCKED_WORDS = "#blocked-words";
 *Constant representing link id
 */
 const LINK = "#link";
+/**
+ * Constant representing Twitter host name
+ **/
+const TWITTER = "twitter.com";
+/**
+ * Constant representing Facebook host name
+ **/
+const FACEBOOK = "facebook.com";
