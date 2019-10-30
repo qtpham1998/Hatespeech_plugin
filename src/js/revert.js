@@ -9,11 +9,11 @@
  **/
 const sendPowerCommand = function (command)
 {
-    browser.tabs.getAllInWindow(null, function(tabs)
+    browser.tabs.getAllInWindow(null, function (tabs)
     {
         for(var i = 0; i < tabs.length; i++)
         {
-            browser.tabs.sendMessage(tabs[i].id, {command: command}, function(response){});
+            browser.tabs.sendMessage(tabs[i].id, {command: command}, function (response) {});
         }
     });
 };
@@ -21,7 +21,7 @@ const sendPowerCommand = function (command)
 /**
  * Switches on the plugin
  **/
-const switchOnPlugin = function()
+const switchOnPlugin = function ()
 {
     $(POWER_BUTTON_ID).attr(SRC_ATTR, RED_BUTTON_PATH);
     $(BLOCKED_WORDS_ID).removeClass(DISPLAY_NONE);
@@ -30,7 +30,7 @@ const switchOnPlugin = function()
 /**
  * Switches off the plugin
  **/
-const switchOffPlugin = function()
+const switchOffPlugin = function ()
 {
     browser.browserAction.setIcon({path: GREY_ICON_PATH});
     $(POWER_BUTTON_ID).attr(SRC_ATTR, GREEN_BUTTON_PATH);
@@ -40,9 +40,9 @@ const switchOffPlugin = function()
 /**
  * Add function to the power button and send request switch on/off commands to tabs when pressed
  **/
-$(LINK_ID).click(function()
+$(LINK_ID).click(function ()
 {
-    browser.storage.sync.get(['power'], function(result)
+    browser.storage.sync.get(['power'], function (result)
     {
         if (result.power)
         {
@@ -56,7 +56,7 @@ $(LINK_ID).click(function()
             sendPowerCommand(SWITCH_ON);
             console.info(INFO_POWER_ON);
         }
-        browser.storage.sync.set({power: !result.power}, function (){});
+        browser.storage.sync.set({power: !result.power}, function () {});
     });
 });
 

@@ -6,12 +6,22 @@
 /**
  * Parses the CSV file and saves data to chrome storage
  * @param data The CSV data
+ * @return {Array} The list of offensive words loaded from csv file
  **/
-const loadWordBank = function(data)
+const parseCsvFile = function(data)
 {
     var words = [];
     $.csv.toArrays(data).forEach((element) => words.push(element[1]));
     words.splice(0, 1);
+    return words;
+};
+
+/**
+ * Stores arrays of offensive workds in browser storage
+ * @param words The array of offensive words
+ **/
+const storeWordBank = function(words)
+{
     browser.storage.sync.set({wordBank: words}, function ()
     {
         console.info(INFO_LOADED_WORDS);
@@ -29,11 +39,10 @@ const setPowerOn = function()
     });
 };
 
-
 /**
  * Loads CSV file on installation/update
  **/
-browser.runtime.onInstalled.addListener(function()
+browser.runtime.onInstalled.addListener(function ()
     {
         $.ajax(
         {
@@ -42,7 +51,7 @@ browser.runtime.onInstalled.addListener(function()
             dataType: TEXT_TYPE,
             success: function (response)
             {
-                loadWordBank(response);
+                storeWordBank(parseCsvFile(response));
                 setPowerOn();
             }
         });

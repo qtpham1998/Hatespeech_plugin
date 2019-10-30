@@ -8,8 +8,10 @@
  * @param count The number to be formatted
  * @return {string} The string representing the given number
  **/
-const formatNumber = function (count) {
-    switch (typeof count) {
+const formatNumber = function (count)
+{
+    switch (typeof count)
+    {
         case NUMBER_TYPE:
             return count.toLocaleString();
         case STRING_TYPE:
@@ -24,9 +26,10 @@ const formatNumber = function (count) {
  **/
 const updateBlockedData = function ()
 {
-    browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+    browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs)
+    {
         browser.runtime.sendMessage(
-            {
+    {
                 type: GET_REQUEST,
                 tabId: tabs[0].id
             },
@@ -40,15 +43,13 @@ const updateBlockedData = function ()
     });
 };
 
+updateBlockedData();
 /**
 * On start up, changes the power button to green and hides word count if the plugin is switched off
 **/
-browser.storage.sync.get(['power'], function(result){
-    if (result.power)
-    {
-        updateBlockedData();
-    }
-    else
+browser.storage.sync.get(['power'], function (result)
+{
+    if (!result.power)
     {
         switchOffPlugin();
     }
