@@ -9,7 +9,7 @@
  **/
 const getDomElements = function ()
 {
-    let divElements = $(INSPECTED_TAGS).toArray();
+    const divElements = $(INSPECTED_TAGS).toArray();
     divElements = divElements.filter(function (elem)
     {
         return elem.innerText.trim();
@@ -29,7 +29,7 @@ const getDomElements = function ()
  **/
 const hasOffensiveLanguage = function (text, wordBank)
 {
-    let wordsList = text.trim().split(SPACE_STR);
+    const wordsList = text.trim().split(SPACE_STR);
     return wordsList.some(function (word)
     {
         return wordBank.includes(word.toLowerCase());
@@ -80,13 +80,13 @@ const revertElements = function ()
  **/
 const inspectElements = function ()
 {
-    let divElements = getDomElements();
+    const divElements = getDomElements();
     browser.storage.sync.get(['wordBank'], function (result)
     {
         var offensiveWordsCount = 0;
         for (var i = divElements.length - 1; i >= 0; i--)
         {
-            let innerText = divElements[i].innerText;
+            const innerText = divElements[i].innerText;
             if (hasOffensiveLanguage(innerText, result.wordBank))
             {
                 console.info(INFO_FOUND_TEXT, innerText);

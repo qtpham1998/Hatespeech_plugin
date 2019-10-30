@@ -2,13 +2,11 @@ language: node_js
 sudo: false
 node_js: "stable"
 install: npm install
-before_script: npm install grunt-cli -g
+before_script: babel src/js src/js -d build
 env:
   matrix:
     - BROWSER=chromium EXT=zip
-script:
-  - npm test
-  - bash ./scripts/build-${BROWSER}.sh
+after_script: bash ./scripts/build-${BROWSER}.sh
 deploy:
   provider: releases
   api_key:

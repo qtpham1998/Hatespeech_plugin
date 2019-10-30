@@ -11,7 +11,10 @@
 const parseCsvFile = function(data)
 {
     var words = [];
-    $.csv.toArrays(data).forEach((element) => words.push(element[1]));
+    $.csv.toArrays(data).forEach(function(element)
+    {
+        words.push(element[1])
+    });
     words.splice(0, 1);
     return words;
 };

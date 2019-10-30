@@ -2,8 +2,8 @@ QUnit.module('Test: popup.js');
 
 QUnit.test('FormatNumberTest', function (assert)
 {
-    let numberInput = formatNumber(5);
-    let stringInput = formatNumber('10');
+    const numberInput = formatNumber(5);
+    const stringInput = formatNumber('10');
 
     assert.equal(typeof numberInput, STRING_TYPE, 'Number input returns string.');
     assert.deepEqual(numberInput, '5', 'Number input return correct output.');

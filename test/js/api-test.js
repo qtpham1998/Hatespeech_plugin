@@ -2,19 +2,19 @@
  *  H8BL*CK - a hatespeech and offensive language remedial plugin
  *  JavaScript file for mock browser used in testing
  *******************************************************************************/
-browser =
+const browser =
 {
     runtime:
     {
         onMessage:
         {
-            addListener (callback) {}
+            addListener(callback) {}
         },
         onInstalled:
         {
-            addListener (callback) {}
+            addListener(callback) {}
         },
-        sendMessage (request, callback)
+        sendMessage(request, callback)
         {
             // Popup blocked data mock
             callback({blocked: 13})
@@ -25,7 +25,7 @@ browser =
     {
         sync:
         {
-            get (list, callback)
+            get(list, callback)
             {
                 callback({power: false});
             }
@@ -36,9 +36,9 @@ browser =
     {
         onActivated:
         {
-            addListener (callback) {}
+            addListener(callback) {}
         },
-        getAllInWindow (param, callback) {},
+        getAllInWindow(param, callback) {},
         query(data, callback)
         {
             callback([{id: 1234}]);
@@ -47,6 +47,6 @@ browser =
 
     browserAction:
     {
-        setIcon (params) {}
+        setIcon(params) {}
     }
 };

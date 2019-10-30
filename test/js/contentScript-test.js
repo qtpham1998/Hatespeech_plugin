@@ -2,11 +2,11 @@ QUnit.module('Test: contentScript.js');
 
 QUnit.test('GetDomElementsTest', function (assert)
 {
-   let words = getDomElements();
+   const words = getDomElements();
 
    // QUnit sometimes adds elements to the page
    assert.ok(words.length === 15 || words.length === 25, 'Queried elements count.');
-   assert.ok(words.includes(''), 'No empty string fetched.');
+   assert.notOk(words.includes(''), 'No empty string fetched.');
 });
 
 QUnit.test('HasOffensiveLanguageTest', function (assert)
@@ -22,7 +22,7 @@ QUnit.test('HasOffensiveLanguageTest', function (assert)
 
 QUnit.test('HideDomElementTest', function (assert)
 {
-   $offensiveElem = $('p:contains(arse)');
+   const $offensiveElem = $('p:contains(arse)');
    const content = $offensiveElem.text();
    hideDomELement($offensiveElem);
 
@@ -34,7 +34,7 @@ QUnit.test('HideDomElementTest', function (assert)
 
 QUnit.test('RevertElementsTest', function (assert)
 {
-   $offensiveElem = $('p:contains(arse)');
+   const $offensiveElem = $('p:contains(arse)');
    const content = $offensiveElem.text();
    hideDomELement($offensiveElem);
    revertElements();
