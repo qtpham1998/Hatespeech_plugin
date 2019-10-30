@@ -2,7 +2,7 @@ language: node_js
 sudo: false
 node_js: "stable"
 install: npm install
-before_script: babel src/js src/js -d build
+before_script: babel src/js test/js -d build
 env:
   matrix:
     - BROWSER=chromium EXT=zip

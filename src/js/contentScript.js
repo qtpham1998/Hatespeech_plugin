@@ -9,7 +9,7 @@
  **/
 const getDomElements = function ()
 {
-    const divElements = $(INSPECTED_TAGS).toArray();
+    var divElements = $(INSPECTED_TAGS).toArray();
     divElements = divElements.filter(function (elem)
     {
         return elem.innerText.trim();
