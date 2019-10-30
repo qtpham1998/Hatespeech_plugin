@@ -70,29 +70,29 @@ const OFFENSIVE_WARNING_CLASS = '.offensiveWarning';
  * Constant representing the data attribute key for hiding
  **/
 const INITIAL_DATA_ATTR = 'data-initial';
-/*
-*Constant sending command to switch off plugin
-*/
+/**
+ * Constant sending command to switch off plugin
+ **/
 const SWITCH_OFF = 'switch-off';
-/*
-*Constant sending command to switch on plugin
-*/
+/**
+ * Constant sending command to switch on plugin
+ **/
 const SWITCH_ON = 'switch-on';
-/*
-*Constant representing source file
-*/
+/**
+ * Constant representing source file
+ **/
 const SRC = 'src';
-/*
-*Constant representing power button id
-*/
+/**
+ * Constant representing power button id
+ **/
 const POWER_BUTTON = "#power-button";
-/*
-*Constant representing blocked words id
-*/
+/**
+ * Constant representing blocked words id
+ **/
 const BLOCKED_WORDS = "#blocked-words";
-/*
-*Constant representing link id
-*/
+/**
+ * Constant representing link id
+ **/
 const LINK = "#link";
 /**
  * Constant representing Twitter host name
@@ -102,3 +102,11 @@ const TWITTER = "twitter.com";
  * Constant representing Facebook host name
  **/
 const FACEBOOK = "facebook.com";
+/**
+ * Constant representing warnedUnsupported tag
+ **/
+const WARNED_UNSUPPORTED_TAG = "warnedUnsupported";
+/**
+ * Constant representing true string
+ **/
+const TRUE = "true";

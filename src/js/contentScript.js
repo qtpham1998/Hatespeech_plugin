@@ -125,10 +125,10 @@ const _isUnsupportedPage = function (hostname)
 const _checkSupported = function ()
 {
     if (_isUnsupportedPage(window.location.hostname)) {
-        var warnedUnsupported = localStorage.getItem('warnedUnsupported') || '';
-        if (warnedUnsupported !== 'yes') {
+        var warnedUnsupported = localStorage.getItem(WARNED_UNSUPPORTED_TAG);
+        if (warnedUnsupported !== TRUE) {
             alert(WARN_UNSUPPORTED_PAGE);
-            localStorage.setItem('warnedUnsupported','yes');
+            localStorage.setItem(WARNED_UNSUPPORTED_TAG, TRUE);
         }
     } else {
         domInspector();
