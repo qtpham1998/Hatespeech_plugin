@@ -22,7 +22,7 @@ const formatNumber = function (count) {
 /**
  * Gets the data for given tab ID
  **/
-(function ()
+const updateBlockedData = function ()
 {
     browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
         browser.runtime.sendMessage(
@@ -32,22 +32,24 @@ const formatNumber = function (count) {
             },
             function (resp)
             {
-                const $blockedStats = $('#blocked-num');
+                const $blockedStats = $(BLOCKED_NUM_ID);
                 const message = $blockedStats.html().replace(QUESTION_MARK_STR, formatNumber(resp.blocked));
                 $blockedStats.html(message);
             }
         );
     });
-})();
+};
 
 /**
-* On startUp, change the power button to green
-* and hide hateblock words if the plugin is switched off
+* On start up, changes the power button to green and hides word count if the plugin is switched off
 **/
 browser.storage.sync.get(['power'], function(result){
-  if(!result.power){
-    $(POWER_BUTTON).attr(SRC,GREEN_BUTTON_PATH);
-    $(BLOCKED_WORDS).css({"display":"none"});
-  }
-
+    if (result.power)
+    {
+        updateBlockedData();
+    }
+    else
+    {
+        switchOffPlugin();
+    }
 });

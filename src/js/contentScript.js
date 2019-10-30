@@ -6,21 +6,19 @@
  /**
   * Iterates over the web page's offensive word and show them
   **/
- const _revertElements = function ()
- {
-     $(OFFENSIVE_WARNING_CLASS).each(function(i, dom){
-       var oldText = $(dom).attr(INITIAL_DATA_ATTR);
-       $(dom).removeAttr(INITIAL_DATA_ATTR);
-       $(dom).html(oldText);
-       $(dom).removeClass(OFFENSIVE_WARNING);
-     })
- };
-
+const revertElements = function ()
+{
+    $(OFFENSIVE_WARNING_CLASS).each(function(i, dom)
+    {
+        $dom = $(dom);
+        $dom.html($dom.attr(INITIAL_DATA_ATTR));
+        $dom.removeAttr(INITIAL_DATA_ATTR);
+        $dom.removeClass(OFFENSIVE_WARNING);
+    })
+};
 
 const domInspector = (function ()
 {
-
-
     /**
     * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
     * @return {Array} Array of DOM elements to inspect
@@ -107,25 +105,28 @@ const domInspector = (function ()
     return _inspectElements();
 });
 
-/*
-* Receive request from plugin to power on or power off and hide or show hate speech
-*/
+/**
+ * Receive request from plugin to power on or power off and hide or show hate speech
+ **/
 browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
-     if(request.command === SWITCH_OFF){
-         _revertElements();
-     }else if (request.command === SWITCH_ON){
-         domInspector();
-     }
-     sendResponse({result: "success"});
- });
+    switch (request.command) {
+        case SWITCH_ON:
+            domInspector();
+            break;
+        case SWITCH_OFF:
+            revertElements();
+            break;
+    }
+});
 
 
-/*
-* On opening a new tab, check if the plugin if switched on before blocking the words
-*/
- browser.storage.sync.get(['power'], function (result)
- {
-    if(result.power){
+/**
+ * On opening a new tab, check if the plugin if switched on before blocking the words
+ **/
+browser.storage.sync.get(['power'], function (result)
+{
+    if (result.power)
+    {
         domInspector();
- }
- });
+    }
+});

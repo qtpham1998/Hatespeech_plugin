@@ -23,11 +23,11 @@ const loadWordBank = function(data)
  **/
 const setPowerOn = function()
 {
-  browser.storage.sync.set({power: true}, function ()
-  {
-      console.info(INFO_POWER_ON);
-  });
-}
+    browser.storage.sync.set({power: true}, function ()
+    {
+        console.info(INFO_POWER_ON);
+    });
+};
 
 
 /**
@@ -37,13 +37,14 @@ browser.runtime.onInstalled.addListener(function()
     {
         $.ajax(
         {
-            type: 'GET',
+            type: GET_REQUEST,
             url: browser.runtime.getURL(WORDS_FILE_PATH),
-            dataType: 'text',
-            success: function (response){
-                          loadWordBank(response);
-                          setPowerOn();
-                          }
+            dataType: TEXT_TYPE,
+            success: function (response)
+            {
+                loadWordBank(response);
+                setPowerOn();
+            }
         });
     }
 );
