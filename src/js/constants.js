@@ -110,3 +110,7 @@ const WARNED_UNSUPPORTED_TAG = "warnedUnsupported";
  * Constant representing true string
  **/
 const TRUE = "true";
+/**
+ * Constant representing false string
+ **/
+const FALSE = "false";

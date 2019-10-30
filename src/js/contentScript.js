@@ -142,6 +142,7 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse)
 {
      if (request.command === SWITCH_OFF) {
          _revertElements();
+         localStorage.setItem(WARNED_UNSUPPORTED_TAG, FALSE);
      } else if (request.command === SWITCH_ON) {
         _checkSupported();
      }
