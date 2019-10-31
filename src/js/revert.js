@@ -1,6 +1,6 @@
-/*
+/**
 add listener to the power button and send request to tab based on power on or power off event
-*/
+**/
 
 document.addEventListener('DOMContentLoaded', function() {
 

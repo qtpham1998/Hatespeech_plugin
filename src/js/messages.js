@@ -43,7 +43,13 @@ const INFO_SET_DATA = 'INFO: Setting data for tab %d, with offensive word count 
  * </ul>
  **/
 const INFO_FOUND_TEXT = 'INFO: Found offensive word in following \"%s\"';
+
 /**
  * Message warning about offensive content
  **/
 const WARN_OFFENSIVE_TEXT = '[Text contains offensive language]';
+
+/**
+ * Message warning user that plugin does not support the page
+ **/
+const WARN_UNSUPPORTED_PAGE = 'H8BL*CK currently does not support this site';

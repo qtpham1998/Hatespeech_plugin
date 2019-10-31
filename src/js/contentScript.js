@@ -16,11 +16,8 @@
      })
  };
 
-
 const domInspector = (function ()
 {
-
-
     /**
     * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
     * @return {Array} Array of DOM elements to inspect
@@ -107,25 +104,58 @@ const domInspector = (function ()
     return _inspectElements();
 });
 
-/*
+/**
+ * Checks whether the page is supported by the plugin
+ * @param hostname URL of the page
+ * @return {boolean} Whether page is supported or not
+ **/
+const _isUnsupportedPage = function (hostname)
+{
+    var unsupportedPagesList = [TWITTER, FACEBOOK];
+    return unsupportedPagesList.some(function (page)
+    {
+        return hostname.includes(page);
+    });
+};
+
+/**
+ * Checks if the site is supported by the plugin and performs the necessary actions -
+ * either warns user of this or if supported, carries on as usual
+ */
+const _checkSupported = function ()
+{
+    if (_isUnsupportedPage(window.location.hostname)) {
+        var warnedUnsupported = localStorage.getItem(WARNED_UNSUPPORTED_TAG);
+        if (warnedUnsupported !== TRUE) {
+            alert(WARN_UNSUPPORTED_PAGE);
+            localStorage.setItem(WARNED_UNSUPPORTED_TAG, TRUE);
+        }
+    } else {
+        domInspector();
+    }
+};
+
+/**
 * Receive request from plugin to power on or power off and hide or show hate speech
-*/
-browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
-     if(request.command === SWITCH_OFF){
+**/
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse)
+{
+     if (request.command === SWITCH_OFF) {
          _revertElements();
-     }else if (request.command === SWITCH_ON){
-         domInspector();
+         localStorage.setItem(WARNED_UNSUPPORTED_TAG, FALSE);
+     } else if (request.command === SWITCH_ON) {
+        _checkSupported();
      }
      sendResponse({result: "success"});
- });
+});
 
 
-/*
+/**
 * On opening a new tab, check if the plugin if switched on before blocking the words
-*/
+**/
  browser.storage.sync.get(['power'], function (result)
  {
-    if(result.power){
-        domInspector();
- }
+    if (result.power) {
+        _checkSupported();
+    }
  });
