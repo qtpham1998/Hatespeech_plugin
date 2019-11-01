@@ -1,12 +1,18 @@
 language: node_js
-sudo: false
-node_js: "stable"
+sudo: required
+node_js: stable
 install: npm install
-before_script: babel src/js test/js -d build
+dist: trusty
+addons: # get google-chrome-stable
+  chrome: stable
+#before_script:
+#  - wget http://chromedriver.storage.googleapis.com/2.7/chromedriver_linux64.zip -P ~/
+#  - unzip ~/chromedriver_linux64.zip -d ~/
+#  - rm chromedriver_linux64.zip
 env:
   matrix:
     - BROWSER=chromium EXT=zip
-after_script: bash ./scripts/build-${BROWSER}.sh
+before_deploy: bash ./scripts/build-${BROWSER}.sh
 deploy:
   provider: releases
   api_key:

@@ -61,6 +61,17 @@ const hideDomELement = function ($elem)
     $elem.addClass(OFFENSIVE_WARNING);
 };
 
+/**
+ * Shows the given DOM element
+ * @param $elem The jQuery element to show
+ **/
+const showDomELement = function ($elem)
+{
+    $elem.html($elem.attr(INITIAL_DATA_ATTR));
+    $elem.removeAttr(INITIAL_DATA_ATTR);
+    $elem.removeClass(OFFENSIVE_WARNING);
+};
+
  /**
   * Iterates over the web page's offensive word and show them
   **/
@@ -68,10 +79,7 @@ const revertElements = function ()
 {
     $(OFFENSIVE_WARNING_CLASS).each(function (i, dom)
     {
-        const $dom = $(dom);
-        $dom.html($dom.attr(INITIAL_DATA_ATTR));
-        $dom.removeAttr(INITIAL_DATA_ATTR);
-        $dom.removeClass(OFFENSIVE_WARNING);
+        showDomELement($(dom));
     })
 };
 
