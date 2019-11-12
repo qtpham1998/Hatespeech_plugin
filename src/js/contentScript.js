@@ -17,9 +17,29 @@
  };
 
 
-const domInspector = (function ()
-{
+ const _revertElementsByCategory = function (category)
+ {
+     var j = 0;
+     $(OFFENSIVE_WARNING_CLASS).each(function(i, dom){
 
+       if($(dom).attr("word-category") === category){
+         var oldText = $(dom).attr(INITIAL_DATA_ATTR);
+         $(dom).removeAttr(INITIAL_DATA_ATTR);
+         $(dom).html(oldText);
+         $(dom).removeClass(OFFENSIVE_WARNING);
+         j++;
+       }
+     })
+     browser.runtime.sendMessage(
+         {
+             type: "remove category",
+             removed: j
+         })
+ };
+
+
+const domInspector = (function (blockedCategory)
+{
 
     /**
     * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
@@ -47,13 +67,30 @@ const domInspector = (function ()
      * @return {boolean} Whether the given text contains offensive words
      * @protected
      **/
-    const _hasOffensiveLanguage = function (text, wordBank)
+    const _hasOffensiveLanguage = function (text, wordBank, blockedList)
     {
         let wordsList = text.trim().split(SPACE_STR);
-        return wordsList.some(function (word)
-        {
-            return wordBank.includes(word.toLowerCase());
+        var category = "";
+        var hasOffensiveLanguage = wordsList.some(function (word)
+            {
+               if(Object.keys(wordBank).includes(word.toLowerCase()) && blockedList[wordBank[word.toLowerCase()]]){
+                 category = wordBank[word.toLowerCase()];
+                 return true;
+            };
         });
+        return [hasOffensiveLanguage, category];
+    };
+
+    const _hasOffensiveLanguageCategory = function (text, wordBank, category)
+    {
+        let wordsList = text.trim().split(SPACE_STR);
+        var hasOffensiveLanguage = wordsList.some(function (word)
+            {
+               if(Object.keys(wordBank).includes(word.toLowerCase()) && wordBank[word.toLowerCase()] === category){
+                 return true;
+            };
+        });
+        return [hasOffensiveLanguage, category];
     };
 
     /**
@@ -70,12 +107,22 @@ const domInspector = (function ()
             })
     };
 
+    const _updateTabContextManagerCategory = function (offensiveWordsCount)
+    {
+        browser.runtime.sendMessage(
+            {
+                type: "add-category",
+                blocked: offensiveWordsCount
+            })
+    };
+
     /**
      * Hides the element in the page
      * @param $elem The jQuey element to hide
      **/
-    const _hideDomELement = function ($elem)
+    const _hideDomELement = function ($elem, category)
     {
+        $elem.attr("word-category", category);
         $elem.attr(INITIAL_DATA_ATTR, $elem.html());
         $elem.html(WARN_OFFENSIVE_TEXT);
         $elem.addClass(OFFENSIVE_WARNING);
@@ -88,19 +135,28 @@ const domInspector = (function ()
     const _inspectElements = function ()
     {
         let divElements = _getDomElements();
-        browser.storage.sync.get(['wordBank'], function (result)
+
+        browser.storage.sync.get(['wordBank'], function (result1)
         {
+          browser.storage.sync.get(['blockedList'], function (result2){
             var offensiveWordsCount = 0;
             for (var i = divElements.length - 1; i >= 0; i--) {
                 let innerText = divElements[i].innerText;
-                if (_hasOffensiveLanguage(innerText, result.wordBank))
+                var hasOffensiveLanguage = blockedCategory === ""? _hasOffensiveLanguage(innerText, result1.wordBank, result2.blockedList):
+                                           _hasOffensiveLanguageCategory(innerText, result1.wordBank, blockedCategory);
+                if (hasOffensiveLanguage[0])
                 {
                     console.info(INFO_FOUND_TEXT, innerText);
                     offensiveWordsCount++;
-                    _hideDomELement($(divElements[i]));
+                    _hideDomELement($(divElements[i]), hasOffensiveLanguage[1]);
                 }
             }
-            _updateTabContextManager(offensiveWordsCount);
+             if(blockedCategory === ""){
+              _updateTabContextManager(offensiveWordsCount);
+            }else{
+              _updateTabContextManagerCategory(offensiveWordsCount);
+            }
+          });
         });
     };
 
@@ -114,7 +170,11 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
      if(request.command === SWITCH_OFF){
          _revertElements();
      }else if (request.command === SWITCH_ON){
-         domInspector();
+         domInspector("");
+     }else if(request.command === "add category"){
+         domInspector(request.category);
+     }else if(request.command === "remove category"){
+         _revertElementsByCategory(request.category);
      }
      sendResponse({result: "success"});
  });
@@ -126,6 +186,6 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
  browser.storage.sync.get(['power'], function (result)
  {
     if(result.power){
-        domInspector();
+        domInspector("");
  }
  });

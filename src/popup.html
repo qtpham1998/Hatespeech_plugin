@@ -35,6 +35,26 @@
         <div class="label">blocked words</div>
     </div>
 </div>
+<a href="#category-popup"><div id="category-button">Category</div></a>
+<div id="category-popup" class="popup-overlay">
+	<div class="popup">
+		<h3>Pick the categories you want to block</h3>
+		<a class="close" href="#">&times;</a>
+    <div class = "Row">
+      <div class = "Column" style="display: inline-block;">
+        <input type="checkbox" name="anti-lgbt" id="anti-lgbt"> Anti-LGBT   <br>
+        <input type="checkbox" name="disablist" id="disablist"> Disablist   <br>
+        <input type="checkbox" name="profanity" id="profanity"> Profanity   <br>
+        <input type="checkbox" name="sexual" id="sexual"> Sexual
+      </div>
+      <div class = "Column" style="display: inline-block;">
+        <input type="checkbox" name="ageist" id="ageist"> Ageist <br>
+        <input type="checkbox" name="threat" id="threat"> Threat <br>
+        <input type="checkbox" name="racist" id="racist"> Racist
+      </div>
+	   </div>
+  </div>
+</div>
 </body>
 <script src="js/lib/jquery-3.4.1.min.js"></script>
 <script src="js/constants.js"></script>
@@ -42,4 +62,5 @@
 <script src="js/lib/semantic.min.js"></script>
 <script src="js/popup.js"></script>
 <script src="js/revert.js"></script>
+<script src="js/category.js"></script>
 </html>

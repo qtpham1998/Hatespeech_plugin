@@ -65,6 +65,16 @@ browser.runtime.onMessage.addListener(function (req, sender, resp)
             blocked = req.blocked;
             hBlock.setData(sender.tab.id, req.blocked);
             break;
+        case "remove category":
+            // removed = req.removed;
+            // blocked = hBlock.lookUp(req.tabId) - removed;
+            // hBlock.setData(req.tab.id, blocked);
+            break;
+        case "add-category":
+            blocked = hBlock.lookUp(req.tabId) + req.blocked;
+            // console(blocked);
+            hBlock.setData(sender.tab.id, blocked);
+            break;
         default:
             break;
     }

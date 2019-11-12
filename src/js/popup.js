@@ -51,3 +51,15 @@ browser.storage.sync.get(['power'], function(result){
   }
 
 });
+
+browser.storage.sync.get(['blockedList'], function(result){
+    var blockedList = Object.keys(result.blockedList);
+    for(var i = 0; i < blockedList.length; i++){
+      var category = blockedList[i];
+      if(result.blockedList[category]){
+       var checkbox_id = "#" + category;
+       console.info(checkbox_id);
+       $(checkbox_id).prop("checked",true);
+     }
+    }
+});

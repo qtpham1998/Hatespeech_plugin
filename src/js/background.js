@@ -9,9 +9,9 @@
  **/
 const loadWordBank = function(data)
 {
-    var words = [];
-    $.csv.toArrays(data).forEach((element) => words.push(element[1]));
-    words.splice(0, 1);
+    var words = {};
+    $.csv.toArrays(data).forEach((element) => words[element[1]] = element[0]);
+    // words.splice(0, 1);
     browser.storage.sync.set({wordBank: words}, function ()
     {
         console.info(INFO_LOADED_WORDS);
@@ -30,6 +30,15 @@ const setPowerOn = function()
 }
 
 
+const setBlockedList = function()
+{
+  browser.storage.sync.set({blockedList: {"profanity": true, "sexual": true, "disablist": true, "ageist": true, "threat": true, "anti-lgbt": true, "racist": true}}, function ()
+  {
+      // console.info(INFO_LOADED_BLOCKED_LIST);
+  });
+}
+
+
 /**
  * Loads CSV file on installation/update
  **/
@@ -43,6 +52,7 @@ browser.runtime.onInstalled.addListener(function()
             success: function (response){
                           loadWordBank(response);
                           setPowerOn();
+                          setBlockedList();
                           }
         });
     }
