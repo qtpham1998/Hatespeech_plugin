@@ -15,6 +15,26 @@ const QUESTION_MARK_STR = '?';
  * Constant representing a space
  **/
 const SPACE_STR = ' ';
+/**
+ * Constant representing true string
+ **/
+const TRUE = "true";
+/**
+ * Constant representing false string
+ **/
+const FALSE = "false";
+/**
+ * Constant representing Twitter host name
+ **/
+const TWITTER = "twitter.com";
+/**
+ * Constant representing Facebook host name
+ **/
+const FACEBOOK = "facebook.com";
+/**
+ * Constant representing warnedUnsupported tag
+ **/
+const WARNED_UNSUPPORTED_TAG = "warnedUnsupported";
 
 /* ****************************************************
  *                       TYPES

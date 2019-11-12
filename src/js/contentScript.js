@@ -107,28 +107,59 @@ const inspectElements = function ()
 };
 
 /**
- * Receive requests from plugin to power on or power off and hide or show hate speech
+ * Checks whether the page is supported by the plugin
+ * @param hostname URL of the page
+ * @return {boolean} Whether page is supported or not
  **/
-browser.runtime.onMessage.addListener(function (request, sender, sendResponse)
+const _isUnsupportedPage = function (hostname)
+{
+    var unsupportedPagesList = [TWITTER, FACEBOOK];
+    return unsupportedPagesList.some(function (page)
+    {
+        return hostname.includes(page);
+    });
+};
+
+/**
+ * Checks if the site is supported by the plugin and performs the necessary actions -
+ * either warns user of this or if supported, carries on as usual
+ */
+const _checkSupported = function ()
+{
+    if (_isUnsupportedPage(window.location.hostname)) {
+        var warnedUnsupported = localStorage.getItem(WARNED_UNSUPPORTED_TAG);
+        if (warnedUnsupported !== TRUE) {
+            alert(WARN_UNSUPPORTED_PAGE);
+            localStorage.setItem(WARNED_UNSUPPORTED_TAG, TRUE);
+        }
+    } else {
+        inspectElements();
+    }
+};
+
+/**
+* Receive request from plugin to power on or power off and hide or show hate speech
+**/
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse)
 {
     switch (request.command)
     {
         case SWITCH_ON:
-            inspectElements();
+            _checkSupported();
             break;
         case SWITCH_OFF:
-            revertElements();
+            _revertElements();
+            localStorage.setItem(WARNED_UNSUPPORTED_TAG, FALSE);
             break;
     }
 });
 
 /**
- * On opening a new tab, check if the plugin if switched on before blocking the words
- **/
+* On opening a new tab, check if the plugin if switched on before blocking the words
+**/
 browser.storage.sync.get(['power'], function (result)
 {
-    if (result.power)
-    {
-        inspectElements();
+    if (result.power) {
+        _checkSupported();
     }
 });
