@@ -9,6 +9,8 @@ addons: # get google-chrome-stable
 #  - wget http://chromedriver.storage.googleapis.com/2.7/chromedriver_linux64.zip -P ~/
 #  - unzip ~/chromedriver_linux64.zip -d ~/
 #  - rm chromedriver_linux64.zip
+script:
+  - #Nothing right now, automated testing on hold
 env:
   matrix:
     - BROWSER=chromium EXT=zip
