@@ -5,7 +5,7 @@
 
 /*reduce brightness of power button when hover above*/
 #power-button:hover {
-  filter: brightness(50%);
+    filter: brightness(50%);
 }
 
 /* To add some space between statistic and bottom border */
@@ -17,3 +17,9 @@
 #blocked-num {
     color: red;
 }
+
+/* To hide the contents of the element */
+.displayNone {
+    display: none !important;
+}
+

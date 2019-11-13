@@ -1,11 +1,29 @@
 language: node_js
-sudo: false
-node_js:
-  - "stable"
-
-install:
-  - npm install
-
-branches:
-  only:
-    - SEP-5_CICD
+sudo: required
+node_js: stable
+install: npm install
+dist: trusty
+addons: # get google-chrome-stable
+  chrome: stable
+#before_script:
+#  - wget http://chromedriver.storage.googleapis.com/2.7/chromedriver_linux64.zip -P ~/
+#  - unzip ~/chromedriver_linux64.zip -d ~/
+#  - rm chromedriver_linux64.zip
+script:
+  - #Nothing right now, automated testing on hold
+env:
+  matrix:
+    - BROWSER=chromium EXT=zip
+before_deploy: bash ./scripts/build-${BROWSER}.sh
+deploy:
+  provider: releases
+  api_key:
+    secure: $GITHUB_OAUTH_TOKEN
+  file: h8blck-${BROWSER}.${EXT}
+  skip_cleanup: true
+  on:
+    repo: qtpham1998/h8bl-ck
+    tags: true
+    branches:
+      only:
+        - master

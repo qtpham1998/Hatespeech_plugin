@@ -10,14 +10,15 @@ const hBlock = {
     /**
      * Mapping from tab ID to its data
      **/
-   tabData: new Map(),
+    tabData: new Map(),
 
     /**
      * Looks up data for given tabId
      * @param tabId The ID of current tab
      * @return {int} Tab's data, 0 if not present in the map
      **/
-    lookUp: function(tabId) {
+    lookUp: function (tabId)
+    {
         console.info(INFO_GET_DATA, tabId);
         return this.tabData[tabId] || 0;
     },
@@ -27,7 +28,8 @@ const hBlock = {
      * @param tabId The ID of the tab
      * @param blocked The tab's data
      **/
-    setData: function (tabId, blocked) {
+    setData: function (tabId, blocked)
+    {
         console.info(INFO_SET_DATA, tabId, blocked);
         this.tabData[tabId] = blocked;
     }
@@ -35,17 +37,14 @@ const hBlock = {
 
 /**
  * Changes the plugin icon depending on whether the plugin is switched on and if offensive words were detected or not
+ * @param blocked The number of offensive words blocked
  **/
-const updateToolbarIcon = function(blocked)
+const updateToolbarIcon = function (blocked)
 {
-    browser.storage.sync.get(['power'], function(result){
-      var imagePath;
-      if(!result.power){
-        imagePath = GREY_ICON_PATH;
-      }else{
-        imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
-      }
-      browser.browserAction.setIcon({path: imagePath});
+    browser.storage.sync.get(['power'], function (result)
+    {
+        var imagePath = (!result.power) ? GREY_ICON_PATH : ((blocked) ? RED_ICON_PATH : BLUE_ICON_PATH);
+        browser.browserAction.setIcon({path: imagePath});
     });
 };
 
@@ -72,7 +71,7 @@ browser.runtime.onMessage.addListener(function (req, sender, resp)
 });
 
 /**
- * Listener for when active tab changes, updated toolbar icon
+ * Listener for when active tab changes, updates toolbar icon
  **/
 browser.tabs.onActivated.addListener(function (activeInfo)
 {

@@ -8,7 +8,6 @@
  **/
 const INFO_LOADED_WORDS = 'INFO: Loaded words into storage.';
 
-
 /**
  * Message indicating power is set to off
  **/
