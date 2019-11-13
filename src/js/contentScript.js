@@ -72,14 +72,58 @@ const domInspector = (function (blockedCategory)
         let wordsList = text.trim().split(SPACE_STR);
         var category = "";
         var hasOffensiveLanguage = wordsList.some(function (word)
-            {
-               if(Object.keys(wordBank).includes(word.toLowerCase()) && blockedList[wordBank[word.toLowerCase()]]){
-                 category = wordBank[word.toLowerCase()];
-                 return true;
+        {
+            if(Object.keys(wordBank).includes(word.toLowerCase()) && blockedList[wordBank[word.toLowerCase()]]){
+                category = wordBank[word.toLowerCase()];
+                return true;
             };
         });
         return [hasOffensiveLanguage, category];
     };
+
+    //ADDED:
+    /**
+     * Return an array of occurred categories in the paragraph
+     * @param text The element inner text to check
+     * @param wordBank Array of offensive words
+     * @return  Array of categories
+     * @protected
+     **/
+    /*
+        const _getOffensiveLanguageCategory = function (text, wordBank) {
+            let wordsList = text.trim().split(SPACE_STR);
+            var categories = [];
+            wordsList.forEach(function (word)
+            {
+                if(wordBank.has(word.toLowerCase())){
+                    categories.push(wordBank.get(word.toLowerCase()));
+                }
+            });
+            return categories;
+        };
+    */
+
+    //ADDED:
+    /**
+     * Return an array of occurred offensive words in the paragraph
+     * @param text The element inner text to check
+     * @param wordBank Array of offensive words
+     * @return  Array of offensive words
+     * @protected
+     **/
+    /*
+    const _getOffensiveWords = function (text, wordBank) {
+        let wordsList = text.trim().split(SPACE_STR);
+        var offensiveWords = [];
+        wordsList.forEach(function (word)
+        {
+            if(wordBank.has(word.toLowerCase())){
+                offensiveWords.push(wordBank.get(word.toLowerCase()));
+            }
+        });
+        return offensiveWords;
+    };
+    */
 
     const _hasOffensiveLanguageCategory = function (text, wordBank, category)
     {
@@ -142,6 +186,20 @@ const domInspector = (function (blockedCategory)
             var offensiveWordsCount = 0;
             for (var i = divElements.length - 1; i >= 0; i--) {
                 let innerText = divElements[i].innerText;
+
+                //ADDED: for each divElement, check the paragraph has how many offensive categories and words
+                /*
+                    var offensiveCategories = _getOffensiveLanguageCategory(innerText, result1.wordBank);
+                    var offensiveWords = _getOffensiveWords(innerText, wordBank);
+                    if(offensiveCategories.length != 0)
+                    {
+                        console.info(INFO_FOUND_TEXT, innerText);
+                        offensiveWordsCount += offensiveWords.length;
+                        _hideDomELement($(divElements[i]), offensiveCategories.join());
+
+                    }s
+                 */
+
                 var hasOffensiveLanguage = blockedCategory === ""? _hasOffensiveLanguage(innerText, result1.wordBank, result2.blockedList):
                                            _hasOffensiveLanguageCategory(innerText, result1.wordBank, blockedCategory);
                 if (hasOffensiveLanguage[0])
@@ -150,6 +208,7 @@ const domInspector = (function (blockedCategory)
                     offensiveWordsCount++;
                     _hideDomELement($(divElements[i]), hasOffensiveLanguage[1]);
                 }
+
             }
              if(blockedCategory === ""){
               _updateTabContextManager(offensiveWordsCount);

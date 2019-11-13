@@ -11,6 +11,11 @@ const loadWordBank = function(data)
 {
     var words = {};
     $.csv.toArrays(data).forEach((element) => words[element[1]] = element[0]);
+    //ADDED: changed words to map
+    /* var words = new Map();
+     * $.csv.toArrays(data).forEach((element) => words.set(element[1], element[0]));
+     */
+
     // words.splice(0, 1);
     browser.storage.sync.set({wordBank: words}, function ()
     {
