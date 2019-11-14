@@ -15,7 +15,20 @@
 
 /* To change the colour of the popup to red */
 #blocked-num {
-    color: red;
+  color: red;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  float:left;
+}
+
+#icon {
+  float: left;
+  width: 45%;
+}
+
+#blocked-value {
+  float:right;
 }
 
 #category-button:hover {

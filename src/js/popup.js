@@ -22,9 +22,11 @@ const formatNumber = function (count) {
 /**
  * Gets the data for given tab ID
  **/
-(function ()
+const updateStatsNumber = function ()
 {
+
     browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+        console.log("DEBUG: Updating tab of id" + tabs[0].id);
         browser.runtime.sendMessage(
             {
                 type: GET_REQUEST,
@@ -32,18 +34,19 @@ const formatNumber = function (count) {
             },
             function (resp)
             {
-                const $blockedStats = $('#blocked-num');
-                const message = $blockedStats.html().replace(QUESTION_MARK_STR, formatNumber(resp.blocked));
-                $blockedStats.html(message);
+                console.log("DEBUG: New stats value is " + resp.blocked);
+                $('#blocked-value').text(resp.blocked)
             }
         );
     });
-})();
+};
+
+updateStatsNumber();
 
 /**
-* On startUp, change the power button to green
-* and hide hateblock words if the plugin is switched off
-**/
+ * On startUp, change the power button to green
+ * and hide hateblock words if the plugin is switched off
+ **/
 browser.storage.sync.get(['power'], function(result){
   if(!result.power){
     $(POWER_BUTTON).attr(SRC,GREEN_BUTTON_PATH);
