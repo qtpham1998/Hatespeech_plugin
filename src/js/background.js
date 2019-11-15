@@ -39,6 +39,16 @@ const setBlockedList = function()
   });
 }
 
+/**
+ * Doesn't reveal blocked content on installation
+ **/
+const setRevealOff = function()
+{
+    browser.storage.sync.set({reveal: false}, function ()
+    {
+        console.info(INFO_REVEAL_OFF);
+    });
+};
 
 /**
  * Loads CSV file on installation/update
@@ -53,6 +63,7 @@ browser.runtime.onInstalled.addListener(function()
             success: function (response){
                           loadWordBank(response);
                           setPowerOn();
+                          setRevealOff();
                           setBlockedList();
                           }
         });

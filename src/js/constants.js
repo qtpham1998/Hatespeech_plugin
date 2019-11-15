@@ -78,6 +78,14 @@ const SWITCH_OFF = 'switch-off';
 *Constant sending command to switch on plugin
 */
 const SWITCH_ON = 'switch-on';
+/**
+ * Constant sending command to not reveal blocked content
+ **/
+const REVEAL_OFF = 'reveal-off';
+/**
+ * Constant sending command to reveal blocked content
+ **/
+const REVEAL_ON = 'reveal-on';
 /*
 *Constant representing source file
 */
@@ -94,3 +102,7 @@ const BLOCKED_WORDS = "#blocked-words";
 *Constant representing link id
 */
 const LINK = "#link";
+/**
+ * Constant representing the id for the button that reveals blocked content
+ **/
+const REVEAL_BLOCKED_ID = '#reveal-blocked-button';

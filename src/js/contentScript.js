@@ -74,6 +74,49 @@ const updateTabContextManagerCategory = function (offensiveWordsCount)
      });
  };
 
+/**
+ * Reveals given DOM element
+ * @param $elem The jQuery element to reveal
+ */
+const revealDomElement = function ($elem)
+{
+    $elem.html($elem.attr(INITIAL_DATA_ATTR));
+    $elem.removeAttr(INITIAL_DATA_ATTR);
+};
+
+/**
+ * Iterates over the page's offensive words and reveals them
+ **/
+const revealElements = function ()
+{
+    $(OFFENSIVE_WARNING_CLASS).each(function (i, dom)
+    {
+        revealDomElement($(dom));
+    })
+};
+
+/**
+ * Hides the element in the page
+ * @param $elem The jQuey element to hide
+ **/
+const hideDomELement = function ($elem)
+{
+    $elem.attr(INITIAL_DATA_ATTR, $elem.html());
+    $elem.html(WARN_OFFENSIVE_TEXT);
+    $elem.addClass(OFFENSIVE_WARNING);
+};
+
+/**
+ * Iterates over the page's offensive words and blocks them
+ */
+const blockElements = function ()
+{
+    $(OFFENSIVE_WARNING_CLASS).each(function (i, dom)
+    {
+        hideDomELement($(dom));
+    })
+};
+
 const domInspector = (function (blockedCategory)
 {
     /**
@@ -237,6 +280,22 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
      sendResponse({result: "success"});
  });
 
+/**
+ * Receive request from plugin to reveal or not reveal blocked content
+ **/
+
+browser.runtime.onMessage.addListener(function(request, sender, sendResponse)
+{
+    switch (request.revealCommand)
+    {
+        case REVEAL_ON:
+            revealElements();
+            break;
+        case REVEAL_OFF:
+            blockElements();
+            break;
+    }
+});
 
 /*
 * On opening a new tab, check if the plugin if switched on before blocking the words

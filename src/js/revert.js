@@ -10,6 +10,7 @@ $(LINK).click(function() {
     browser.browserAction.setIcon({path: GREY_ICON_PATH});
     $(POWER_BUTTON).attr(SRC,GREEN_BUTTON_PATH);
     $(BLOCKED_WORDS).css({"display":"none"});
+    $(REVEAL_BLOCKED_ID).removeClass({"display":"none"});
 
     browser.tabs.getAllInWindow(null, function(tabs) {
     for(var i = 0; i < tabs.length; i++){
@@ -21,6 +22,7 @@ $(LINK).click(function() {
 
    $(POWER_BUTTON).attr(SRC,RED_BUTTON_PATH);
    $(BLOCKED_WORDS).removeAttr("style");
+   $(REVEAL_BLOCKED_ID).addClass({"display":"none"});
 
    browser.tabs.getAllInWindow(null, function(tabs) {
      for(var i = 0; i < tabs.length; i++){
@@ -35,4 +37,3 @@ $(LINK).click(function() {
 
 });
   });
-
