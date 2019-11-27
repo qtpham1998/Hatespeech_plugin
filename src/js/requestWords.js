@@ -1,10 +1,10 @@
 //Authentication
 
 function a(key) {
-    var form = new FormData();
+    let form = new FormData();
     form.append("api_key", key);
 
-    var settings = {
+    let settings = {
         "async": false,
         "crossDomain": true,
         "url": "https://api.hatebase.org/4-4/authenticate",
@@ -18,7 +18,7 @@ function a(key) {
         "data": form
     }
 
-    var token = "";
+    let token = "";
     $.ajax(settings).done(function (response) {
         console.log(response);
         token = JSON.parse(response).result["token"];
@@ -31,14 +31,14 @@ function a(key) {
     return token;
 }
 
-function retrieveWords(tokenReceived, key) {
+function retrieveWords(tokenReceived, key, page) {
 
-    var form = new FormData();
+    let form = new FormData();
     form.append("api_key", key);
     form.append("token", tokenReceived);
-    //form.append("language", "ZHO");
+    form.append("page", page.toString());
 
-    var settings = {
+    let settings = {
         "async": false,
         "crossDomain": true,
         "url": "https://api.hatebase.org/4-4/get_vocabulary",
@@ -52,12 +52,11 @@ function retrieveWords(tokenReceived, key) {
         "data": form
     };
 
-    var allWordsReceived = [];
+
     $.ajax(settings).done(function (response) {
-        //console.log(response);
         const words = JSON.parse(response).result;
         console.log(words.length);
-        for (var i = 0; i < words.length; i++) {
+        for (let i = 0; i < words.length; i++) {
             allWordsReceived.push(words[i]);
         }
     });
@@ -65,17 +64,27 @@ function retrieveWords(tokenReceived, key) {
     if (allWordsReceived.length == 0) {
         console.log("NO WORDS RECEIVED, let's try again..");
     }
+
+}
+
+function returnAllWordsList() {
     return allWordsReceived;
 }
 
 //var token = authenticate();
 const keyList = ["WnxszacNJAUDfmhaRj4DpAFEuXPBTZUZ", "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt", "HQTBtxnWeNReUZAvfPpoqFrjFeLnoJRg"];
-var i = 0;
+let allWordsReceived = [];
+
 var tokenA = a(keyList[1]);
 // if (token === "") {
 //     console.log("Can't retrieve token..may have reached the api request limit.")
 // } else {
-console.log(retrieveWords(tokenA, keyList[1]));
+
+// The word list has 37 pages
+for (let i = 0; i < 37; i++) {
+    retrieveWords(tokenA, keyList[1], i+1);
+}
+console.log(returnAllWordsList());
 
 // }
 
