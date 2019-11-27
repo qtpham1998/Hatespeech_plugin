@@ -5,7 +5,7 @@ function a(key) {
     form.append("api_key", key);
 
     var settings = {
-        "async": true,
+        "async": false,
         "crossDomain": true,
         "url": "https://api.hatebase.org/4-4/authenticate",
         "method": "POST",
@@ -18,54 +18,67 @@ function a(key) {
         "data": form
     }
 
-    var token;
+    var token = "";
     $.ajax(settings).done(function (response) {
         console.log(response);
         token = JSON.parse(response).result["token"];
-        console.log(token);
+        console.log("TOKEN: " + token);
     });
 
     if (!token) {
-        console.error("NO TOKEN RECEIVED, let's try again..");
-        token = a(key2);
+        console.log("NO TOKEN RECEIVED, let's try again..");
     }
     return token;
 }
 
-function retrieveWords(token, language) {
-    const dataList = [{
-        'api_key': "enTeQEPwfVQFcWxRZVJUGEGHXJUYTYDy",
-        'format': "json",
-        'token': token,
-        "language": "zho"
-    }];
+function retrieveWords(tokenReceived, key) {
 
-    var r = $.ajax({
-        type: "POST",
-        url: "https://api.hatebase.org/4-4/authenticate",
-        data: dataList,
-        success: function(response) {
-            console.log(response);
+    var form = new FormData();
+    form.append("api_key", key);
+    form.append("token", tokenReceived);
+    //form.append("language", "ZHO");
+
+    var settings = {
+        "async": false,
+        "crossDomain": true,
+        "url": "https://api.hatebase.org/4-4/get_vocabulary",
+        "method": "POST",
+        "headers": {
+            "dataType":"jsonp"
+        },
+        "processData": false,
+        "contentType": false,
+        "mimeType": "multipart/form-data",
+        "data": form
+    };
+
+    var allWordsReceived = [];
+    $.ajax(settings).done(function (response) {
+        //console.log(response);
+        const words = JSON.parse(response).result;
+        console.log(words.length);
+        for (var i = 0; i < words.length; i++) {
+            allWordsReceived.push(words[i]);
         }
     });
 
-    const arr = JSON.parse(r);
-    console.log(arr);
-
-    var wordList = [];
-    for (var i in arr.result) {
-        // append the "term" item, which is the offensive word, into wordList
-        wordList.push(i["term"]);
+    if (allWordsReceived.length == 0) {
+        console.log("NO WORDS RECEIVED, let's try again..");
     }
-    return wordList;
+    return allWordsReceived;
 }
 
 //var token = authenticate();
+const keyList = ["WnxszacNJAUDfmhaRj4DpAFEuXPBTZUZ", "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt", "HQTBtxnWeNReUZAvfPpoqFrjFeLnoJRg"];
+var i = 0;
+var tokenA = a(keyList[1]);
+// if (token === "") {
+//     console.log("Can't retrieve token..may have reached the api request limit.")
+// } else {
+console.log(retrieveWords(tokenA, keyList[1]));
 
-const key1 = "WnxszacNJAUDfmhaRj4DpAFEuXPBTZUZ";
-const key2 = "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt";
-const token = a(key1);
-console.log(retrieveWords(token, "zho"));
+// }
+
 
 
 
