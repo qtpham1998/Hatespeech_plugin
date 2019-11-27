@@ -1,8 +1,8 @@
 //Authentication
 
-function a() {
+function a(key) {
     var form = new FormData();
-    form.append("api_key", "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt");
+    form.append("api_key", key);
 
     var settings = {
         "async": true,
@@ -18,50 +18,23 @@ function a() {
         "data": form
     }
 
+    var token;
     $.ajax(settings).done(function (response) {
         console.log(response);
-        // console.log(JSON.toString(response) + "hello");
-        // token = response.result["token"];
-        // console.log(token);
+        token = JSON.parse(response).result["token"];
+        console.log(token);
     });
-}
-function authenticate() {
-    var formAu = new FormData();
-    formAu.append("api_key", "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt");
 
-    //console.log(formAu);
-
-    //const dataList = {api_key:"oxdKzspzxPvsskdMupfHhgbnnRqrWmvt"};
-
-    var token = "";
-    $.ajaxSetup({async:false});
-    $.ajax({
-        method: "POST",
-        url: "https://api.hatebase.org/4-4/authenticate",
-        data: {
-            api_key: "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt"
-        },
-        success: function(response) {
-            console.log(response);
-            const resp = JSON.parse(response.body);
-            token = resp.result["token"];
-        },
-        error: function (response) {
-            console.log("DEBBUG: IN AJAX FAILURE");
-            console.log(response);
-        }
-    });
-    $.ajaxSetup({async:true});
-    console.log(token);
-    if (token === "") {
-        console.log("oh no");
+    if (!token) {
+        console.error("NO TOKEN RECEIVED, let's try again..");
+        token = a(key2);
     }
     return token;
 }
 
 function retrieveWords(token, language) {
     const dataList = [{
-        'api_key': "HQTBtxnWeNReUZAvfPpoqFrjFeLnoJRg",
+        'api_key': "enTeQEPwfVQFcWxRZVJUGEGHXJUYTYDy",
         'format': "json",
         'token': token,
         "language": "zho"
@@ -88,8 +61,11 @@ function retrieveWords(token, language) {
 }
 
 //var token = authenticate();
-//console.log(retrieveWords(token, "zho"));
-a();
+
+const key1 = "WnxszacNJAUDfmhaRj4DpAFEuXPBTZUZ";
+const key2 = "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt";
+const token = a(key1);
+console.log(retrieveWords(token, "zho"));
 
 
 
