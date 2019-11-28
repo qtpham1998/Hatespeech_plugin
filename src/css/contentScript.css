@@ -4,3 +4,9 @@
     font-family: "Franklin Gothic Demi" !important;
     font-weight: bold !important;
 }
+
+.redacted {
+    color: grey !important;
+    font-family: "Franklin Gothic Demi" !important;
+    font-weight: bold !important;
+}

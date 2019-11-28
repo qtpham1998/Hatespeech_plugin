@@ -8,11 +8,11 @@
   **/
  const _revertElements = function ()
  {
-     $(OFFENSIVE_WARNING_CLASS).each(function(i, dom){
-       var oldText = $(dom).attr(INITIAL_DATA_ATTR);
-       $(dom).removeAttr(INITIAL_DATA_ATTR);
+     $('a.redacted').each(function(i, dom){
+       var oldText = $(dom).attr("original");
+       $(dom).removeAttr('original');
        $(dom).html(oldText);
-       $(dom).removeClass(OFFENSIVE_WARNING);
+       $(dom).removeClass('redacted');
      })
  };
 
@@ -20,13 +20,13 @@
  const _revertElementsByCategory = function (category)
  {
      var j = 0;
-     $(OFFENSIVE_WARNING_CLASS).each(function(i, dom){
+     $('a.redacted').each(function(i, dom){
 
        if($(dom).attr("word-category") === category){
-         var oldText = $(dom).attr(INITIAL_DATA_ATTR);
-         $(dom).removeAttr(INITIAL_DATA_ATTR);
+         var oldText = $(dom).attr('original');
+         $(dom).removeAttr('original');
          $(dom).html(oldText);
-         $(dom).removeClass(OFFENSIVE_WARNING);
+         $(dom).removeClass('redacted');
          j++;
        }
      })
@@ -70,15 +70,18 @@ const domInspector = (function (blockedCategory)
     const _hasOffensiveLanguage = function (text, wordBank, blockedList)
     {
         let wordsList = text.trim().split(SPACE_STR);
-        var category = "";
-        var hasOffensiveLanguage = wordsList.some(function (word)
+        var blockedWords = {};
+        var counter = 0;
+        var hasOffensiveLanguage = false;
+        wordsList.forEach(function (word)
         {
             if(Object.keys(wordBank).includes(word.toLowerCase()) && blockedList[wordBank[word.toLowerCase()]]){
-                category = wordBank[word.toLowerCase()];
-                return true;
+                blockedWords[word] = wordBank[word.toLowerCase()];
+                counter++;
+                hasOffensiveLanguage = true;
             };
         });
-        return [hasOffensiveLanguage, category];
+        return [hasOffensiveLanguage,blockedWords, counter];
     };
 
     //ADDED:
@@ -127,14 +130,19 @@ const domInspector = (function (blockedCategory)
 
     const _hasOffensiveLanguageCategory = function (text, wordBank, category)
     {
+        var blockedWords = {};
+        var counter = 0;
         let wordsList = text.trim().split(SPACE_STR);
-        var hasOffensiveLanguage = wordsList.some(function (word)
+        var hasOffensiveLanguage = false;
+        wordsList.forEach(function (word)
             {
                if(Object.keys(wordBank).includes(word.toLowerCase()) && wordBank[word.toLowerCase()] === category){
-                 return true;
+                 counter++;
+                 blockedWords[word] = category;
+                 hasOffensiveLanguage = true;
             };
         });
-        return [hasOffensiveLanguage, category];
+        return [hasOffensiveLanguage, blockedWords, counter];
     };
 
     /**
@@ -164,13 +172,21 @@ const domInspector = (function (blockedCategory)
      * Hides the element in the page
      * @param $elem The jQuey element to hide
      **/
-    const _hideDomELement = function ($elem, category)
+    const _hideDomELement = function ($elem, blockedWords)
     {
-        $elem.attr("word-category", category);
-        $elem.attr(INITIAL_DATA_ATTR, $elem.html());
-        $elem.html(WARN_OFFENSIVE_TEXT);
-        $elem.addClass(OFFENSIVE_WARNING);
+        // $elem.attr("word-category", category);
+        // $elem.attr(INITIAL_DATA_ATTR, $elem.html());
+        // $elem.html(WARN_OFFENSIVE_TEXT);
+        for(var k in blockedWords){
+          var originalText = $elem.html();
+          var replaced = originalText.replace(new RegExp(k, 'g'), "<a class='redacted' word-category='" +blockedWords[k]+ "' "+"original='"+k+"'"+" onClick=this.innerHTML='"+k+"'>" + "[Redacted]"+"</a>");
+          $elem.html(replaced);
+        }
+        // $elem.addClass(OFFENSIVE_WARNING);
     };
+
+
+
 
     /**
      * Iterates over the web page's elements and inspects them
@@ -204,8 +220,8 @@ const domInspector = (function (blockedCategory)
                                            _hasOffensiveLanguageCategory(innerText, result1.wordBank, blockedCategory);
                 if (hasOffensiveLanguage[0])
                 {
-                    console.info(INFO_FOUND_TEXT, innerText);
-                    offensiveWordsCount++;
+                    // console.info(INFO_FOUND_TEXT, innerText);
+                    offensiveWordsCount+=hasOffensiveLanguage[2];
                     _hideDomELement($(divElements[i]), hasOffensiveLanguage[1]);
                 }
 
