@@ -9,6 +9,16 @@
 const INFO_LOADED_WORDS = 'INFO: Loaded words into storage.';
 
 /**
+ * Message indicating not revealing blocked content
+ **/
+const INFO_REVEAL_OFF = 'INFO: Not revealing blocked content';
+
+/**
+ * Message indicating revealing blocked content
+ **/
+const INFO_REVEAL_ON = 'INFO: Revealing blocked content';
+
+/**
  * Message indicating power is set to off
  **/
 const INFO_POWER_OFF = 'INFO: Power is switched off.';

@@ -37,14 +37,17 @@ const hBlock = {
 
 /**
  * Changes the plugin icon depending on whether the plugin is switched on and if offensive words were detected or not
- * @param blocked The number of offensive words blocked
  **/
 const updateToolbarIcon = function (blocked)
 {
-    browser.storage.sync.get(['power'], function (result)
-    {
-        var imagePath = (!result.power) ? GREY_ICON_PATH : ((blocked) ? RED_ICON_PATH : BLUE_ICON_PATH);
-        browser.browserAction.setIcon({path: imagePath});
+    browser.storage.sync.get(['power'], function(result){
+      var imagePath;
+      if(!result.power){
+        imagePath = GREY_ICON_PATH;
+      }else{
+        imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
+      }
+      browser.browserAction.setIcon({path: imagePath});
     });
 };
 
@@ -63,6 +66,15 @@ browser.runtime.onMessage.addListener(function (req, sender, resp)
         case POST_REQUEST:
             blocked = req.blocked;
             hBlock.setData(sender.tab.id, req.blocked);
+            break;
+        case "remove category":
+            blocked = hBlock.lookUp(sender.tab.id) - req.removed;
+            hBlock.setData(sender.tab.id, blocked);
+            break;
+        case "add-category":
+            blocked = hBlock.lookUp(sender.tab.id) + req.blocked;
+            // console(blocked);
+            hBlock.setData(sender.tab.id, blocked);
             break;
         default:
             break;

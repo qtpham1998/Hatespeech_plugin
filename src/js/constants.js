@@ -56,7 +56,15 @@ const TEXT_TYPE = 'text';
  *                      COMMANDS
  * ****************************************************/
 /**
- * Constant sending command to switch off plugin
+ * Constant representing the path to the red power button
+ **/
+const RED_BUTTON_PATH = '/img/red_button.png';
+/**
+ * Constant representing the path to the green power button
+ **/
+const GREEN_BUTTON_PATH = '/img/green_button.png';
+/**
+ * Constant representing the path to the blue icon image
  **/
 const SWITCH_OFF = 'switch-off';
 /**
@@ -75,6 +83,10 @@ const POST_REQUEST = 'POST';
 /* ****************************************************
  *                  HTML ELEMENTS
  * ****************************************************/
+/**
+ * Constant representing the path to the grey icon image
+ **/
+const GREY_ICON_PATH = '/img/plugin_grey_icon.png';
 /**
  * Constant representing HTML tag to be inspected
  **/
@@ -108,38 +120,46 @@ const SRC_ATTR = 'src';
  **/
 const OFFENSIVE_WARNING = 'offensiveWarning';
 /**
- * Constant representing 'displayNone' class for CSS
- **/
-const DISPLAY_NONE = 'displayNone';
-/**
- * Constant representing 'offensiveWarning' class for CSS selection
+ * Constant representing 'offensiveWarning' class for CSS
  **/
 const OFFENSIVE_WARNING_CLASS = '.offensiveWarning';
-
-/* ****************************************************
- *                      FILE PATHS
- * ****************************************************/
 /**
- * Constant representing the path to the csv file
+ * Constant representing the data attribute key for hiding
  **/
-const WORDS_FILE_PATH = '../words/smallOffensiveList.csv';
+const INITIAL_DATA_ATTR = 'data-initial';
+/*
+*Constant sending command to switch off plugin
+*/
+const SWITCH_OFF = 'switch-off';
+/*
+*Constant sending command to switch on plugin
+*/
+const SWITCH_ON = 'switch-on';
 /**
- * Constant representing the path to the red power button
+ * Constant sending command to not reveal blocked content
  **/
-const RED_BUTTON_PATH = '/img/red_button.png';
+const REVEAL_OFF = 'reveal-off';
 /**
- * Constant representing the path to the green power button
+ * Constant sending command to reveal blocked content
  **/
-const GREEN_BUTTON_PATH = '/img/green_button.png';
+const REVEAL_ON = 'reveal-on';
+/*
+*Constant representing source file
+*/
+const SRC = 'src';
+/*
+*Constant representing power button id
+*/
+const POWER_BUTTON = "#power-button";
+/*
+*Constant representing blocked words id
+*/
+const BLOCKED_WORDS = "#blocked-words";
+/*
+*Constant representing link id
+*/
+const LINK = "#link";
 /**
- * Constant representing the path to the blue icon image
+ * Constant representing the id for the button that reveals blocked content
  **/
-const BLUE_ICON_PATH = '/img/plugin_blue_icon.png';
-/**
- * Constant representing the path to the red icon image
- **/
-const RED_ICON_PATH = '/img/plugin_darkred_icon.png';
-/**
- * Constant representing the path to the grey icon image
- **/
-const GREY_ICON_PATH = '/img/plugin_grey_icon.png';
+const REVEAL_BLOCKED_ID = '#reveal-blocked-button';
