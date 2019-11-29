@@ -179,7 +179,7 @@ const domInspector = (function (blockedCategory)
         // $elem.html(WARN_OFFENSIVE_TEXT);
         for(var k in blockedWords){
           var originalText = $elem.html();
-          var replaced = originalText.replace(new RegExp(k, 'g'), "<a class='redacted' word-category='" +blockedWords[k]+ "' "+"original='"+k+"'"+" onClick=this.innerHTML='"+k+"'>" + "[Redacted]"+"</a>");
+          var replaced = originalText.replace(new RegExp(k, 'g'), "<a class='redacted' isHidden='false' word-category='" +blockedWords[k]+ "' "+"original='"+k+"'>" + "[Redacted]"+"</a>");
           $elem.html(replaced);
         }
         // $elem.addClass(OFFENSIVE_WARNING);
@@ -225,7 +225,16 @@ const domInspector = (function (blockedCategory)
                     _hideDomELement($(divElements[i]), hasOffensiveLanguage[1]);
                 }
 
+
             }
+
+            $('a.redacted').click(function(e){
+              e.stopPropagation();
+              $(this).text(function(_, oldText) {
+                return oldText === '[Redacted]' ? $(this).attr('original') : '[Redacted]';
+              });
+              });
+
              if(blockedCategory === ""){
               _updateTabContextManager(offensiveWordsCount);
             }else{
