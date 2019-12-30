@@ -1,8 +1,8 @@
 describe('Test: popup.js', function () {
-    it('FormatNumberTest', function ()
+    it('FormatToStringTest', function ()
     {
-        const numberInput = formatNumber(5);
-        const stringInput = formatNumber('10');
+        const numberInput = formatToString(5);
+        const stringInput = formatToString('10');
 
         expect(typeof numberInput).toEqual(STRING_TYPE);
         expect(numberInput).toEqual('5');
@@ -13,10 +13,9 @@ describe('Test: popup.js', function () {
     it('UpdateBlockedDataTest', function ()
     {
         updateBlockedData();
-        const $blockedStats = $(BLOCKED_NUM_ID);
+        const $blockedStats = $(BLOCKED_DATA_ID);
 
         expect($blockedStats).toHaveText('13');
-        expect($blockedStats).not.toHaveText(QUESTION_MARK_STR);
-        expect($blockedStats).toContainHtml('<i class="ban icon"></i>');
+        expect($blockedStats).toContainHtml('<i id="blocked-icon" class="icon ban"></i>');
     });
 });

@@ -18,8 +18,8 @@
         "https://*/*"
       ],
       "js" : [
-        "/js/lib/jquery-3.4.1.min.js",
-        "/js/lib/semantic.min.js",
+        "js/lib/jquery-3.4.1.min.js",
+        "js/lib/semantic.min.js",
         "/js/api.js",
         "/js/constants.js",
         "/js/messages.js",

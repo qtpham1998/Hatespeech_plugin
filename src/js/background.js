@@ -4,27 +4,33 @@
  *******************************************************************************/
 
 /**
- * Parses the CSV file and saves data to chrome storage
+ * Parses the given CSV file data
  * @param data The CSV data
- * @return {Array} The list of offensive words loaded from csv file
+ * @param reverse Whether the mapping should be reversed
+ * @return Map of the parsed CSV file
  **/
-const parseCsvFile = function(data)
-{
-    var words = [];
-    $.csv.toArrays(data).forEach(function(element)
+const parseCsvData = function (data, reverse = false) {
+    let dataMap = {};
+    const csvData = $.csv.toArrays(data);
+    csvData.splice(0, 1);
+    if (reverse)
     {
-        words.push(element[1])
-    });
-    words.splice(0, 1);
-    return words;
+        csvData.forEach((element) => dataMap[element[1]] = element[0]);
+    }
+    else
+    {
+        csvData.forEach((element) => dataMap[element[0]] = element[1]);
+    }
+    return dataMap;
 };
 
 /**
- * Stores arrays of offensive workds in browser storage
- * @param words The array of offensive words
+ * Parses the CSV file and saves data to chrome storage in the form of a map from word to category
+ * @param data The CSV data
  **/
-const storeWordBank = function(words)
+const loadWordBank = function(data)
 {
+    const words = parseCsvData(data, true);
     browser.storage.sync.set({wordBank: words}, function ()
     {
         console.info(INFO_LOADED_WORDS);
@@ -32,9 +38,31 @@ const storeWordBank = function(words)
 };
 
 /**
+ * Sets all categories to be blocked
+ * @param data The CSV data
+ **/
+const loadBlockedList = function (data)
+{
+    const blockedLabels = parseCsvData(data);
+    const blockedList = {};
+    for (let [category, _] of Object.entries(blockedLabels))
+    {
+        blockedList[category] = true;
+    }
+
+    browser.storage.sync.set({
+        blockedList: blockedList,
+        blockedLabels: blockedLabels
+    }, function ()
+    {
+        console.info(INFO_LOADED_CATEGORIES)
+    });
+};
+
+/**
  * Turn on the plugin on installation
  **/
-const setPowerOn = function()
+const setPowerOn = function ()
 {
     browser.storage.sync.set({power: true}, function ()
     {
@@ -43,7 +71,7 @@ const setPowerOn = function()
 };
 
 /**
- * Loads CSV file on installation/update
+ * Loads CSV files on installation/update
  **/
 browser.runtime.onInstalled.addListener(function ()
     {
@@ -54,9 +82,21 @@ browser.runtime.onInstalled.addListener(function ()
             dataType: TEXT_TYPE,
             success: function (response)
             {
-                storeWordBank(parseCsvFile(response));
-                setPowerOn();
+                loadWordBank(response);
             }
         });
+
+        $.ajax(
+        {
+            type: GET_REQUEST,
+            url: browser.runtime.getURL(CATEGORIES_FILE_PATH),
+            dataType: TEXT_TYPE,
+            success: function (response)
+            {
+                loadBlockedList(response);
+            }
+        });
+
+        setPowerOn();
     }
 );

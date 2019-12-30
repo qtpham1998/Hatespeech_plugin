@@ -14,9 +14,10 @@
 <body>
   <div style="display:none;">
     <!-- POPUP TESTING -->
+
     <div class="ui basic segment">
-      <div class = "Row">
-        <div class = "Column" style="display: inline-block;">
+      <div class="Row">
+        <div class="Column" style="display: inline-block;">
           <h2 class="ui header">
             <div class="content">
               H8BL*CK
@@ -24,22 +25,41 @@
             </div>
           </h2>
         </div>
-        <div class = "Column" style="display: inline-block; padding-left: 50px">
+        <div class="Column" style="display: inline-block; padding-left: 50px">
           <div class="overlay">
-            <a id = "link">
-              <img id="power-button" src="/img/red_button.png" style="width: 40px; height: 33px; display: inline-block;">
+            <a id="button">
+              <img id="power-button" src="/img/red_button.png">
             </a>
           </div>
         </div>
       </div>
     </div>
-    <div id="blocked-words" class="ui container center aligned">
-      <div class="ui statistic">
-        <div class="value" id="blocked-num">
-          <i class="ban icon"></i> ?
+
+    <div id="blocked-wrap">
+      <!--  BLOCKED DATA  -->
+      <div class="ui container center aligned">
+        <div class="ui statistic">
+          <div id="blocked-data" class="value">
+            <i  id="blocked-icon" class="check icon"></i> <span id="blocked-num"></span>
+          </div>
+          <div class="label">blocked words</div>
         </div>
-        <div class="label">blocked words</div>
       </div>
+
+      <!--  CATEGORY POPUP  -->
+      <div class="popup-overlay" id="category-popup">
+        <div class="popup">
+          <h3>Pick the categories to block</h3>
+          <a class="close" href="#">x</a>
+          <ul id="category-list">
+          </ul>
+        </div>
+      </div>
+
+      <!--  POPUP BUTTON  -->
+      <a href="#category-popup">
+        <div id="category-button">Category</div>
+      </a>
     </div>
 
     <!-- CONTENT TESTING -->
@@ -113,13 +133,14 @@
 <script src="lib/jquery.csv.min.js"></script>
 <script src="src/js/constants.js"></script>
 <script src="src/js/messages.js"></script>
+<script src="src/js/templates.js"></script>
 <script src="spec/api-test.js"></script>
 
 <!-- Source code -->
 <script src="src/js/background.js"></script>
 <script src="src/js/contentScript.js"></script>
 <script src="src/js/tab.js"></script>
-<script src="src/js/revert.js"></script>
+<script src="src/js/power.js"></script>
 <script src="src/js/popup.js"></script>
 
 <!-- Tests -->
@@ -127,6 +148,6 @@
 <script src="spec/contentScriptSpec.js"></script>
 <script src="spec/tabSpec.js"></script>
 <script src="spec/popupSpec.js"></script>
-<script src="spec/revertSpec.js"></script>
+<script src="spec/powerSpec.js"></script>
 </html>
 

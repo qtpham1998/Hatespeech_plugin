@@ -4,53 +4,65 @@
  *******************************************************************************/
 
 /**
- * Formats number to a string
- * @param count The number to be formatted
+ * Formats object to a string
+ * @param obj The number to be formatted
  * @return {string} The string representing the given number
  **/
-const formatNumber = function (count)
-{
-    switch (typeof count)
-    {
-        case NUMBER_TYPE:
-            return count.toLocaleString();
-        case STRING_TYPE:
-            return count;
-        default:
-            return QUESTION_MARK_STR;
-    }
+const formatToString = function (obj) {
+    return (typeof obj === STRING_TYPE) ? obj : obj.toLocaleString();
 };
 
 /**
- * Gets the data for given tab ID
+ * Updates the blocked-data element according to the 'blocked' value
+ * @param blocked The number of words blocked
+ * @param select True if the number is to be added to current data, false if removed, undefined if replaced
  **/
-const updateBlockedData = function ()
-{
-    browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs)
+const updatePopupData = function (blocked, select) {
+    const $blockedStats = $(BLOCKED_NUM_ID);
+
+    if (select !== undefined)
     {
-        browser.runtime.sendMessage(
+        blocked *= select ? 1 : -1;
+        blocked += parseInt($blockedStats.text(), 10);
+    }
+
+    $blockedStats.text(formatToString(blocked));
+    if (blocked === 0) {
+        $(BLOCKED_DATA_ID).addClass(CLEAR_CLASS);
+        $(BLOCKED_ICON_ID).removeClass(BAN_ICON_CLASS);
+        $(BLOCKED_ICON_ID).addClass(CHECK_ICON_CLASS);
+    }
+    else
     {
-                type: GET_REQUEST,
-                tabId: tabs[0].id
-            },
-            function (resp)
-            {
-                const $blockedStats = $(BLOCKED_NUM_ID);
-                const message = $blockedStats.html().replace(QUESTION_MARK_STR, formatNumber(resp.blocked));
-                $blockedStats.html(message);
-            }
-        );
-    });
+        $(BLOCKED_DATA_ID).removeClass(CLEAR_CLASS);
+        $(BLOCKED_ICON_ID).removeClass(CHECK_ICON_CLASS);
+        $(BLOCKED_ICON_ID).addClass(BAN_ICON_CLASS);
+    }
 };
 
-updateBlockedData();
 /**
-* On start up, changes the power button to green and hides word count if the plugin is switched off
-**/
-browser.storage.sync.get(['power'], function (result)
+ * Gets the data for given tab ID and updates the popup
+ * @param power Whether the plugin is turned on or not. Defaults to true
+ **/
+const updateBlockedData = function (power = true)
 {
-    if (!result.power)
+    if (!power)
     {
-        switchOffPlugin();
+        updatePopupData(0);
     }
-});
+    else
+    {
+        browser.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs)
+        {
+            browser.runtime.sendMessage(
+                {
+                    type: GET_REQUEST,
+                    tabId: tabs[0].id
+                },
+                function (resp) {
+                    updatePopupData(resp.blocked);
+                }
+            );
+        });
+    }
+};

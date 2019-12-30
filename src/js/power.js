@@ -11,10 +11,7 @@ const sendPowerCommand = function (command)
 {
     browser.tabs.getAllInWindow(null, function (tabs)
     {
-        for(var i = 0; i < tabs.length; i++)
-        {
-            browser.tabs.sendMessage(tabs[i].id, {command: command}, function (response) {});
-        }
+        tabs.forEach((tab) => browser.tabs.sendMessage(tab.id, {command: command}));
     });
 };
 
@@ -24,7 +21,9 @@ const sendPowerCommand = function (command)
 const switchOnPlugin = function ()
 {
     $(POWER_BUTTON_ID).attr(SRC_ATTR, RED_BUTTON_PATH);
-    $(BLOCKED_WORDS_ID).removeClass(DISPLAY_NONE);
+    $(BLOCKED_WRAP_ID).removeClass(DISPLAY_NONE_CLASS);
+    sendPowerCommand(SWITCH_ON);
+    console.info(INFO_POWER_OFF);
 };
 
 /**
@@ -34,31 +33,39 @@ const switchOffPlugin = function ()
 {
     browser.browserAction.setIcon({path: GREY_ICON_PATH});
     $(POWER_BUTTON_ID).attr(SRC_ATTR, GREEN_BUTTON_PATH);
-    $(BLOCKED_WORDS_ID).addClass(DISPLAY_NONE);
+    $(BLOCKED_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
+    sendPowerCommand(SWITCH_OFF);
+    console.info(INFO_POWER_ON);
 };
 
 /**
- * Add function to the power button and send request switch on/off commands to tabs when pressed
+ * Adds a listener function to the power button which sends switch on/off command requests to tabs when pressed
  **/
-$(LINK_ID).click(function ()
+$(BUTTON_ID).click(function (e)
 {
     browser.storage.sync.get(['power'], function (result)
     {
         if (result.power)
         {
             switchOffPlugin();
-            sendPowerCommand(SWITCH_OFF);
-            console.info(INFO_POWER_OFF);
         }
         else
         {
             switchOnPlugin();
-            sendPowerCommand(SWITCH_ON);
-            console.info(INFO_POWER_ON);
         }
-        browser.storage.sync.set({power: !result.power}, function () {});
+        updateBlockedData(!result.power);
+        browser.storage.sync.set({power: !result.power}, EMPTY_FUNCTION);
     });
 });
 
-
-
+/**
+ * On start up, changes the power button to green and hides word count if the plugin is switched off
+ **/
+browser.storage.sync.get(['power'], function (result)
+{
+    updateBlockedData(result.power);
+    if (!result.power)
+    {
+        switchOffPlugin();
+    }
+});

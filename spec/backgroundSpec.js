@@ -2,10 +2,10 @@ describe('Test: background.js', function () {
     it('ParseCSVFileTest', function ()
     {
         const data = 'category,word\none,comma\ntwo,separated\nthree,file';
-        const parsedData = parseCsvFile(data);
+        const parsedDataKeys = Object.values(parseCsvData(data));
 
-        expect(parsedData.length).toBe(3);
-        expect(parsedData).toContain('separated');
-        expect(parsedData).not.toContain('word');
+        expect(parsedDataKeys.length).toBe(3);
+        expect(parsedDataKeys).toContain('separated');
+        expect(parsedDataKeys).not.toContain('word');
     });
 });

@@ -1,25 +1,107 @@
+html {
+  height: auto;
+}
+
 /*To make the gap between the title and the statistic smaller*/
 .ui.basic.segment {
-    margin: 0;
+  margin: 0;
+}
+#power-button {
+  width: 40px;
+  height: 33px;
+  display: inline-block;
 }
 
 /*reduce brightness of power button when hover above*/
 #power-button:hover {
-    filter: brightness(50%);
+  filter: brightness(50%);
 }
 
 /* To add some space between statistic and bottom border */
 .ui.container.center.aligned {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+/* To hide a section in the popup*/
+.displayNone {
+  display: none;
 }
 
 /* To change the colour of the popup to red */
-#blocked-num {
-    color: red;
+#blocked-data {
+  color: red;
 }
 
-/* To hide the contents of the element */
-.displayNone {
-    display: none !important;
+/* To change the colour of the popup to blue */
+#blocked-data.clear {
+  color: deepskyblue;
 }
 
+#category-popup {
+  margin: 0;
+  padding: 0;
+}
+
+#category-button:hover {
+  background-color: #E2E2E2;
+}
+
+#category-button {
+  background-color: grey;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 15px 10px 10px 220px;
+  cursor: pointer;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  display: none;
+  opacity: 0;
+}
+.popup-overlay:target {
+  display: unset;
+  opacity: 1;
+}
+
+.popup {
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 70%;
+  height: 80%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: all 200ms;
+  font-size: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.popup .close:hover {
+  color: deepskyblue;
+}
+
+#category-list {
+  list-style-type: none;
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 65%;
+}
