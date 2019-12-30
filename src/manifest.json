@@ -23,6 +23,7 @@
         "/js/api.js",
         "/js/constants.js",
         "/js/messages.js",
+        "/js/templates.js",
         "/js/contentScript.js"
       ],
       "css" : ["/css/contentScript.css"],

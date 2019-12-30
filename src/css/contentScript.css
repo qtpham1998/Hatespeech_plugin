@@ -1,10 +1,4 @@
-/* Hides elements containing offensive language */
-.offensiveWarning {
-    color: red !important;
-    font-family: "Franklin Gothic Demi" !important;
-    font-weight: bold !important;
-}
-
+/* Redacts elements containing offensive language */
 .redacted {
     color: grey !important;
     font-family: "Franklin Gothic Demi" !important;

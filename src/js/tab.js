@@ -35,17 +35,14 @@ const hBlock = {
 
 /**
  * Changes the plugin icon depending on whether the plugin is switched on and if offensive words were detected or not
+ * @param blocked The number of offensive words blocked
  **/
 const updateToolbarIcon = function(blocked)
 {
-    browser.storage.sync.get(['power'], function(result){
-      var imagePath;
-      if(!result.power){
-        imagePath = GREY_ICON_PATH;
-      }else{
-        imagePath = (blocked) ? RED_ICON_PATH : BLUE_ICON_PATH;
-      }
-      browser.browserAction.setIcon({path: imagePath});
+    browser.storage.sync.get(['power'], function (result)
+    {
+        var imagePath = (!result.power) ? GREY_ICON_PATH : ((blocked) ? RED_ICON_PATH : BLUE_ICON_PATH);
+        browser.browserAction.setIcon({path: imagePath});
     });
 };
 
@@ -54,29 +51,34 @@ const updateToolbarIcon = function(blocked)
  **/
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
+    const tabId = sender.tab !== undefined ? sender.tab.id : req.tabId;
     var blocked;
     switch (req.type)
     {
         case GET_REQUEST:
-            blocked = hBlock.lookUp(req.tabId);
+            blocked = hBlock.lookUp(tabId);
             resp({blocked: blocked});
             break;
+
         case POST_REQUEST:
             blocked = req.blocked;
-            hBlock.setData(sender.tab.id, req.blocked);
             break;
-        case "remove category":
-            // removed = req.removed;
-            // blocked = hBlock.lookUp(req.tabId) - removed;
-            // hBlock.setData(req.tab.id, blocked);
+
+        case ADD_CATEGORY_UPDATE:
+            blocked = hBlock.lookUp(tabId) + req.blocked;
             break;
-        case "add-category":
-            blocked = hBlock.lookUp(req.tabId) + req.blocked;
-            // console(blocked);
-            hBlock.setData(sender.tab.id, blocked);
+
+        case REMOVE_CATEGORY_UPDATE:
+            blocked = hBlock.lookUp(tabId) - req.blocked;
             break;
+
         default:
             break;
+    }
+
+    if (req.type !== GET_REQUEST)
+    {
+        hBlock.setData(tabId, blocked);
     }
     updateToolbarIcon(blocked);
 });

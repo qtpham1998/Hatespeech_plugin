@@ -3,64 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>H8BL*CK Popup</title>
-    <link rel="stylesheet" type="text/css" href="css/popup.css">
+    <link href="css/popup.css" rel="stylesheet" type="text/css">
     <!-- Semantic UI CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet">
 </head>
 <body>
+
 <div class="ui basic segment">
-    <div class = "Row">
-      <div class = "Column" style="display: inline-block;">
-        <h2 class="ui header">
-          <div class="content">
-            H8BL*CK
-          <div class="sub header">Protecting you from hate</div>
-          </div>
-        </h2>
-      </div>
-      <div class = "Column" style="display: inline-block; padding-left: 50px">
-        <div class="overlay">
-          <a id = "link">
-            <img id="power-button" src="/img/red_button.png" style="width: 40px; height: 33px; display: inline-block;">
-          </a>
+    <div class="Row">
+        <div class="Column" style="display: inline-block;">
+            <h2 class="ui header">
+                <div class="content">
+                    H8BL*CK
+                    <div class="sub header">Protecting you from hate</div>
+                </div>
+            </h2>
         </div>
-      </div>
+        <div class="Column" style="display: inline-block; padding-left: 50px">
+            <div class="overlay">
+                <a id="button">
+                    <img id="power-button" src="/img/red_button.png"
+                         style="width: 40px; height: 33px; display: inline-block;">
+                </a>
+            </div>
+        </div>
     </div>
 </div>
-<div id="blocked-words" class="ui container center aligned">
-    <div class="ui statistic">
-        <div class="value" id="blocked-num">
-            <i class="ban icon"></i> ?
+
+<div id="blocked-wrap">
+    <!--  BLOCKED DATA  -->
+    <div class="ui container center aligned">
+        <div class="ui statistic">
+            <div class="value" id="blocked-data">
+                <i class="check icon" id="blocked-icon"></i> <span id="blocked-num"></span>
+            </div>
+            <div class="label">blocked words</div>
         </div>
-        <div class="label">blocked words</div>
     </div>
-</div>
-<a href="#category-popup"><div id="category-button">Category</div></a>
-<div id="category-popup" class="popup-overlay">
-	<div class="popup">
-		<h3>Pick the categories you want to block</h3>
-		<a class="close" href="#">&times;</a>
-    <div class = "Row">
-      <div class = "Column" style="display: inline-block;">
-        <input type="checkbox" name="anti-lgbt" id="anti-lgbt"> Anti-LGBT   <br>
-        <input type="checkbox" name="disablist" id="disablist"> Disablist   <br>
-        <input type="checkbox" name="profanity" id="profanity"> Profanity   <br>
-        <input type="checkbox" name="sexual" id="sexual"> Sexual
-      </div>
-      <div class = "Column" style="display: inline-block;">
-        <input type="checkbox" name="ageist" id="ageist"> Ageist <br>
-        <input type="checkbox" name="threat" id="threat"> Threat <br>
-        <input type="checkbox" name="racist" id="racist"> Racist
-      </div>
-	   </div>
-  </div>
+
+    <!--  CATEGORY POPUP  -->
+    <div class="popup-overlay" id="category-popup">
+        <div class="popup">
+            <h3>Pick the categories to block</h3>
+            <a class="close" href="#">x</a>
+            <ul id="category-list">
+            </ul>
+        </div>
+    </div>
+
+    <!--  POPUP BUTTON  -->
+    <a href="#category-popup">
+        <div id="category-button">Category</div>
+    </a>
 </div>
 </body>
 <script src="js/lib/jquery-3.4.1.min.js"></script>
-<script src="js/constants.js"></script>
-<script src="js/api.js"></script>
 <script src="js/lib/semantic.min.js"></script>
+<script src="js/constants.js"></script>
+<script src="js/messages.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/api.js"></script>
 <script src="js/popup.js"></script>
-<script src="js/revert.js"></script>
+<script src="js/power.js"></script>
 <script src="js/category.js"></script>
 </html>

@@ -3,273 +3,224 @@
  *  JavaScript file to be injected into specified pages
  *******************************************************************************/
 
- /**
-  * Iterates over the web page's offensive word and show them
-  **/
- const _revertElements = function ()
- {
-     $('a.redacted').each(function(i, dom){
-       var oldText = $(dom).attr("original");
-       $(dom).removeAttr('original');
-       $(dom).html(oldText);
-       $(dom).removeClass('redacted');
-     })
- };
 
-
- const _revertElementsByCategory = function (category)
- {
-     var j = 0;
-     $('a.redacted').each(function(i, dom){
-
-       if($(dom).attr("word-category") === category){
-         var oldText = $(dom).attr('original');
-         $(dom).removeAttr('original');
-         $(dom).html(oldText);
-         $(dom).removeClass('redacted');
-         j++;
-       }
-     })
-     browser.runtime.sendMessage(
-         {
-             type: "remove category",
-             removed: j
-         })
- };
-
-
-const domInspector = (function (blockedCategory)
+/**
+ * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
+ * @return {Array} Array of DOM elements to inspect
+ **/
+const getDomElements = function ()
 {
+    let divElements = $(INSPECTED_TAGS).toArray();
+    divElements = divElements.filter(function (elem) {
+        return ALPHA_REGEX.test(elem.innerText);
+    });
 
-    /**
-    * Gets all elements with #INSPECTED_TAGS tags and returns filtered results
-    * @return {Array} Array of DOM elements to inspect
-    * @protected
-    **/
-    const _getDomElements = function ()
+    if (divElements.length > MAX_ELEMENTS)
     {
-        let divElements = $(INSPECTED_TAGS).toArray();
-        divElements = divElements.filter(function (elem) {
-            return elem.innerText.trim();
-          });
-          if (divElements.length > MAX_ELEMENTS)
-          {
-            divElements.length = MAX_ELEMENTS;
-          }
-          return divElements;
-        };
+        divElements.length = MAX_ELEMENTS;
+    }
+    return divElements;
+};
 
-
-    /**
-     * Checks whether the given string contains offensive languages
-     * @param text The element inner text to check
-     * @param wordBank Array of offensive words
-     * @return {boolean} Whether the given text contains offensive words
-     * @protected
-     **/
-    const _hasOffensiveLanguage = function (text, wordBank, blockedList)
-    {
-        let wordsList = text.trim().split(SPACE_STR);
-        var blockedWords = {};
-        var counter = 0;
-        var hasOffensiveLanguage = false;
-        wordsList.forEach(function (word)
+/**
+ * Sends message to update the tab manager
+ * @param messageType The type of message to send, with POST as default
+ * @param offensiveWordsCount The number of offensive words in the tab
+ **/
+const updateTabContextManager = function (offensiveWordsCount, messageType = POST_REQUEST)
+{
+    browser.runtime.sendMessage(
         {
-            if(Object.keys(wordBank).includes(word.toLowerCase()) && blockedList[wordBank[word.toLowerCase()]]){
-                blockedWords[word] = wordBank[word.toLowerCase()];
-                counter++;
-                hasOffensiveLanguage = true;
-            };
-        });
-        return [hasOffensiveLanguage,blockedWords, counter];
-    };
+            type: messageType,
+            blocked: offensiveWordsCount
+        })
+};
 
-    //ADDED:
-    /**
-     * Return an array of occurred categories in the paragraph
-     * @param text The element inner text to check
-     * @param wordBank Array of offensive words
-     * @return  Array of categories
-     * @protected
-     **/
-    /*
-        const _getOffensiveLanguageCategory = function (text, wordBank) {
-            let wordsList = text.trim().split(SPACE_STR);
-            var categories = [];
-            wordsList.forEach(function (word)
-            {
-                if(wordBank.has(word.toLowerCase())){
-                    categories.push(wordBank.get(word.toLowerCase()));
-                }
-            });
-            return categories;
-        };
-    */
-
-    //ADDED:
-    /**
-     * Return an array of occurred offensive words in the paragraph
-     * @param text The element inner text to check
-     * @param wordBank Array of offensive words
-     * @return  Array of offensive words
-     * @protected
-     **/
-    /*
-    const _getOffensiveWords = function (text, wordBank) {
-        let wordsList = text.trim().split(SPACE_STR);
-        var offensiveWords = [];
-        wordsList.forEach(function (word)
+/**
+ * Checks whether the given string contains offensive languages
+ * @param textToInspect The element inner text to check
+ * @param wordBank Map of offensive words to category
+ * @return {Map} of the offensive words found to its category
+ **/
+const hasOffensiveLanguage = function (textToInspect, wordBank)
+{
+    const wordsList = textToInspect.trim().split(SPACE_STR);
+    const blockedWords = new Map();
+    wordsList.forEach(function (text)
+    {
+        const word = text.toLowerCase();
+        const category = wordBank[word];
+        if (category !== undefined)
         {
-            if(wordBank.has(word.toLowerCase())){
-                offensiveWords.push(wordBank.get(word.toLowerCase()));
-            }
-        });
-        return offensiveWords;
-    };
-    */
-
-    const _hasOffensiveLanguageCategory = function (text, wordBank, category)
-    {
-        var blockedWords = {};
-        var counter = 0;
-        let wordsList = text.trim().split(SPACE_STR);
-        var hasOffensiveLanguage = false;
-        wordsList.forEach(function (word)
-            {
-               if(Object.keys(wordBank).includes(word.toLowerCase()) && wordBank[word.toLowerCase()] === category){
-                 counter++;
-                 blockedWords[word] = category;
-                 hasOffensiveLanguage = true;
-            };
-        });
-        return [hasOffensiveLanguage, blockedWords, counter];
-    };
-
-    /**
-     * Sends message to update the tab manager
-     * @param offensiveWordsCount The number of offensive words in the tab
-     * @protected
-     **/
-    const _updateTabContextManager = function (offensiveWordsCount)
-    {
-        browser.runtime.sendMessage(
-            {
-                type: POST_REQUEST,
-                blocked: offensiveWordsCount
-            })
-    };
-
-    const _updateTabContextManagerCategory = function (offensiveWordsCount)
-    {
-        browser.runtime.sendMessage(
-            {
-                type: "add-category",
-                blocked: offensiveWordsCount
-            })
-    };
-
-    /**
-     * Hides the element in the page
-     * @param $elem The jQuey element to hide
-     **/
-    const _hideDomELement = function ($elem, blockedWords)
-    {
-        // $elem.attr("word-category", category);
-        // $elem.attr(INITIAL_DATA_ATTR, $elem.html());
-        // $elem.html(WARN_OFFENSIVE_TEXT);
-        for(var k in blockedWords){
-          var originalText = $elem.html();
-          var replaced = originalText.replace(new RegExp(k, 'g'), "<a class='redacted' isHidden='false' word-category='" +blockedWords[k]+ "' "+"original='"+k+"'>" + "[Redacted]"+"</a>");
-          $elem.html(replaced);
+            blockedWords.set(word, category);
         }
-        // $elem.addClass(OFFENSIVE_WARNING);
-    };
+    });
+    return blockedWords;
+};
 
-
-
-
-    /**
-     * Iterates over the web page's elements and inspects them
-     * @return {int} The number of offensive words found in the page
-     **/
-    const _inspectElements = function ()
+/**
+ * Wraps offensive word in an HTML 'span' element
+ * @param $elem The jQuey element with offensive content
+ * @param offensiveWords The map from offensive words to the categories
+ **/
+const flagOffensiveWords = function ($elem, offensiveWords)
+{
+    offensiveWords.forEach(function (category, word, _)
     {
-        let divElements = _getDomElements();
+        var elemText = $elem.html();
+        const wrapper = REDACTED_ELEMENT(category, word);
+        elemText = elemText.replace(new RegExp(word, GLOBAL_REG_EXP), wrapper);
+        $elem.html(elemText);
+    });
+};
 
-        browser.storage.sync.get(['wordBank'], function (result1)
-        {
-          browser.storage.sync.get(['blockedList'], function (result2){
-            var offensiveWordsCount = 0;
-            for (var i = divElements.length - 1; i >= 0; i--) {
-                let innerText = divElements[i].innerText;
+/**
+ * Redacts the given element
+ * @param elem The element to hide
+ **/
+const hideDomElement = function (elem)
+{
+    const $elem = $(elem);
+    $elem.text(REDACTED_TEXT);
+    $elem.addClass(REDACTED_CLASS);
 
-                //ADDED: for each divElement, check the paragraph has how many offensive categories and words
-                /*
-                    var offensiveCategories = _getOffensiveLanguageCategory(innerText, result1.wordBank);
-                    var offensiveWords = _getOffensiveWords(innerText, wordBank);
-                    if(offensiveCategories.length != 0)
-                    {
-                        console.info(INFO_FOUND_TEXT, innerText);
-                        offensiveWordsCount += offensiveWords.length;
-                        _hideDomELement($(divElements[i]), offensiveCategories.join());
-
-                    }s
-                 */
-
-                var hasOffensiveLanguage = blockedCategory === ""? _hasOffensiveLanguage(innerText, result1.wordBank, result2.blockedList):
-                                           _hasOffensiveLanguageCategory(innerText, result1.wordBank, blockedCategory);
-                if (hasOffensiveLanguage[0])
-                {
-                    // console.info(INFO_FOUND_TEXT, innerText);
-                    offensiveWordsCount+=hasOffensiveLanguage[2];
-                    _hideDomELement($(divElements[i]), hasOffensiveLanguage[1]);
-                }
-
-
-            }
-
-            $('a.redacted').click(function(e){
-              e.stopPropagation();
-              $(this).text(function(_, oldText) {
-                return oldText === '[Redacted]' ? $(this).attr('original') : '[Redacted]';
-              });
-              });
-
-             if(blockedCategory === ""){
-              _updateTabContextManager(offensiveWordsCount);
-            }else{
-              _updateTabContextManagerCategory(offensiveWordsCount);
-            }
-          });
+    /* Add listener to reveal word when clicked */
+    $elem.click(function (e)
+    {
+        e.stopPropagation();
+        $elem.text(function(_, currText) {
+            return currText === REDACTED_TEXT ? $elem.attr(INITIAL_DATA_ATTR) : REDACTED_TEXT;
         });
-    };
+    });
+};
 
-    return _inspectElements();
+/**
+ * Reveals a redacted given element
+ * @param elem The element to reveal
+ **/
+const revealDomElement = function (elem)
+{
+    const $elem = $(elem);
+    $elem.text($elem.attr(INITIAL_DATA_ATTR));
+    $elem.removeClass(REDACTED_CLASS);
+    $elem.off();
+};
+
+/**
+ * Hides elements flagged as offensive with respect to the given category
+ * @param category The category of words to hide
+ * @param updateData Whether to update tab data
+ **/
+const hideElementsByCategory = function (category, updateData = true)
+{
+    const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, CATEGORY_ATTR, category)).toArray();
+    elements.forEach(hideDomElement);
+    if (updateData)
+    {
+        updateTabContextManager(elements.length, ADD_CATEGORY_UPDATE);
+    }
+    return elements.length;
+};
+
+/**
+ * Reveals elements flagged as offensive with respect to the given category
+ * @param category The category of words to hide
+ * @param updateData Whether to update tab data
+ **/
+const revealElementsByCategory = function (category, updateData = true)
+{
+    const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, CATEGORY_ATTR, category)).toArray();
+    elements.forEach(revealDomElement);
+    if (updateData)
+    {
+        updateTabContextManager(elements.length, REMOVE_CATEGORY_UPDATE);
+    }
+    return elements.length;
+};
+
+/**
+ * Hides all elements flagged as offensive
+ **/
+const hideAllElements =  function (resp)
+{
+    browser.storage.sync.get(['blockedList'], function (result)
+    {
+        var count = 0;
+        for (let [category, enabled] of Object.entries(result.blockedList))
+        {
+            if (enabled)
+            {
+                count += hideElementsByCategory(category, false);
+            }
+        }
+        updateTabContextManager(count);
+    });
+};
+
+/**
+ * Reveals all redacted elements
+ **/
+const revealAllElements =  function ()
+{
+    const elements = $(CLASS_SELECTOR(REDACTED_CLASS)).toArray();
+    elements.forEach(revealDomElement);
+};
+
+/**
+ * Iterates over the web page's elements and flags potentially offensive texts
+ **/
+const inspectElements = function ()
+{
+    let divElements = getDomElements();
+    browser.storage.sync.get(['wordBank'], function (result)
+    {
+        divElements.forEach((elem) =>
+        {
+            const $elem = $(elem);
+            /* Get text of element only (without its child elements' texts) */
+            const innerText = $elem.clone().children().remove().end().text();
+
+            const blockedList = hasOffensiveLanguage(innerText, result.wordBank);
+            if (blockedList.size > 0)
+            {
+                flagOffensiveWords($elem, blockedList);
+            }
+        });
+    });
+};
+
+/**
+ * Receive request from plugin to power on or power off and hide or show hate speech
+ **/
+browser.runtime.onMessage.addListener(function(request, _, resp)
+{
+    let count = 0;
+    switch (request.command)
+    {
+        case SWITCH_ON:
+            hideAllElements();
+            break;
+        case SWITCH_OFF:
+            revealAllElements();
+            break;
+        case ADD_CATEGORY:
+            count = hideElementsByCategory(request.category);
+            resp({blocked: count});
+            break;
+        case REMOVE_CATEGORY:
+            count = revealElementsByCategory(request.category);
+            resp({blocked: count});
+            break;
+    }
 });
 
-/*
-* Receive request from plugin to power on or power off and hide or show hate speech
-*/
-browser.runtime.onMessage.addListener(function(request, sender, sendResponse){
-     if(request.command === SWITCH_OFF){
-         _revertElements();
-     }else if (request.command === SWITCH_ON){
-         domInspector("");
-     }else if(request.command === "add category"){
-         domInspector(request.category);
-     }else if(request.command === "remove category"){
-         _revertElementsByCategory(request.category);
-     }
-     sendResponse({result: "success"});
- });
-
-
-/*
-* On opening a new tab, check if the plugin if switched on before blocking the words
-*/
- browser.storage.sync.get(['power'], function (result)
- {
-    if(result.power){
-        domInspector("");
- }
- });
+/**
+ * On opening a new tab, check if the plugin if switched on before blocking the words
+ **/
+inspectElements();
+browser.storage.sync.get(['power'], function (result)
+{
+    if (result.power) {
+        hideAllElements();
+    }
+});

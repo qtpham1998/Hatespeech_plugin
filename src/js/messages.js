@@ -8,6 +8,10 @@
  **/
 const INFO_LOADED_WORDS = 'INFO: Loaded words into storage.';
 
+/**
+ * Message indicating list of categories have been loaded
+ **/
+const INFO_LOADED_CATEGORIES = 'INFO: Loaded categories into storage.';
 
 /**
  * Message indicating power is set to off
@@ -37,13 +41,6 @@ const INFO_GET_DATA = 'INFO: Fetching data for tab %d';
 const INFO_SET_DATA = 'INFO: Setting data for tab %d, with offensive word count of %d';
 
 /**
- * Message indicating that an offensive word was found
- * <ul>
- *     <li> {0} - The text </li>
- * </ul>
+ * Message indicating redacted content
  **/
-const INFO_FOUND_TEXT = 'INFO: Found offensive word in following \"%s\"';
-/**
- * Message warning about offensive content
- **/
-const WARN_OFFENSIVE_TEXT = '[Text contains offensive language]';
+const REDACTED_TEXT = '[Redacted]';

@@ -4,19 +4,32 @@
  *******************************************************************************/
 
 /**
- * Parses the CSV file and saves data to chrome storage
+ * Parses the given CSV file data
+ * @param data The CSV data
+ * @return Map of the parsed CSV file
+ **/
+const parseCsvData = function (data, reverse = false) {
+    let dataMap = {};
+    const csvData = $.csv.toArrays(data);
+    csvData.splice(0, 1);
+    if (reverse)
+    {
+        csvData.forEach((element) => dataMap[element[1]] = element[0]);
+    }
+    else
+    {
+        csvData.forEach((element) => dataMap[element[0]] = element[1]);
+    }
+    return dataMap;
+};
+
+/**
+ * Parses the CSV file and saves data to chrome storage in the form of a map from word to category
  * @param data The CSV data
  **/
 const loadWordBank = function(data)
 {
-    var words = {};
-    $.csv.toArrays(data).forEach((element) => words[element[1]] = element[0]);
-    //ADDED: changed words to map
-    /* var words = new Map();
-     * $.csv.toArrays(data).forEach((element) => words.set(element[1], element[0]));
-     */
-
-    // words.splice(0, 1);
+    const words = parseCsvData(data, true);
     browser.storage.sync.set({wordBank: words}, function ()
     {
         console.info(INFO_LOADED_WORDS);
@@ -24,41 +37,65 @@ const loadWordBank = function(data)
 };
 
 /**
- * Turn on the plugin on installation
+ * Sets all categories to be blocked
+ * @param data The CSV data
  **/
-const setPowerOn = function()
+const loadBlockedList = function (data)
 {
-  browser.storage.sync.set({power: true}, function ()
-  {
-      console.info(INFO_POWER_ON);
-  });
-}
+    const blockedLabels = parseCsvData(data);
+    const blockedList = {};
+    for (let [category, _] of Object.entries(blockedLabels))
+    {
+        blockedList[category] = true;
+    }
 
-
-const setBlockedList = function()
-{
-  browser.storage.sync.set({blockedList: {"profanity": true, "sexual": true, "disablist": true, "ageist": true, "threat": true, "anti-lgbt": true, "racist": true}}, function ()
-  {
-      // console.info(INFO_LOADED_BLOCKED_LIST);
-  });
-}
-
+    browser.storage.sync.set({
+        blockedList: blockedList,
+        blockedLabels: blockedLabels
+    }, function ()
+    {
+        console.info(INFO_LOADED_CATEGORIES)
+    });
+};
 
 /**
- * Loads CSV file on installation/update
+ * Turn on the plugin on installation
  **/
-browser.runtime.onInstalled.addListener(function()
+const setPowerOn = function ()
+{
+    browser.storage.sync.set({power: true}, function ()
+    {
+        console.info(INFO_POWER_ON);
+    });
+};
+
+/**
+ * Loads CSV files on installation/update
+ **/
+browser.runtime.onInstalled.addListener(function ()
     {
         $.ajax(
         {
-            type: 'GET',
+            type: GET_REQUEST,
             url: browser.runtime.getURL(WORDS_FILE_PATH),
-            dataType: 'text',
-            success: function (response){
-                          loadWordBank(response);
-                          setPowerOn();
-                          setBlockedList();
-                          }
+            dataType: TEXT_TYPE,
+            success: function (response)
+            {
+                loadWordBank(response);
+            }
         });
+
+        $.ajax(
+        {
+            type: GET_REQUEST,
+            url: browser.runtime.getURL(CATEGORIES_FILE_PATH),
+            dataType: TEXT_TYPE,
+            success: function (response)
+            {
+                loadBlockedList(response);
+            }
+        });
+
+        setPowerOn();
     }
 );
