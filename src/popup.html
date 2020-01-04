@@ -50,11 +50,123 @@
         </div>
     </div>
 
+    <div class="popup-overlay" id="custom-blocked-words">
+        <div class="popup">
+            <a class="back" href="#custom-block-words"><</a>
+            <h4>Customised Words to Block</h4>
+            <div id="custom-words-table-style">
+         <table id="custom-words-table">
+              <thead>
+              <tr>
+                <th> Word </th>
+                <th> Category </th>
+                <th> Delete </th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            </table>
+          </div>
+            <a class="close" href="#">x</a>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="replaced-words">
+        <div class="popup">
+            <a class="back" href="#replace-word"><</a>
+            <h4>Replaced Words</h4>
+            <div id="custom-words-table-style">
+              <table id="replaced-words-table">
+                <thead>
+                  <tr>
+                    <th> Word </th>
+                    <th> Replacement </th>
+                    <th> Delete </th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <a class="close" href="#">x</a>
+        </div>
+     </div>
+
+     <div class="popup-overlay" id="custom-blocked-categories">
+        <div class="popup">
+            <a class="back" href="#custom-block-words"><</a>
+            <h4>Customised Categories to Block</h4>
+            <a class="close" href="#">x</a>
+            <div id="new-category-buttons"></div>
+        </div>
+     </div>
+
+     <div class="popup-overlay" id="custom-block-words">
+        <div class="popup">
+            <h4>Add words to be blocked</h4>
+            <a class="close" href="#">x</a>
+            <table>
+              <tr>
+                <td>Word:</td>
+                <td>Category:</td>
+              </tr>
+              <tr>
+                <td><input type="text" id="custom-block-input" name="block-words" size="7"></td>
+                <td><select id="custom-word-list"></select></td>
+              </tr>
+              <tr>
+                <td colspan="2">New Category:</td>
+              </tr>
+              <tr>
+                <td><input type="text" id="custom-block-category" name="block-category" size="10"></td>
+                <td><div id="custom-warning" hidden></div></td>
+              </tr>
+              <tr>
+                <td colspan="2"><button id="custom-block-submit" type="submit" value="Submit">Submit</button></td>
+              </tr>
+              <tr>
+                <td><a href="#custom-blocked-categories"><div id="new-category">New Categories</div></a></td>
+                <td><a href="#custom-blocked-words"><div id="new-words">New Words</div></a></td>
+              </tr>
+            </table>
+          </div>
+      </div>
+
+
+    <div class="popup-overlay" id="replace-word">
+        <div class="popup">
+            <h4>Replace Word</h4>
+            <a class="close" href="#">x</a>
+            <table>
+              <tr>
+              <td>Word:</td>
+              <td>Replacement:</td>
+              </tr>
+              <tr>
+                <td><input type="text" id="before-replace" name="block-words" size="8"></td>
+                <td><input type="text" id="after-replace" name="block-category" size="8"></select></td>
+              </tr>
+              <tr><td colspan="2"><div id="replace-warning" hidden></div></td></tr>
+              <tr><td colspan="2"><button id="replace-submit" type="submit" value="Submit">Submit</button></td></tr>
+            </table>
+            <a href="#replaced-words">
+              <div id="replaced-words-button">Replaced Words</div>
+            </a>
+          </div>
+    </div>
+
     <!--  POPUP BUTTON  -->
-    <a href="#category-popup">
-        <div id="category-button">Category</div>
-    </a>
+    <table>
+      <tr>
+        <td><a href="#category-popup"><div id="category-button">Category</div></a></td>
+        <td><a href="#custom-block-words"><div id="custom-block-button">Customise</div></a></td>
+        <td><a href="#replace-word"><div id="replace-button">Replace</div></a></td>
+      </tr>
+    </table>
 </div>
+
+
+
 </body>
 <script src="js/lib/jquery-3.4.1.min.js"></script>
 <script src="js/lib/semantic.min.js"></script>

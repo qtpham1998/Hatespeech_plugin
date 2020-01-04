@@ -55,6 +55,18 @@ const STRING_TYPE = 'string';
  * Constant representing text data type
  **/
 const TEXT_TYPE = 'text';
+/**
+ * Constant representing selected option
+ **/
+const SELECTED = ':selected';
+/**
+ * Constant representing default category
+ **/
+const DEFAULT_CATEGORY = 'default';
+/**
+ * Constant representing default label
+ **/
+const DEFAULT_LABEL = 'Default';
 
 /* ****************************************************
  *                      COMMANDS
@@ -75,6 +87,22 @@ const ADD_CATEGORY = 'add-category';
  * Constant sending command to remove a category
  **/
 const REMOVE_CATEGORY = 'remove-category';
+/**
+ * Constant sending command to add a new word to block with category of choice
+ **/
+const ADD_WORD = 'add-word';
+/**
+ * Constant sending command to remove blocking of a word
+ **/
+const DELETE_WORD = 'delete-word';
+/**
+ * Constant sending command to add a replcement for a word
+ **/
+const ADD_REPLACEMENT = 'add-replacement';
+/**
+ * Constant sending command to delete a replacement
+ **/
+const DELETE_REPLACEMENT = 'delete-replacement';
 /**
  * Constant sending command to update tab data after selecting a category
  **/
@@ -103,6 +131,10 @@ const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span,a,em,b,i,ul,ol,li';
  * Constant representing HTML 'span' tag
  **/
 const SPAN_TAG = 'span';
+/**
+ * Constant representing HTML 'option' tag
+ **/
+const OPTION_TAG = 'option';
 /**
  * Constant representing HTML 'input' tag
  **/
@@ -141,6 +173,70 @@ const BLOCKED_NUM_ID = "#blocked-num";
  * Constant representing category list id
  **/
 const CATEGORY_LIST_ID = "#category-list";
+/**
+ * Constant representing button id for submiting replacement
+ **/
+const REPLACE_SUBMIT_BUTTON = "#replace-submit";
+/**
+ * Constant representing button id for submiting words to be blocked
+ **/
+const SUBMIT_BLOCK_BUTTON = "#custom-block-submit";
+/**
+ * Constant representing button id for customising word
+ **/
+const CUSTOMISE_BUTTON = '#custom-block-button';
+/**
+ * Constant representing warning id when replacing word
+ **/
+const REPLACE_WARNING = "#replace-warning";
+/**
+ * Constant representing warning id when adding words to be blocked
+ **/
+const CUSTOM_WARNING = "#custom-warning";
+/**
+ * Constant representing textbox id for word to be block
+ **/
+const WORD_TO_BLOCK = "#custom-block-input";
+/**
+ * Constant representing textbox id for category of word to be block
+ **/
+const BLOCK_WORD_CATEGORY = "#custom-block-category";
+/**
+ * Constant representing textbox id for word to be replace
+ **/
+const WORD_TO_REPLACE = "#before-replace";
+/**
+ * Constant representing textbox id for replacement
+ **/
+const WORD_REPLACEMENT = "#after-replace";
+/**
+ * Constant representing id category dropdown list
+ **/
+const CATEGORY_LIST = "#custom-word-list";
+/**
+ * Constant representing id for added words button
+ **/
+const ADDED_WORDS_BUTTON = "#new-words";
+/**
+ * Constant representing id for added categories button
+ **/
+const ADDED_CATEGORIES_BUTTON = "#new-category";
+/**
+ * Constant representing id for added categories
+ **/
+const ADDED_CATEGORIES = "#new-category-buttons";
+/**
+ * Constant representing id for replaced words button
+ **/
+const REPLACED_WORDS_BUTTON = "#replaced-words-button";
+/**
+ * Constant representing id for tbody of added words
+ **/
+const ADDED_WORDS_TABLE = "#custom-words-table tbody";
+/**
+ * Constant representing id for tbody of replaced words
+ **/
+const REPLACED_WORDS_TABLE = "#replaced-words-table tbody";
 
 /* ************** HTML ATTRIBUTES ******************* */
 /**
@@ -151,6 +247,18 @@ const INITIAL_DATA_ATTR = 'data-initial';
  * Constant representing the data attribute key for offensive category
  **/
 const CATEGORY_ATTR = 'data-category';
+/**
+ * Constant representing the data attribute key for word replacement
+ **/
+const REPLACE_ATTR = 'data-replace';
+/**
+ * Constant representing the value key for selected category
+ **/
+const VALUE_ATTR = 'value';
+/**
+ * Constant representing category attribute for options
+ **/
+const OPTION_CATEGORY_ATTR = 'category';
 /**
  * Constant representing the 'src' attribute
  **/
@@ -164,6 +272,14 @@ const ID_ATTR = 'id';
  **/
 const TYPE_ATTR = 'type';
 /**
+ * Constant representing the 'word' attribute
+ **/
+const WORD_ATTR = 'word';
+/**
+ * Constant representing the 'selected' attribute
+ **/
+const SELECTED_ATTR = 'selected';
+/**
  * Constant representing the 'checked' property
  **/
 const CHECKED_PROP = 'checked';
@@ -173,6 +289,10 @@ const CHECKED_PROP = 'checked';
  * Constant representing HTML 'redacted' class
  **/
 const REDACTED_CLASS = 'redacted';
+/**
+ * Constant representing HTML 'replaced' class
+ **/
+const REPLACED_CLASS = 'replaced';
 /**
  * Constant representing HTML 'clear' class
  **/
@@ -189,6 +309,18 @@ const BAN_ICON_CLASS = 'ban';
  * Constant representing HTML 'displayNone' class
  **/
 const DISPLAY_NONE_CLASS = 'displayNone';
+/**
+ * Constant representing HTML 'delete-word' class
+ **/
+const DELETE_WORD_CLASS = '.delete-word';
+/**
+ * Constant representing HTML 'delete-replacement' class
+ **/
+const DELETE_REPLACEMENT_CLASS = '.delete-replacement';
+/**
+ * Constant representing HTML 'category-custom-button' class
+ **/
+const CATEGORY_BUTTON_CLASS = '.category-custom-button';
 
 /* ****************************************************
  *                      FILE PATHS

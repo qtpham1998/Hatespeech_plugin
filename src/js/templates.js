@@ -44,6 +44,8 @@ const ATTRIBUTE_SELECTOR = (type, attr, value) => `${type}[${attr}~='${value}'`;
  **/
 const REDACTED_ELEMENT = (category, initial) => `<span title='Text contains ${category} content' data-category='${category}' data-initial='${initial}'>${initial}</span>`;
 
+const REPLACED_ELEMENT = (word, replacement) => `<span class='replaced' data-replace='${replacement}' data-initial='${word}'>${word}</span>`;
+
 /**
  * Checkbox element for categories
  * <ul>
@@ -52,6 +54,43 @@ const REDACTED_ELEMENT = (category, initial) => `<span title='Text contains ${ca
  * </ul>
  **/
 const CHECKBOX_ELEMENT = (identifier, label) => `<input id='${identifier}' type='checkbox'> ${label}`;
+
+/**
+ * option element for select categories
+ * <select>
+ *  <option>{0} - The category name</option>
+ *  <option>{1} - The category id</option>
+ * </select>
+ **/
+const OPTION_ELEMENT = (category, value) => `<option category = '${category}' value = '${value}'> ${category} </option>`;
+
+/**
+ * table row entry for user added word
+ * <table>
+ *  <tbody>
+ *    <tr>{0} - the added word to be block</tr>
+ *    <tr>{1} - choosen category of the word</tr>
+ *  </tbpdy>
+ * </table>
+ **/
+const WORD_TABLE_ROW = (word, category) => `<tr id='${word}-row'><td> ${word} </td><td> ${category} </td><td><button class="delete-word" word='${word}'> delete </button></td></tr>`
+
+/**
+ * table row entry for user added replacement
+ * <table>
+ *  <tbody>
+ *    <tr>{0} - the added word to be block</tr>
+ *    <tr>{1} - replacement for the word</tr>
+ *  </tbpdy>
+ * </table>
+ **/
+const REPLACE_TABLE_ROW = (word, replacement) => `<tr id='${word}-replace'><td> ${word} </td><td> ${replacement} </td><td><button class="delete-replacement" word='${word}'> delete </button></td></tr>`
+
+/**
+ * button for the user added category, click to delete the category
+ **/
+const CATEGORY_BUTTON = (category) => `<button class="category-custom-button" category='${category}'>
+                                       <span class="align">${category}</span></button>`
 
 /**
  * List element for categories list
