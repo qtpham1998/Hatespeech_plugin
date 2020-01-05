@@ -38,10 +38,10 @@ const loadWordBank = function(data)
 };
 
 /**
- * Sets all categories to be blocked
+ * Loads all the lists into storage
  * @param data The CSV data
  **/
-const loadBlockedList = function (data)
+const loadBlockedLists = function (data)
 {
     const blockedLabels = parseCsvData(data);
     const blockedList = {};
@@ -52,7 +52,8 @@ const loadBlockedList = function (data)
 
     browser.storage.sync.set({
         blockedList: blockedList,
-        blockedLabels: blockedLabels
+        blockedLabels: blockedLabels,
+        whitelist: []
     }, function ()
     {
         console.info(INFO_LOADED_CATEGORIES)
@@ -93,7 +94,7 @@ browser.runtime.onInstalled.addListener(function ()
             dataType: TEXT_TYPE,
             success: function (response)
             {
-                loadBlockedList(response);
+                loadBlockedLists(response);
             }
         });
 

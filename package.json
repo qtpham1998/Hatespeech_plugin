@@ -10,6 +10,7 @@
     "test": "karma start --single-run --browsers Chrome karma.conf.js"
   },
   "devDependencies": {
+    "bad-words": "^3.0.3",
     "jasmine": "^3.5.0",
     "jasmine-console-reporter": "^3.1.0",
     "jasmine-core": "^3.5.0",

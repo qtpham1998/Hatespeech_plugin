@@ -38,7 +38,7 @@
     "128" : "/img/plugin_darkred_icon.png"
   },
   "web_accessible_resources" : [
-    "/words/*.csv",
+    "/csv/*.csv",
     "/js/lib/*",
     "/css/*.css"
   ],

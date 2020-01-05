@@ -17,9 +17,9 @@ describe('Test: contentScript.js', function () {
         show’s draw is that all of these Chasers as they’re known are given flamboyant, over the top personalities
         and nicknames like The Beast or The Dark Destroyer.`;
 
-        expect(hasOffensiveLanguage(' ', offensiveLanguage).size).toBe(0);
-        expect(hasOffensiveLanguage(offensiveText, offensiveLanguage).size).toBe(2);
-        expect(hasOffensiveLanguage(nonOffensiveText, offensiveLanguage).size).toBe(0);
+        expect(checkOffensiveLanguage(' ', offensiveLanguage).size).toBe(0);
+        expect(checkOffensiveLanguage(offensiveText, offensiveLanguage).size).toBe(2);
+        expect(checkOffensiveLanguage(nonOffensiveText, offensiveLanguage).size).toBe(0);
     });
 
     it('HideRevealDomElementTest', function () {
