@@ -8,30 +8,29 @@
  **/
 const hBlock = {
     /**
-     * Mapping from tab ID to its data
+     * Mapping from tab ID to its reveal flag
      **/
-    tabData: new Map(),
+    revealFlag: {},
 
     /**
-     * Looks up data for given tabId
+     * Looks up flag for given tabId
      * @param tabId The ID of current tab
-     * @return {int} Tab's data, 0 if not present in the map
+     * @return {boolean} Tab's reveal flag, {false} if not present in the map
      **/
-    lookUp: function (tabId)
+    lookUpFlag: function (tabId)
     {
-        console.info(INFO_GET_DATA, tabId);
-        return this.tabData[tabId] || 0;
+        console.info(INFO_GET_REVEAL_FLAG, tabId, (this.revealFlag[tabId] ? 1 : 0));
+        return this.revealFlag[tabId] || false;
     },
 
     /**
-     * Puts new tab/data pair into the map
+     * Puts new tab/flag pair into the map
      * @param tabId The ID of the tab
-     * @param blocked The tab's data
      **/
-    setData: function (tabId, blocked)
+    setRevealFlag: function (tabId)
     {
-        console.info(INFO_SET_DATA, tabId, blocked);
-        this.tabData[tabId] = blocked;
+        console.info(INFO_SET_REVEAL_FLAG, tabId, (this.revealFlag[tabId] ? 0 : 1));
+        this.revealFlag[tabId] = !this.revealFlag[tabId];
     }
 };
 
@@ -41,7 +40,7 @@ const hBlock = {
  **/
 const updateToolbarIcon = function (blocked)
 {
-    browser.storage.sync.get(['power'], function (result)
+    browser.storage.sync.get([POWER], function (result)
     {
         var imagePath = (!result.power) ? GREY_ICON_PATH : ((blocked) ? RED_ICON_PATH : BLUE_ICON_PATH);
         browser.browserAction.setIcon({path: imagePath});
@@ -54,35 +53,24 @@ const updateToolbarIcon = function (blocked)
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
     const tabId = sender.tab !== undefined ? sender.tab.id : req.tabId;
-    var blocked;
     switch (req.type)
     {
-        case GET_REQUEST:
-            blocked = hBlock.lookUp(tabId);
-            resp({blocked: blocked});
-            break;
-
         case POST_REQUEST:
-            blocked = req.blocked;
+            updateToolbarIcon(req.blocked);
             break;
 
-        case ADD_CATEGORY_UPDATE:
-            blocked = hBlock.lookUp(tabId) + req.blocked;
+        case REVEAL_FLAG_GET:
+            const revealFlag = hBlock.lookUpFlag(tabId);
+            resp({reveal: revealFlag});
             break;
 
-        case REMOVE_CATEGORY_UPDATE:
-            blocked = hBlock.lookUp(tabId) - req.blocked;
+        case REVEAL_FLAG_UPDATE:
+            hBlock.setRevealFlag(tabId);
             break;
 
         default:
             break;
     }
-
-    if (req.type !== GET_REQUEST)
-    {
-        hBlock.setData(tabId, blocked);
-    }
-    updateToolbarIcon(blocked);
 });
 
 /**
@@ -90,5 +78,16 @@ browser.runtime.onMessage.addListener(function (req, sender, resp)
  **/
 browser.tabs.onActivated.addListener(function (activeInfo)
 {
-    updateToolbarIcon(hBlock.lookUp(activeInfo.tabId));
+    browser.tabs.sendMessage(activeInfo.tabId, {command: GET_REQUEST},
+        function (resp)
+        {
+            if (browser.runtime.lastError)
+            {
+                browser.browserAction.setIcon({path: GREY_ICON_PATH});
+            }
+            else
+            {
+                updateToolbarIcon(resp.blocked || 0);
+            }
+        });
 });

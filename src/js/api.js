@@ -3,7 +3,7 @@
  *  JavaScript file for Chromium browser API
  *******************************************************************************/
 
-if ( self.browser instanceof Object )
+if (self.browser instanceof Object)
 {
     self.chrome = self.browser;
 }

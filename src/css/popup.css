@@ -1,20 +1,13 @@
-html {
-  height: auto;
+html, body {
+  max-width: 320px;
+  max-height: 200px;
+  margin: 0;
+  padding: 0;
 }
 
 /*To make the gap between the title and the statistic smaller*/
 .ui.basic.segment {
   margin: 0;
-}
-#power-button {
-  width: 40px;
-  height: 33px;
-  display: inline-block;
-}
-
-/*reduce brightness of power button when hover above*/
-#power-button:hover {
-  filter: brightness(50%);
 }
 
 /* To add some space between statistic and bottom border */
@@ -27,81 +20,198 @@ html {
   display: none;
 }
 
-/* To change the colour of the popup to red */
-#blocked-data {
+#error-message {
+  padding-top: 20px;
+  width: 75%;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+}
+
+/* To change the colour of the popup icon to red */
+#blocked-data, #error-message > i {
   color: red;
 }
 
-/* To change the colour of the popup to blue */
+/* To change the colour of the popup icon to blue */
 #blocked-data.clear {
   color: deepskyblue;
 }
 
-#category-popup {
+/* Remove space around the popup */
+#category-popup, #words-popup {
   margin: 0;
   padding: 0;
+}
+
+/* Styles the category popup */
+.categoryPopup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  display: none;
+  opacity: 0;
+  transition: all 5s ease-in-out;
+}
+
+.categoryPopup:target {
+  display: unset;
+  opacity: 1;
+}
+
+.categoryHeading {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 20px;
+  margin-bottom: 0;
+  background-color: #f7f9fa;
+}
+
+/* Styles the category list */
+#category-list, #words-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.categoryList, .wordsList {
+  overflow: auto;
+  height: 165px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+
+.categoryItem, .wordItem {
+  display: flex;
+  position: relative;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 40px;
+  line-height: 40px;
+  align-items: center;
+  color: black;
+  border-top: 1px solid #e7e8ea;
+}
+
+.wordItem {
+  cursor: pointer;
+}
+
+.categoryItem:hover, .wordItem:hover {
+  background-color: #f7f9fa;
+}
+
+.categoryItem > span {
+  height: 40px;
+  line-height: 40px;
+  width: 100%;
+}
+
+.boxItem {
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 40px !important;
+  cursor: pointer;
+}
+
+.more {
+  position: absolute;
+  cursor: pointer;
+  right: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  height: 40px !important;
+}
+
+.wordsPopup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  transition: all 5s ease-in-out;
+}
+
+#back-button {
+  top: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  font-size: 13px;
+  background-color: #f7f9fa;
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background-color: #e7e8ea;
+}
+
+/* ****************************************************
+ *                      BUTTONS
+ * ****************************************************/
+
+/* To set the style of the power button */
+#power-button.on {
+  color: white;
+  background: #17d42a;
+}
+
+#power-button.off {
+  color: white;
+  background: #eb3d34;
+}
+
+#power-button:hover {
+  filter: brightness(50%);
+}
+
+/* To set the colour for category button */
+#category-button {
+  background-color: grey;
+  color: white;
 }
 
 #category-button:hover {
   background-color: #E2E2E2;
 }
 
-#category-button {
-  background-color: grey;
+/* To set the style of the reveal button */
+#reveal-blocked-button.on {
   color: white;
-  padding: 10px;
-  text-align: center;
-  display: inline-block;
-  font-size: 16px;
-  margin: 15px 10px 10px 220px;
-  cursor: pointer;
+  background: #eb3d34;
 }
 
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
-  display: none;
-  opacity: 0;
-}
-.popup-overlay:target {
-  display: unset;
-  opacity: 1;
+#reveal-blocked-button.off {
+  color: white;
+  background: #34bdeb;
 }
 
-.popup {
-  margin: 20px auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  width: 70%;
-  height: 80%;
-  position: relative;
-  transition: all 5s ease-in-out;
+#reveal-blocked-button:hover {
+  filter: brightness(50%);
 }
 
-.popup .close {
+/* To style the close button for category popup */
+.categoryPopup .close {
   position: absolute;
-  top: 15px;
   right: 15px;
   transition: all 200ms;
-  font-size: 25px;
+  font-size: 20px;
   font-weight: bold;
   text-decoration: none;
-  color: #333;
-}
-
-.popup .close:hover {
   color: deepskyblue;
 }
 
-#category-list {
-  list-style-type: none;
-  overflow: hidden;
-  overflow-y: scroll;
-  height: 65%;
+.categoryPopup .close:hover {
+  color: deepskyblue;
 }

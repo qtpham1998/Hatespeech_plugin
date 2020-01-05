@@ -1,6 +1,11 @@
 /* Redacts elements containing offensive language */
 .redacted {
-    color: grey !important;
-    font-family: "Franklin Gothic Demi" !important;
-    font-weight: bold !important;
+    color: grey;
+    font-family: "Franklin Gothic Demi";
+    font-weight: bold;
+}
+
+[data-tag], [data-tag] * {
+    text-shadow: 0 0 20px black;
+    color: transparent !important;
 }
