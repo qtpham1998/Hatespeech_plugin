@@ -140,4 +140,5 @@ function getOffensiveWordsList()
     const keyList = ["WnxszacNJAUDfmhaRj4DpAFEuXPBTZUZ", "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt", "HQTBtxnWeNReUZAvfPpoqFrjFeLnoJRg"];
     authenticate(keyList[1]);
 }
-//getOffensiveWordsList();
+
+getOffensiveWordsList();
