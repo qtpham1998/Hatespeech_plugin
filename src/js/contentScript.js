@@ -47,7 +47,7 @@ browser.runtime.onMessage.addListener(function(req, _, resp)
             resp({blocked: (req.data + count) || 0});
             break;
         case REMOVE_CATEGORY:
-            count = revealElementsByCategory(req.category);
+            count = revealElementsByCategory(req.category, req.remove);
             resp({blocked: (req.data - count) || 0});
             break;
         case REVEAL_ON:
@@ -55,6 +55,24 @@ browser.runtime.onMessage.addListener(function(req, _, resp)
             break;
         case REVEAL_OFF:
             hideAllRedactedElements();
+            break;
+        case ADD_WORD:
+            hideElementsByWord(req.word, req.category, req.block);
+            showRedacted();
+            resp({blocked: (req.data || 0)});
+            break;
+        case DELETE_WORD:
+            count = revealElementsByWord(req.word);
+            resp({blocked: (req.data - count || 0)});
+            break;
+        case ADD_REPLACEMENT:
+            replaceElementsByWord(req.word, req.replace);
+            showRedacted();
+            resp({});
+            break;
+        case DELETE_REPLACEMENT:
+            removeElementsReplacement(req.word);
+            resp({});
             break;
     }
 });
@@ -64,4 +82,3 @@ browser.runtime.onMessage.addListener(function(req, _, resp)
 **/
 notifyTabContextManager(0);
 inspectElements();
-

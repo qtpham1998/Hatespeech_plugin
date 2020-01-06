@@ -215,3 +215,165 @@ html, body {
 .categoryPopup .close:hover {
   color: deepskyblue;
 }
+
+
+#new-category:hover, #new-words:hover,
+#replace-button:hover, #replaced-words-button:hover,
+#custom-block-button:hover
+ {
+  background-color: #E2E2E2;
+}
+
+#custom-block-button, #replace-button {
+  background-color: grey;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  margin: 15px 10px 10px 0px;
+  cursor: pointer;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  display: none;
+  opacity: 0;
+}
+.popup-overlay:target {
+  display: unset;
+  opacity: 1;
+}
+
+.popup {
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 70%;
+  height: 90%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup .close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: all 200ms;
+  font-size: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.popup .close:hover, .popup .back:hover  {
+  color: deepskyblue;
+}
+
+.popup .back {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  transition: all 200ms;
+  font-size: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+#custom-words-table-style{
+  width:320px;
+  height:100px;
+  overflow:auto;
+}
+
+#category-list {
+  list-style-type: none;
+  overflow: hidden;
+  overflow-y: scroll;
+  height: 65%;
+}
+
+#custom-warning {
+  color: red;
+  font-size: 8px;
+}
+
+#replace-warning {
+  color: red;
+  font-size: 10px;
+}
+
+.category-custom-button {
+    margin: 2px 2px 2px 2px;
+    padding: 1px 3px 2px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    white-space: nowrap;
+    background-color: #46a546;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+.category-custom-button:hover{
+  background-color: red;
+}
+
+.category-custom-button:hover span{
+  display: none;
+}
+
+.category-custom-button:hover:after{
+  content: 'DELETE';
+}
+
+.delete-word, .delete-replacement{
+  background-color: red;
+}
+
+#replaced-words-button {
+  background-color: grey;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  display: inline-block;
+  font-size: 12px;
+  margin: 30px 0px 10px 85px;
+  cursor: pointer;
+}
+
+#new-category {
+  background-color: grey;
+  color: white;
+  padding: 3px;
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  margin: 5px 5px 5px 5px;
+  cursor: pointer;
+}
+
+#new-words {
+  background-color: grey;
+  color: white;
+  padding: 3px;
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  margin: 5px 5px 5px 5px;
+  cursor: pointer;
+}
+
+#custom-block-submit {
+  margin: 5px 0px 0px 0px;
+}

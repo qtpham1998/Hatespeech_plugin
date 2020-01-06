@@ -31,7 +31,7 @@ const parseCsvData = function (data, reverse = false) {
 const loadWordBank = function(data)
 {
     const words = parseCsvData(data, true);
-    browser.storage.sync.set({wordBank: words}, function ()
+    browser.storage.sync.set({wordBank: words, customWordBank: {}}, function ()
     {
         console.info(INFO_LOADED_WORDS);
     });
@@ -44,6 +44,7 @@ const loadWordBank = function(data)
 const loadBlockedLists = function (data)
 {
     const blockedLabels = parseCsvData(data);
+    blockedLabels[DEFAULT_CATEGORY] = DEFAULT_LABEL;
     const blockedList = {};
     for (let [category, _] of Object.entries(blockedLabels))
     {
@@ -53,7 +54,9 @@ const loadBlockedLists = function (data)
     browser.storage.sync.set({
         blockedList: blockedList,
         blockedLabels: blockedLabels,
-        whitelist: []
+        whitelist: [],
+        customBlockedList: {},
+        replaceList: {},
     }, function ()
     {
         console.info(INFO_LOADED_CATEGORIES)

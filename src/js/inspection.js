@@ -44,7 +44,7 @@ const wrapMatches = function (elemHtml, word, category, score) {
 
     matches.forEach(function ([initial, _])
     {
-        const wrapper = REDACTED_ELEMENT(category, initial, title);
+        const wrapper = REDACTED_ELEMENT(category, initial, title, word);
         const regex = new RegExp(NEGATIVE_LOOKBEHIND_REGEX(initial, DATA_INITIAL_PRECEDENT), GI_REG_EXP);
         elemHtml = elemHtml.replace(regex, wrapper);
     });
@@ -116,10 +116,42 @@ const getContextElement = function ($elem) {
 const inspectElements = function ()
 {
     let divElements = getDomElements();
-    browser.storage.sync.get([WORD_BANK, WHITELIST], function (result)
+    browser.storage.sync.get([WORD_BANK, WHITELIST, CUSTOM_WORD_BANK, REPLACE_LIST], function (result)
     {
+      divElements.each((_,elem) =>
+    {
+        const $elem = $(elem);
+        /* Get text of element only (without its child elements' texts) */
+
+        replaceWord($elem, result.replaceList);
+    });
+
         let tag = 0;
         const whitelist = new Set(result.whitelist)
+        for(let [word, replacement] of Object.entries(result.replaceList)){
+          delete result.wordBank[word];
+          delete result.customWordBank[word];
+        }
+
+        if(result.customWordBank){
+
+          divElements = getDomElements();
+
+        divElements.each((_, elem) =>
+        {
+            const $elem = getContextElement($(elem));
+            // If this context element has been already inspected, can move on to the next one
+            if ($elem.attr(TAG_ATTR) !== undefined)
+            {
+                return;
+            }
+
+            flagOffensiveWords($elem, Object.entries(result.customWordBank), 1);
+        })
+      }
+
+        divElements = getDomElements();
+
         divElements.each((_, elem) =>
         {
             const $elem = getContextElement($(elem));

@@ -59,6 +59,18 @@ const TEXT_TYPE = 'text';
  * Constant representing JSON data type
  **/
 const JSON_TYPE = 'json';
+/**
+ * Constant representing selected option
+ **/
+const SELECTED = ':selected';
+/**
+ * Constant representing default category
+ **/
+const DEFAULT_CATEGORY = 'default';
+/**
+ * Constant representing default label
+ **/
+const DEFAULT_LABEL = 'Default';
 
 /* ****************************************************
  *                      STORAGE
@@ -67,6 +79,18 @@ const JSON_TYPE = 'json';
  * Constant representing the wordBank key
  **/
 const WORD_BANK = 'wordBank';
+/**
+ * Constant representing the customWordBank key
+ **/
+const CUSTOM_WORD_BANK = 'customWordBank';
+/**
+ * Constant representing the customBlockedList key
+ **/
+const CUSTOM_BLOCKED_LIST = 'customBlockedList';
+/**
+ * Constant representing the replaceList key
+ **/
+const REPLACE_LIST = 'replaceList';
 /**
  * Constant representing the power key
  **/
@@ -131,6 +155,22 @@ const POST_REQUEST = 'POST';
  * Constant representing PUT request
  **/
 const PUT_REQUEST = 'PUT';
+/**
+ * Constant sending command to add a new word to block with category of choice
+ **/
+const ADD_WORD = 'add-word';
+/**
+ * Constant sending command to remove blocking of a word
+ **/
+const DELETE_WORD = 'delete-word';
+/**
+ * Constant sending command to add a replcement for a word
+ **/
+const ADD_REPLACEMENT = 'add-replacement';
+/**
+ * Constant sending command to delete a replacement
+ **/
+const DELETE_REPLACEMENT = 'delete-replacement';
 
 
 /* ****************************************************
@@ -157,9 +197,17 @@ const SPAN_TAG = 'span';
  **/
 const ICON_TAG = 'i';
 /**
+ * Constant representing HTML 'option' tag
+ **/
+const OPTION_TAG = 'option';
+/**
+ * Constant representing HTML 'input' tag
+ **/
+const INPUT_TAG = 'input';
+/**
  * Constant representing the data initial attribute precedent for negative lookbehind
  **/
-const DATA_INITIAL_PRECEDENT = 'data-initial=[\'|"]';
+const DATA_INITIAL_PRECEDENT = 'data-(initial|origin)=[\'|"]';
 
 /* ****************** HTML ID *********************** */
 /**
@@ -187,10 +235,6 @@ const BLOCKED_NUM_ID = "#blocked-num";
  **/
 const REVEAL_BLOCKED_ID = '#reveal-blocked-button';
 /**
- * Constant representing category list id
- **/
-const CATEGORY_LIST_ID = "#category-list";
-/**
  * Constant representing words list id
  **/
 const WORDS_LIST_ID = "#words-list";
@@ -206,6 +250,74 @@ const BACK_BUTTON_ID = "#back-button";
  * Constant representing error message id
  **/
 const ERROR_MESSAGE_ID = "#error-message";
+/**
+ * Constant representing category list id
+ **/
+const CATEGORY_LIST_ID = "#category-list";
+/**
+ * Constant representing button id for submiting replacement
+ **/
+const REPLACE_SUBMIT_BUTTON = "#replace-submit";
+/**
+ * Constant representing button id for submiting words to be blocked
+ **/
+const SUBMIT_BLOCK_BUTTON = "#custom-block-submit";
+/**
+ * Constant representing button id for customising word
+ **/
+const CUSTOMISE_BUTTON = '#custom-block-button';
+/**
+ * Constant representing warning id when replacing word
+ **/
+const REPLACE_WARNING = "#replace-warning";
+/**
+ * Constant representing warning id when adding words to be blocked
+ **/
+const CUSTOM_WARNING = "#custom-warning";
+/**
+ * Constant representing textbox id for word to be block
+ **/
+const WORD_TO_BLOCK = "#custom-block-input";
+/**
+ * Constant representing textbox id for category of word to be block
+ **/
+const BLOCK_WORD_CATEGORY = "#custom-block-category";
+/**
+ * Constant representing textbox id for word to be replace
+ **/
+const WORD_TO_REPLACE = "#before-replace";
+/**
+ * Constant representing textbox id for replacement
+ **/
+const WORD_REPLACEMENT = "#after-replace";
+/**
+ * Constant representing id category dropdown list
+ **/
+const CATEGORY_LIST = "#custom-word-list";
+/**
+ * Constant representing id for added words button
+ **/
+const ADDED_WORDS_BUTTON = "#new-words";
+/**
+ * Constant representing id for added categories button
+ **/
+const ADDED_CATEGORIES_BUTTON = "#new-category";
+/**
+ * Constant representing id for added categories
+ **/
+const ADDED_CATEGORIES = "#new-category-buttons";
+/**
+ * Constant representing id for replaced words button
+ **/
+const REPLACED_WORDS_BUTTON = "#replaced-words-button";
+/**
+ * Constant representing id for tbody of added words
+ **/
+const ADDED_WORDS_TABLE = "#custom-words-table tbody";
+/**
+ * Constant representing id for tbody of replaced words
+ **/
+const REPLACED_WORDS_TABLE = "#replaced-words-table tbody";
 
 /* ************** HTML ATTRIBUTES ******************* */
 /**
@@ -216,6 +328,10 @@ const INITIAL_DATA_ATTR = 'data-initial';
  * Constant representing the data attribute key for offensive category
  **/
 const CATEGORY_ATTR = 'data-category';
+/**
+ * Constant representing the original data attribute key
+ **/
+const ORIGIN_ATTR = 'data-origin';
 /**
  * Constant representing the tag key
  **/
@@ -236,6 +352,26 @@ const TYPE_ATTR = 'type';
  * Constant representing the 'checked' property
  **/
 const CHECKED_PROP = 'checked';
+/**
+ * Constant representing the 'word' attribute
+ **/
+const WORD_ATTR = 'word';
+/**
+ * Constant representing the 'selected' attribute
+ **/
+const SELECTED_ATTR = 'selected';
+/**
+ * Constant representing the data attribute key for word replacement
+ **/
+const REPLACE_ATTR = 'data-replace';
+/**
+ * Constant representing the value key for selected category
+ **/
+const VALUE_ATTR = 'value';
+/**
+ * Constant representing category attribute for options
+ **/
+const OPTION_CATEGORY_ATTR = 'category';
 
 /* **************** HTML CLASSES ******************** */
 /**
@@ -282,6 +418,22 @@ const BOX_ITEM_CLASS = 'boxItem';
  * Constant representing HTML 'more' class
  **/
 const CATEGORY_MORE_CLASS = 'more';
+/**
+ * Constant representing HTML 'replaced' class
+ **/
+const REPLACED_CLASS = 'replaced';
+/**
+ * Constant representing HTML 'delete-word' class
+ **/
+const DELETE_WORD_CLASS = '.delete-word';
+/**
+ * Constant representing HTML 'delete-replacement' class
+ **/
+const DELETE_REPLACEMENT_CLASS = '.delete-replacement';
+/**
+ * Constant representing HTML 'category-custom-button' class
+ **/
+const CATEGORY_BUTTON_CLASS = '.category-custom-button';
 
 /* ****************************************************
  *                      CATEGORIES
