@@ -44,14 +44,12 @@ const setRevealButton = function (revealOn)
     if (revealOn)
     {
         $(REVEAL_BLOCKED_ID).text(HIDE_BLOCKED_WORDS);
-        $(REVEAL_BLOCKED_ID).addClass(ON_CLASS);
         $(REVEAL_BLOCKED_ID).removeClass(OFF_CLASS);
     }
     else
     {
         $(REVEAL_BLOCKED_ID).text(REVEAL_BLOCKED_WORDS);
         $(REVEAL_BLOCKED_ID).addClass(OFF_CLASS);
-        $(REVEAL_BLOCKED_ID).removeClass(ON_CLASS);
     }
 };
 

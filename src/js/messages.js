@@ -121,3 +121,18 @@ const REVEAL_BLOCKED_WORDS = 'Reveal Blocked Words';
  * Message on Reveal button when reveal is on
  **/
 const HIDE_BLOCKED_WORDS = 'Hide Blocked Words';
+
+/**
+ * Message warning about empty input error
+ **/
+const WARN_EMPTY_INPUT = 'Please enter a word or category!';
+
+/**
+ * Message warning about an existing word
+ **/
+const WARN_WORD_EXISTS = 'Word already exists in the database!!';
+
+/**
+ * Message warning about an existing category
+ **/
+const WARN_CATEGORY_EXISTS = 'Category already exists in the database!!';

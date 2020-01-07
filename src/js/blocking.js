@@ -12,31 +12,28 @@ const hideDomElement = function ($elem)
     $elem.text(REDACTED_TEXT);
     $elem.addClass(REDACTED_CLASS);
     $elem.off();
-
+    /* Add listener to reveal word when clicked */
     $elem.click(function (e)
     {
         e.stopPropagation();
-        // console.log($(this).attr(INITIAL_DATA_ATTR));
-        $elem.text(function(_, currText) {
+        $elem.text(function(_, currText)
+        {
             return currText === REDACTED_TEXT ? $elem.attr(INITIAL_DATA_ATTR) : REDACTED_TEXT;
         });
     });
-
-    /* Add listener to reveal word when clicked */
 };
 
-const showRedacted = function (){
-  $("." + REDACTED_CLASS).off();
-  $("." + REDACTED_CLASS).click(function (e)
-  {
-      e.stopPropagation();
-      console.log($(this).attr(INITIAL_DATA_ATTR));
-      // console.log($(this).attr(INITIAL_DATA_ATTR));
-      $(this).text(function(_, currText) {
-          return currText === REDACTED_TEXT ? $(this).attr(INITIAL_DATA_ATTR) : REDACTED_TEXT;
-      });
-  });
-}
+// const showRedacted = function ()
+// {
+//     $(CLASS_SELECTOR(REDACTED_CLASS)).off();
+//     $(CLASS_SELECTOR(REDACTED_CLASS)).click(function (e)
+//     {
+//         e.stopPropagation();
+//         $(this).text(function(_, currText) {
+//           return currText === REDACTED_TEXT ? $(this).attr(INITIAL_DATA_ATTR) : REDACTED_TEXT;
+//       });
+//   });
+// }
 
 /**
  * Hides recently flagged elements if power is on and corresponding category is selected
@@ -126,16 +123,14 @@ const hideAllElements =  function ()
     replaceAllWord();
     browser.storage.sync.get([BLOCKED_LIST, CUSTOM_BLOCKED_LIST], function (result)
     {
-        var count = 0;
         var allBlockedList = $.extend({}, result.blockedList, result.customBlockedList);
         for (let [category, enabled] of Object.entries(allBlockedList))
         {
             if (enabled)
             {
-                count += hideElementsByCategory(category);
+                hideElementsByCategory(category);
             }
         }
-        notifyTabContextManager(count);
     });
 };
 
@@ -201,7 +196,7 @@ const removeElementCategory = function (elem)
 
 /**
  * Replace the given element
- * @param elem The element to hide
+ * @param $elem The element to hide
  * @param wordReplacements word to be replaced and it's replacements
  **/
 const replaceWord = function ($elem, wordReplacements)
@@ -240,7 +235,7 @@ const replaceElementsByWord = function(word, replacement){
                 replaceWord($elem, map);
             });
   });
-}
+};
 
 /**
  * Reveals a replaced given element
@@ -282,13 +277,15 @@ const removeElementsReplacement = function(word){
 };
 
 /**
-Replace all the words in replaceList
-**/
-const replaceAllWord = function(){
-   const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, 'class', REPLACED_CLASS)).toArray();
-   elements.forEach(function(elem){
-     const $elem = $(elem);
-     $elem.text($elem.attr(REPLACE_ATTR));
-   });
+ * Replace all the words in replaceList
+ **/
+const replaceAllWord = function ()
+{
+    const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, 'class', REPLACED_CLASS)).toArray();
+    elements.forEach(function (elem)
+    {
+        const $elem = $(elem);
+        $elem.text($elem.attr(REPLACE_ATTR));
+    });
 
-}
+};

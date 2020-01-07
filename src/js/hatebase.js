@@ -65,7 +65,7 @@ const retrieveWords = function (token, key)
     browser.storage.sync.get([WORD_BANK], function (result)
     {
         const wordBank = result.wordBank;
-        for (let i = 1; i <= 5; i++)
+        for (let i = 1; i <= 10; i++)
         {
             const settings = getRequestSettings(key, token, i);
             $.ajax(settings).done(function (response)
@@ -88,12 +88,15 @@ const addResponseToWordBank = function (wordBank, resultSet)
 {
     resultSet.forEach(function (word)
     {
-        const term = word[TERM_KEY].toLowerCase();
-        if (term.includes(SPACE_STR))
+        if (word[SIGHTINGS_KEY] >= SIGHTINGS_THRESHOLD)
         {
-            return;
+            const term = word[TERM_KEY].toLowerCase();
+            if (term.includes(SPACE_STR))
+            {
+                return;
+            }
+            wordBank[term] = categorize(word);
         }
-        wordBank[term] = categorize(word);
     });
     browser.storage.sync.set({wordBank: wordBank});
 };

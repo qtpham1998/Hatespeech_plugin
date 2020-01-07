@@ -40,6 +40,10 @@ const EMPTY_FUNCTION = function () {};
  **/
 const ACCEPTABLE_REGEX = /.*[a-zA-Z\-']+.*/;
 /**
+ * Constant representing unacceptable characters for the 'id' attribute
+ **/
+const NON_IDENTIFIER_REGEX = /[^a-zA-Z\-]/;
+/**
  * Constant representing the flag for a global and case-insensitive reg expression
  **/
 const GI_REG_EXP = 'gi';
@@ -63,14 +67,6 @@ const JSON_TYPE = 'json';
  * Constant representing selected option
  **/
 const SELECTED = ':selected';
-/**
- * Constant representing default category
- **/
-const DEFAULT_CATEGORY = 'default';
-/**
- * Constant representing default label
- **/
-const DEFAULT_LABEL = 'Default';
 
 /* ****************************************************
  *                      STORAGE
@@ -189,6 +185,10 @@ const INNER_TAGS = new Set(['EM','I','B']);
  **/
 const TAG_NAME_PROP = 'tagName';
 /**
+ * Constant representing HTML 'html' tag
+ **/
+const HTML_TAG = 'html';
+/**
  * Constant representing HTML 'span' tag
  **/
 const SPAN_TAG = 'span';
@@ -200,10 +200,6 @@ const ICON_TAG = 'i';
  * Constant representing HTML 'option' tag
  **/
 const OPTION_TAG = 'option';
-/**
- * Constant representing HTML 'input' tag
- **/
-const INPUT_TAG = 'input';
 /**
  * Constant representing the data initial attribute precedent for negative lookbehind
  **/
@@ -217,7 +213,7 @@ const POWER_BUTTON_ID = "#power-button";
 /**
  * Constant representing blocked wrap id
  **/
-const BLOCKED_WRAP_ID = "#blocked-wrap";
+const BLOCKED_WRAP_ID = "#plugin-wrap";
 /**
  * Constant representing blocked data id
  **/
@@ -257,23 +253,23 @@ const CATEGORY_LIST_ID = "#category-list";
 /**
  * Constant representing button id for submiting replacement
  **/
-const REPLACE_SUBMIT_BUTTON = "#replace-submit";
+const REPLACE_SUBMIT_BUTTON_ID = "#replace-submit";
 /**
  * Constant representing button id for submiting words to be blocked
  **/
-const SUBMIT_BLOCK_BUTTON = "#custom-block-submit";
+const SUBMIT_BLOCK_BUTTON_ID = "#custom-block-submit";
 /**
  * Constant representing button id for customising word
  **/
-const CUSTOMISE_BUTTON = '#custom-block-button';
+const CUSTOMISE_BUTTON_ID = '#custom-block-button';
 /**
  * Constant representing warning id when replacing word
  **/
-const REPLACE_WARNING = "#replace-warning";
+const REPLACE_WARNING_ID = "#replace-warning";
 /**
  * Constant representing warning id when adding words to be blocked
  **/
-const CUSTOM_WARNING = "#custom-warning";
+const CUSTOM_WARNING_ID = "#custom-warning";
 /**
  * Constant representing textbox id for word to be block
  **/
@@ -293,15 +289,15 @@ const WORD_REPLACEMENT = "#after-replace";
 /**
  * Constant representing id category dropdown list
  **/
-const CATEGORY_LIST = "#custom-word-list";
+const CATEGORY_LIST = "#category-select-list";
 /**
  * Constant representing id for added words button
  **/
-const ADDED_WORDS_BUTTON = "#new-words";
+const ADDED_WORDS_BUTTON = "#custom-words-button";
 /**
  * Constant representing id for added categories button
  **/
-const ADDED_CATEGORIES_BUTTON = "#new-category";
+const ADDED_CATEGORIES_BUTTON = "#custom-categories-button";
 /**
  * Constant representing id for added categories
  **/
@@ -309,7 +305,7 @@ const ADDED_CATEGORIES = "#new-category-buttons";
 /**
  * Constant representing id for replaced words button
  **/
-const REPLACED_WORDS_BUTTON = "#replaced-words-button";
+const REPLACED_WORDS_BUTTON = "#replaced-list-button";
 /**
  * Constant representing id for tbody of added words
  **/
@@ -344,14 +340,6 @@ const SRC_ATTR = 'src';
  * Constant representing the 'id' attribute
  **/
 const ID_ATTR = 'id';
-/**
- * Constant representing the 'type' attribute
- **/
-const TYPE_ATTR = 'type';
-/**
- * Constant representing the 'checked' property
- **/
-const CHECKED_PROP = 'checked';
 /**
  * Constant representing the 'word' attribute
  **/
@@ -395,10 +383,6 @@ const BAN_ICON_CLASS = 'ban';
  **/
 const DISPLAY_NONE_CLASS = 'displayNone';
 /**
- * Constant representing HTML 'on' class
- **/
-const ON_CLASS = 'on';
-/**
  * Constant representing HTML 'off' class
  **/
 const OFF_CLASS = 'off';
@@ -406,10 +390,6 @@ const OFF_CLASS = 'off';
  * Constant representing HTML 'categoryItem' class
  **/
 const CATEGORY_ITEM_CLASS = 'categoryItem';
-/**
- * Constant representing HTML 'wordItem' class
- **/
-const WORD_ITEM_CLASS = 'wordItem';
 /**
  * Constant representing HTML 'boxItem' class
  **/
@@ -438,6 +418,14 @@ const CATEGORY_BUTTON_CLASS = '.category-custom-button';
 /* ****************************************************
  *                      CATEGORIES
  * ****************************************************/
+/**
+ * Constant representing default category
+ **/
+const DEFAULT_CATEGORY = 'default';
+/**
+ * Constant representing default label
+ **/
+const DEFAULT_LABEL = 'Default';
 /**
  * Constant representing the profanity category
  **/
@@ -477,7 +465,7 @@ const PERSPECTIVE_API_URL = 'https://h8bl-ck.herokuapp.com/analyse';
 /**
  * Constant representing the number of API keys for Perspective API
  **/
-const NUMBER_OF_API_KEYS = 6;
+const NUMBER_OF_API_KEYS = 7;
 /**
  * Constant representing analyse command for Perspective API
  **/
@@ -522,6 +510,14 @@ const JSONP_DATA_TYPE = 'jsonp';
  * Constant representing the multipart/form-data MIME type
  **/
 const FORM_DATA_MIMETYPE = 'multipart/form-data';
+/**
+ * Constant representing the 'number_of_sightings' key
+ **/
+const SIGHTINGS_KEY = 'number_of_sightings';
+/**
+ * Constant representing the number of sightings threshold
+ **/
+const SIGHTINGS_THRESHOLD = 100;
 /**
  * Constant representing the 'term' key
  **/

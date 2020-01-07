@@ -21,7 +21,7 @@ const addMoreListener = function () {
             {
                 if (category === categoryName)
                 {
-                    const identifier = word.replace(new RegExp(SPACE_STR, GI_REG_EXP), DASH_STR);
+                    const identifier = word.replace(new RegExp(NON_IDENTIFIER_REGEX, GI_REG_EXP), DASH_STR);
                     $wordsList.append($.parseHTML(WORD_LIST_ELEMENT(identifier, word)));
                     const $wordElem = $(IDENTIFIER_SELECTOR(identifier));
                     toggleCheckBox($wordElem.children(CLASS_SELECTOR(BOX_ITEM_CLASS)), !whitelist.has(word));

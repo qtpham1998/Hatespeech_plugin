@@ -9,7 +9,8 @@
  **/
 const getDomElements = function ()
 {
-    return  $(INSPECTED_TAGS).filter(function (_, elem) {
+    return  $(INSPECTED_TAGS).filter(function (_, elem)
+    {
         const text = $(elem).clone().children().remove().end().text();
         return ACCEPTABLE_REGEX.test(text);
     });
@@ -38,7 +39,8 @@ const checkOffensiveLanguage = function (text, wordBank, whitelist)
  * @param score The toxicity score of the element
  * @return {String} The flagged HTML code
  **/
-const wrapMatches = function (elemHtml, word, category, score) {
+const wrapMatches = function (elemHtml, word, category, score)
+{
     const title = REDACTED_TITLE(category, score);
     const matches = [...elemHtml.matchAll(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP))];
 
@@ -118,37 +120,37 @@ const inspectElements = function ()
     let divElements = getDomElements();
     browser.storage.sync.get([WORD_BANK, WHITELIST, CUSTOM_WORD_BANK, REPLACE_LIST], function (result)
     {
-      divElements.each((_,elem) =>
-    {
-        const $elem = $(elem);
-        /* Get text of element only (without its child elements' texts) */
+        divElements.each((_,elem) =>
+        {
+            const $elem = $(elem);
+            /* Get text of element only (without its child elements' texts) */
 
-        replaceWord($elem, result.replaceList);
-    });
+            replaceWord($elem, result.replaceList);
+        });
 
         let tag = 0;
-        const whitelist = new Set(result.whitelist)
+        const whitelist = new Set(result.whitelist);
         for(let [word, replacement] of Object.entries(result.replaceList)){
           delete result.wordBank[word];
           delete result.customWordBank[word];
         }
 
-        if(result.customWordBank){
-
-          divElements = getDomElements();
-
-        divElements.each((_, elem) =>
+        if (result.customWordBank)
         {
-            const $elem = getContextElement($(elem));
-            // If this context element has been already inspected, can move on to the next one
-            if ($elem.attr(TAG_ATTR) !== undefined)
-            {
-                return;
-            }
+            divElements = getDomElements();
 
-            flagOffensiveWords($elem, Object.entries(result.customWordBank), 1);
-        })
-      }
+            divElements.each((_, elem) =>
+            {
+                const $elem = getContextElement($(elem));
+                // If this context element has been already inspected, can move on to the next one
+                if ($elem.attr(TAG_ATTR) !== undefined)
+                {
+                    return;
+                }
+
+                flagOffensiveWords($elem, Object.entries(result.customWordBank), 1);
+            })
+        }
 
         divElements = getDomElements();
 
@@ -172,6 +174,7 @@ const inspectElements = function ()
                 tag++;
             }
         });
+        $(HTML_TAG).removeClass(DISPLAY_NONE_CLASS);
     });
 };
 

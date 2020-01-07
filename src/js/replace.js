@@ -28,8 +28,8 @@
  };
 
 
- $(REPLACE_SUBMIT_BUTTON).click(function (){
-     $(REPLACE_WARNING).hide();
+ $(REPLACE_SUBMIT_BUTTON_ID).click(function (){
+     $(REPLACE_WARNING_ID).hide();
      browser.storage.sync.get([REPLACE_LIST, WORD_BANK, CUSTOM_WORD_BANK], function(result){
        var replaceList = result.replaceList;
        const wordInput = $(WORD_TO_REPLACE).val();
@@ -39,26 +39,26 @@
        $(WORD_REPLACEMENT).val("");
 
        if(wordInput.length == 0){
-         $(REPLACE_WARNING).html("Please enter a word to replace!");
-         $(REPLACE_WARNING).show();
+         $(REPLACE_WARNING_ID).html("Please enter a word to replace!");
+         $(REPLACE_WARNING_ID).show();
          return;
        }else if(replaceInput.length == 0){
-         $(REPLACE_WARNING).html("Please enter a replacement");
-         $(REPLACE_WARNING).show();
+         $(REPLACE_WARNING_ID).html("Please enter a replacement");
+         $(REPLACE_WARNING_ID).show();
          return;
        }else if(replaceList[wordInput] !== undefined){
-         $(REPLACE_WARNING).html("Replacement for " + wordInput +" already existed!");
-         $(REPLACE_WARNING).show();
+         $(REPLACE_WARNING_ID).html("Replacement for " + wordInput +" already existed!");
+         $(REPLACE_WARNING_ID).show();
          return;
        }else if(result.wordBank[replaceInput] !== undefined || result.customWordBank[replaceInput] !== undefined){
-         $(REPLACE_WARNING).html("Replacement word is blocked!");
-         $(REPLACE_WARNING).show();
+         $(REPLACE_WARNING_ID).html("Replacement word is blocked!");
+         $(REPLACE_WARNING_ID).show();
          return;
        }else{
          for (let [word, replacement] of Object.entries(result.replaceList)){
              if(wordInput === replacement){
-               $(REPLACE_WARNING).html( replacement + " is already replacement for " + word);
-               $(REPLACE_WARNING).show();
+               $(REPLACE_WARNING_ID).html( replacement + " is already replacement for " + word);
+               $(REPLACE_WARNING_ID).show();
                return;
              }
          }
