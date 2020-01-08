@@ -94,9 +94,7 @@ const removeWordReplacements = function (word)
             if (result.wordBank[word] !== undefined || result.customWordBank[word] !== undefined)
             {
                 const category = result.wordBank[word] || result.customWordBank[word];
-                const map = {};
-                map[word] = category;
-                flagOffensiveWords($elem, Object.entries(map), 1);
+                flagOffensiveWords($elem, [[word, category]], 1);
             }
         });
     });

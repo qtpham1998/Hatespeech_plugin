@@ -55,7 +55,6 @@ $(POWER_BUTTON_ID).click(function (e)
         {
             switchOnPlugin();
         }
-        updateBlockedData(!result.power);
         browser.storage.sync.set({power: !result.power}, EMPTY_FUNCTION);
     });
 });
@@ -65,7 +64,7 @@ $(POWER_BUTTON_ID).click(function (e)
  **/
 browser.storage.sync.get([POWER], function (result)
 {
-    updateBlockedData(result.power);
+    updateBlockedData();
     if (!result.power)
     {
         switchOffPlugin();

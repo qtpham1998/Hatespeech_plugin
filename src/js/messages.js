@@ -7,9 +7,19 @@
  *              CONSOLE INFO MESSAGES
  * ****************************************************/
 /**
+ * Message indicating list of languages have been loaded
+ **/
+const INFO_LOADED_LANGUAGES = 'INFO: Loaded languages into storage.';
+
+/**
  * Message indicating list of words have been loaded
  **/
 const INFO_LOADED_WORDS = 'INFO: Loaded words into storage.';
+
+/**
+ * Message indicating list of Spanish words have been loaded
+ **/
+const INFO_LOADED_SPANISH_WORDS = 'INFO: Loaded Spanish words into storage.';
 
 /**
  * Message indicating list of categories have been loaded

@@ -12,6 +12,14 @@
  **/
 const REDACTED_TITLE = (category, score) => `Text contains ${category}${category === PROFANITY_CATEGORY ? "." : " content."} Toxicity score is ${score < 0 ? 0.5 : score.toPrecision(3)}`;
 
+/**
+ * The appropriate wordBank depending on language
+ * <ul>
+ *     <li> {0} - The language code in ISO 639-1 format </li>
+ * </ul>
+ **/
+const LANGUAGE_WORD_BANK = (language) => `${language === ENGLISH_LANGUAGE ? 'w' : (language + 'W')}ordBank`;
+
 /* ****************************************************
  *                        REGEX
  * ****************************************************/

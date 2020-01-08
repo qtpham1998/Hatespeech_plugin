@@ -62,6 +62,14 @@ const checkSupported = function ()
     }
 };
 
+/**
+ * Gets the language of the current tab
+ **/
+const getTabLanguage = function ()
+{
+    const language = document.getElementsByTagName(HTML_TAG)[0].getAttribute(LANG_ATTR);
+    return language ? language.substring(0, 2) : ENGLISH_LANGUAGE;
+};
 
 /**
  * Replaces words in replaceList then redacts others
@@ -137,14 +145,16 @@ browser.runtime.onMessage.addListener(function(req, _, resp)
 
         case ADD_REPLACEMENT:
             replaceWordInstances(req.word, req.replace);
+            count = getRedactedCount();
             break;
         case DELETE_REPLACEMENT:
             removeWordReplacements(req.word);
+            count = getRedactedCount();
             break;
     }
     if (resp !== undefined && count !== undefined)
     {
-        resp({blocked: count})
+        resp({blocked: getRedactedCount()})
     }
 });
 

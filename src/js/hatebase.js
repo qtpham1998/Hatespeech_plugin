@@ -8,8 +8,10 @@
  * @param token The authentication token
  * @param key The API key
  * @param page The page number
+ * @param language The language of the vocabulary
+ * @return The settings for the request
  **/
-const getRequestSettings = function (key, token, page)
+const getRequestSettings = function (key, token, page, language)
 {
     const form = new FormData();
     form.append(API_KEY, key);
@@ -19,6 +21,7 @@ const getRequestSettings = function (key, token, page)
         reqUrl = HB_REQUEST_URL;
         form.append(TOKEN_KEY, token);
         form.append(PAGE_KEY, page);
+        form.append(LANGUAGE_KEY, language)
     }
 
     return {
@@ -47,7 +50,6 @@ const getRequestSettings = function (key, token, page)
 const authenticate = function (key)
 {
     const settings = getRequestSettings(key);
-
     $.ajax(settings).done(function (response)
     {
         const token = JSON.parse(response).result[TOKEN_KEY];
@@ -60,31 +62,38 @@ const authenticate = function (key)
  * @param token The authentication token
  * @param key The API key
  **/
-const retrieveWords = function (token, key)
+const retrieveWords = function (token, key, language)
 {
-    browser.storage.sync.get([WORD_BANK], function (result)
+    browser.storage.sync.get([LANGUAGES_LIST], function (result)
     {
-        const wordBank = result.wordBank;
-        for (let i = 1; i <= 10; i++)
+        for (let [shortcode, language] of Object.entries(result.languagesList))
         {
-            const settings = getRequestSettings(key, token, i);
-            $.ajax(settings).done(function (response)
+            const wbKey = LANGUAGE_WORD_BANK(shortcode);
+            browser.storage.sync.get([wbKey], function (result)
             {
-                console.info(INFO_HATEBASE_SUCCESS, i);
-                const results = JSON.parse(response).result;
-                addResponseToWordBank(wordBank, results);
+                const wordBank = result[wbKey];
+                for (let i = 1; i <= 10; i++)
+                {
+                    const settings = getRequestSettings(key, token, i, language);
+                    $.ajax(settings).done(function (response)
+                    {
+                        console.info(INFO_HATEBASE_SUCCESS, i);
+                        const results = JSON.parse(response).result;
+                        addResponseToWordBank(wordBank, results, wbKey);
+                    });
+                }
             });
         }
     });
-
 };
 
 /**
  * Retrieves words from Hatebase and stores them in the wordBank
  * @param wordBank The current wordBank
  * @param resultSet The response results from the request
+ * @param wbKey The wordBank key
  **/
-const addResponseToWordBank = function (wordBank, resultSet)
+const addResponseToWordBank = function (wordBank, resultSet, wbKey)
 {
     resultSet.forEach(function (word)
     {
@@ -98,7 +107,9 @@ const addResponseToWordBank = function (wordBank, resultSet)
             wordBank[term] = categorize(word);
         }
     });
-    browser.storage.sync.set({wordBank: wordBank});
+    const store = {};
+    store[wbKey] = wordBank;
+    browser.storage.sync.set(store);
 };
 
 /**
@@ -141,7 +152,5 @@ function getOffensiveWordsList()
 {
     // API keys used for hatebase
     const keyList = ["WnxszacNJAUDfmhaRj4DpAFEuXPBTZUZ", "oxdKzspzxPvsskdMupfHhgbnnRqrWmvt", "HQTBtxnWeNReUZAvfPpoqFrjFeLnoJRg"];
-    authenticate(keyList[1]);
+    authenticate(keyList[0]);
 }
-
-//setInterval(getOffensiveWordsList, 5 * MS_IN_A_DAY);

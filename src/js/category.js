@@ -19,7 +19,6 @@ const sendCategoryCommand = function (command, categoryName, remove = false)
                 {
                     command: command,
                     category: categoryName,
-                    data: getCurrentData(),
                     remove: remove
                 },
                 function (resp)

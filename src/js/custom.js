@@ -22,7 +22,6 @@ const sendCustomWordCommand = function (command, word, category, block)
                     word: word,
                     category: category,
                     block: block,
-                    data: getCurrentData(),
                 },
                 function (resp)
                 {
@@ -117,7 +116,7 @@ const addCustomWord = function (wordInput, categoryInput, blockedList, customBlo
     }
     else
     {
-        category = $(CATEGORY_SELECT_LIST_ID).find(SELECTED).attr(ID_ATTR);
+        category = $(CATEGORY_SELECT_LIST_ID).find(SELECTED_OPT).attr(ID_ATTR);
         isBlocked = blockedList[category] || customBlockedList[category];
     }
 

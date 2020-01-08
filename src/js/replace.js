@@ -20,6 +20,10 @@ const sendReplaceWordCommand = function (command, word, replacement)
                     command: command,
                     word: word,
                     replace: replacement
+                },
+                function (resp)
+                {
+                    updatePopupData(resp.blocked);
                 });
         });
     });

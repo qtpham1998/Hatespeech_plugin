@@ -141,38 +141,52 @@ const getContextElement = function ($elem)
  **/
 const inspectElements = function ()
 {
+    const language = getTabLanguage();
     const divElements = getDomElements();
-    browser.storage.sync.get([WORD_BANK, CUSTOM_WORD_BANK, REPLACE_LIST], function (result)
+    const wordBank = LANGUAGE_WORD_BANK(language);
+    browser.storage.sync.get([wordBank, CUSTOM_WORD_BANK, REPLACE_LIST], function (result)
     {
-        let tag = 0;
-        for (let [word, _] of Object.entries(result.replaceList))
-        {
-            delete result.wordBank[word];
-            delete result.customWordBank[word];
+        try {
+            let tag = 0;
+            for (let [word, _] of Object.entries(result.replaceList))
+            {
+                delete result[wordBank][word];
+                delete result.customWordBank[word];
+            }
+
+            divElements.each((_, elem) =>
+            {
+                const $elem = getContextElement($(elem));
+                // If this context element has been already inspected, can move on to the next one
+                if ($elem.length === 0 || $elem.attr(TAG_ATTR) !== undefined)
+                {
+                    return;
+                }
+
+                const text = $elem.text();
+                flagReplaceWords($elem, result.replaceList);
+                flagOffensiveWords($elem, Object.entries(result.customWordBank), 1, true);
+                const blockedWords = checkOffensiveLanguage(text, result[wordBank]);
+                if (blockedWords.length > 0)
+                {
+                    if (PERSPECTIVE_SUPPORTED_LANGUAGES.has(language))
+                    {
+                        const info = {tag: tag, language: language, blocked: blockedWords};
+                        sendForAnalysis(text, info);
+                        $elem.attr(TAG_ATTR, tag);
+                        tag++;
+                    }
+                    else
+                    {
+                        flagOffensiveWords($elem, blockedWords, 0.5);
+                    }
+                }
+            });
         }
-
-        divElements.each((_, elem) =>
+        finally
         {
-            const $elem = getContextElement($(elem));
-            // If this context element has been already inspected, can move on to the next one
-            if ($elem.length === 0 || $elem.attr(TAG_ATTR) !== undefined)
-            {
-                return;
-            }
-
-            const text = $elem.text();
-            flagReplaceWords($elem, result.replaceList);
-            flagOffensiveWords($elem, Object.entries(result.customWordBank), 1, true);
-            const blockedWords = checkOffensiveLanguage(text, result.wordBank);
-            if (blockedWords.length > 0)
-            {
-                const info = {tag: tag, blocked: blockedWords};
-                sendForAnalysis(text, info);
-                $elem.attr(TAG_ATTR, tag);
-                tag++;
-            }
-        });
-        $(HTML_TAG).removeClass(DISPLAY_NONE_CLASS);
+            $(HTML_TAG).removeClass(DISPLAY_NONE_CLASS);
+        }
     });
 };
 

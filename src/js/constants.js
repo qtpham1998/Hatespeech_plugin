@@ -30,7 +30,15 @@ const WARNED_UNSUPPORTED_TAG = 'warnedUnsupported';
 /**
  * Constant representing warnedUnsupported tag
  **/
-const UNSUPPORTED_PAGES_LIST = ['twitter.com'];
+const UNSUPPORTED_PAGES_LIST = ['twitter.com', 'docs.google.com', 'slides.google.com', 'overleaf.com'];
+/**
+ * Constant representing spanish in ISO 639-1
+ **/
+const SPANISH_LANGUAGE = 'es';
+/**
+ * Constant representing English in ISO 639-1
+ **/
+const ENGLISH_LANGUAGE = 'en';
 /**
 * An empty function
 **/
@@ -71,10 +79,6 @@ const TEXT_TYPE = 'text';
  * Constant representing JSON data type
  **/
 const JSON_TYPE = 'json';
-/**
- * Constant representing selected option
- **/
-const SELECTED = ':selected';
 
 /* ****************************************************
  *                      STORAGE
@@ -87,6 +91,10 @@ const WORD_BANK = 'wordBank';
  * Constant representing the customWordBank key
  **/
 const CUSTOM_WORD_BANK = 'customWordBank';
+/**
+ * Constant representing the customWordBank key
+ **/
+const LANGUAGES_LIST = 'languagesList';
 /**
  * Constant representing the power key
  **/
@@ -190,20 +198,12 @@ const DELETE_REPLACEMENT = 'delete-replacement';
 
 
 /* ****************************************************
- *                  HTML ELEMENTS
+ *               HTML/CSS ELEMENTS
  * ****************************************************/
 /**
  * Constant representing HTML tags to be inspected
  **/
 const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span,a,em,b,i,ul,ol,li,cite,strong';
-/**
- * Constant representing HTML tags contained inside another content tag
- **/
-const OUTER_TAGS = ':not(em,i,b,strong)'; //(['EM','I','B', 'STRONG']);
-/**
- * Constant representing the 'tagName' property
- **/
-const TAG_NAME_PROP = 'tagName';
 /**
  * Constant representing HTML 'html' tag
  **/
@@ -224,6 +224,14 @@ const OPTION_TAG = 'option';
  * Constant representing the data initial attribute precedent for negative lookbehind
  **/
 const DATA_ATTR_PRECEDENT = 'data-(initial|origin)=[\'|"]';
+/**
+ * Constant representing jQuery selector for 'outer' tags
+ **/
+const OUTER_TAGS = ':not(em,i,b,strong)';
+/**
+ * Constant representing selected option
+ **/
+const SELECTED_OPT = ':selected';
 
 /* ****************** HTML ID *********************** */
 /**
@@ -340,6 +348,10 @@ const CUSTOM_CATEGORIES_TABLE_ID = '#custom-categories-table';
 const REPLACED_WORDS_TABLE_ID = "#replaced-words-table";
 
 /* ************** HTML ATTRIBUTES ******************* */
+/**
+ * Constant representing the lang attribute
+ **/
+const LANG_ATTR = 'lang';
 /**
  * Constant representing the data attribute key for hiding
  **/
@@ -512,6 +524,10 @@ const TOKEN_KEY = 'token';
  **/
 const PAGE_KEY = 'page';
 /**
+ * Constant representing the 'language' form key
+ **/
+const LANGUAGE_KEY = 'language';
+/**
  * Constant representing the 'jsonp' data type
  **/
 const JSONP_DATA_TYPE = 'jsonp';
@@ -563,6 +579,14 @@ const HB_LGBT_CATEGORY = 'is_about_sexual_orientation';
  * Constant representing the path to the smallOffensiveList.csv file
  **/
 const WORDS_FILE_PATH = '../csv/smallOffensiveList.csv';
+/**
+ * Constant representing the path to the spanishSmallOffensiveList.csv file
+ **/
+const SPANISH_WORDS_FILE_PATH = '../csv/spanishSmallOffensiveList.csv';
+/**
+ * Constant representing the path to the languages.csv file
+ **/
+const LANGUAGES_FILE_PATH = '../csv/languages.csv';
 /**
  * Constant representing the path to the categories.csv file
  **/
