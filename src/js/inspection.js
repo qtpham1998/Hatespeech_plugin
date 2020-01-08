@@ -129,11 +129,6 @@ const processAnalysisResponse = function (analysed, info)
 const getContextElement = function ($elem)
 {
     return $elem.closest(OUTER_TAGS);
-    // while (OUTER_TAGS.has($elem.prop(TAG_NAME_PROP)) && $elem.parent() !== undefined)
-    // {
-    //     $elem = $elem.parent();
-    // }
-    // return $elem;
 };
 
 /**
@@ -185,7 +180,7 @@ const inspectElements = function ()
         }
         finally
         {
-            $(HTML_TAG).removeClass(DISPLAY_NONE_CLASS);
+            $(HTML_TAG).show();
         }
     });
 };

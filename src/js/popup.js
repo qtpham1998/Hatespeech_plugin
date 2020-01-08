@@ -57,8 +57,8 @@ const toggleCheckBox = function ($checkbox, select) {
  **/
 const showErrorMessage = function ()
 {
-    $(DATA_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
-    $(ERROR_MESSAGE_ID).removeClass(DISPLAY_NONE_CLASS);
+    $(DATA_WRAP_ID).hide();
+    $(ERROR_MESSAGE_ID).show();
 };
 
 /**

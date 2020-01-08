@@ -55,6 +55,7 @@ const checkSupported = function ()
             alert(WARN_UNSUPPORTED_PAGE);
             localStorage.setItem(WARNED_UNSUPPORTED_TAG, TRUE);
         }
+        $(HTML_TAG).show();
     }
     else
     {

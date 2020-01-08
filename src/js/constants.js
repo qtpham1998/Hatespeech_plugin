@@ -404,10 +404,6 @@ const CHECK_CLASS = 'check';
  **/
 const BAN_ICON_CLASS = 'ban';
 /**
- * Constant representing HTML 'displayNone' class
- **/
-const DISPLAY_NONE_CLASS = 'displayNone';
-/**
  * Constant representing HTML 'off' class
  **/
 const OFF_CLASS = 'off';

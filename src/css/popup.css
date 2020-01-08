@@ -23,11 +23,6 @@ html.clear {
   margin-bottom: 10px;
 }
 
-/* To hide a section in the popup*/
-.displayNone {
-  display: none;
-}
-
 #error-message {
   padding-top: 10px;
   height: 75px;

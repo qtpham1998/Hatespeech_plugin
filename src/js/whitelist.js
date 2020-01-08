@@ -53,7 +53,7 @@ const addMoreListener = function () {
                     addWordListener($wordElem)
                 }
             });
-            $(WORDS_POPUP_ID).removeClass(DISPLAY_NONE_CLASS);
+            $(WORDS_POPUP_ID).show();
         });
     });
     addBackButtonListener();
@@ -105,7 +105,7 @@ const addWordListener = function ($wordElem) {
 const addBackButtonListener = function () {
     $(BACK_BUTTON_ID).click(function ()
     {
-        $(WORDS_POPUP_ID).addClass(DISPLAY_NONE_CLASS);
+        $(WORDS_POPUP_ID).hide();
         $(WORDS_LIST_ID).empty();
     });
 };

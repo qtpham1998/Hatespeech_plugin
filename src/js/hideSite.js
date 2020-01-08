@@ -9,6 +9,6 @@
 browser.storage.sync.get([POWER], function (result) {
     if (result.power)
     {
-        $(HTML_TAG).addClass(DISPLAY_NONE_CLASS);
+        $(HTML_TAG).hide();
     }
 });

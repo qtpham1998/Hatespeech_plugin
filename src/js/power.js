@@ -22,7 +22,7 @@ const switchOnPlugin = function ()
 {
     $(HTML_TAG).removeClass(OFF_CLASS);
     $(POWER_BUTTON_ID).removeClass(OFF_CLASS);
-    $(PLUGIN_WRAP_ID).removeClass(DISPLAY_NONE_CLASS);
+    $(PLUGIN_WRAP_ID).show();
     sendPowerCommand(SWITCH_ON);
     console.info(INFO_POWER_OFF);
 };
@@ -34,7 +34,7 @@ const switchOffPlugin = function ()
 {
     browser.browserAction.setIcon({path: GREY_ICON_PATH});
     $(POWER_BUTTON_ID).addClass(OFF_CLASS);
-    $(PLUGIN_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
+    $(PLUGIN_WRAP_ID).hide();
     $(HTML_TAG).addClass(OFF_CLASS);
     sendPowerCommand(SWITCH_OFF);
     console.info(INFO_POWER_ON);
@@ -43,7 +43,7 @@ const switchOffPlugin = function ()
 /**
  * Adds a listener function to the power button which sends switch on/off command requests to tabs when pressed
  **/
-$(POWER_BUTTON_ID).click(function (e)
+$(POWER_BUTTON_ID).click(function ()
 {
     browser.storage.sync.get([POWER], function (result)
     {
