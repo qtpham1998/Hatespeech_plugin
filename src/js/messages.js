@@ -27,24 +27,6 @@ const INFO_POWER_OFF = 'INFO: Power is switched off.';
 const INFO_POWER_ON = 'INFO: Power is switched on.';
 
 /**
- * Message indicating the tab's data is being fetched
- * <ul>
- *     <li> {0} - The tab's ID </li>
- *     <li> {1} - The tab's data </li>
- * </ul>
- **/
-const INFO_GET_DATA = 'INFO: Fetching data for tab %d, count is %d';
-
-/**
- * Message indicating a tab's data is being set
- * <ul>
- *     <li> {0} - The tab's ID </li>
- *     <li> {1} - The number of offensive words detected in the tab </li>
- * </ul>
- **/
-const INFO_SET_DATA = 'INFO: Setting data for tab %d, with offensive word count of %d';
-
-/**
 * Message indicating the tab's data is being fetched
 * <ul>
 *     <li> {0} - The tab's ID </li>
@@ -125,14 +107,35 @@ const HIDE_BLOCKED_WORDS = 'Hide Blocked Words';
 /**
  * Message warning about empty input error
  **/
-const WARN_EMPTY_INPUT = 'Please enter a word or category!';
+const WARN_EMPTY_INPUT = 'Please enter a word!';
 
 /**
  * Message warning about an existing word
  **/
-const WARN_WORD_EXISTS = 'Word already exists in the database!!';
+const WARN_WORD_EXISTS = 'Word already exists in the database!';
 
 /**
  * Message warning about an existing category
  **/
-const WARN_CATEGORY_EXISTS = 'Category already exists in the database!!';
+const WARN_CATEGORY_EXISTS = 'Category already exists in the database!';
+
+/**
+ * Message warning about the word being a replacement
+ **/
+const WARN_WORD_REPLACEMENT = 'The word is a replacement for another!';
+
+/**
+ * Message warning about missing replacement input
+ **/
+const WARN_EMPTY_REPLACEMENT = 'Please enter a replacement!';
+
+/**
+ * Message warning about the word already having a replacement
+ **/
+const WARN_REPLACEMENT_EXISTS = (word) => `Replacement for ${word} already existed!`;
+
+/**
+ * Message warning about the replacement being a blocked word
+ **/
+const WARN_REPLACEMENT_BLOCKED = 'Replacement word is blocked!';
+

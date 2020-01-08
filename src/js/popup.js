@@ -66,8 +66,37 @@ const toggleCheckBox = function ($checkbox, select) {
  **/
 const showErrorMessage = function ()
 {
-    $(BLOCKED_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
+    $(DATA_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
     $(ERROR_MESSAGE_ID).removeClass(DISPLAY_NONE_CLASS);
+};
+
+/**
+ * Adds a listener function to all close button to clear data
+ **/
+const addCloseButtonListener = function ()
+{
+    $(CLASS_SELECTOR(CLOSE_BUTTON_CLASS)).click(function ()
+    {
+        $(CATEGORY_LIST_ID).empty();
+        $(WORDS_LIST_ID).empty();
+        $(CUSTOM_WORDS_TABLE_ID).empty();
+        $(CUSTOM_CATEGORIES_TABLE_ID).empty();
+        $(REPLACED_WORDS_TABLE_ID).empty();
+    });
+};
+addCloseButtonListener();
+
+/**
+ * Shows the waning popup message
+ **/
+const showWaningPopup = function ()
+{
+    const $warningPopup = $(WARNING_MESSAGE_ID).parent();
+    $warningPopup.show();
+    $warningPopup.find(CLASS_SELECTOR(CLOSE_BUTTON_CLASS)).click(function ()
+    {
+        $warningPopup.hide();
+    });
 };
 
 /**
@@ -95,7 +124,9 @@ const updateBlockedData = function (power = true)
                     {
                         updatePopupData(resp.blocked || 0);
                     }
-                });
+                }
+            );
         });
     }
 };
+

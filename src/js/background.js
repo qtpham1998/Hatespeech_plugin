@@ -44,7 +44,6 @@ const loadWordBank = function(data)
 const loadBlockedLists = function (data)
 {
     const blockedLabels = parseCsvData(data);
-    blockedLabels[DEFAULT_CATEGORY] = DEFAULT_LABEL;
     const blockedList = {};
     for (let [category, _] of Object.entries(blockedLabels))
     {
@@ -54,9 +53,10 @@ const loadBlockedLists = function (data)
     browser.storage.sync.set({
         blockedList: blockedList,
         blockedLabels: blockedLabels,
-        whitelist: [],
         customBlockedList: {},
+        customBlockedLabels: {},
         replaceList: {},
+        whitelist: [],
     }, function ()
     {
         console.info(INFO_LOADED_CATEGORIES)

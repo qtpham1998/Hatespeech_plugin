@@ -1,12 +1,16 @@
 html, body {
   max-width: 320px;
-  max-height: 300px;
+  max-height: 240px;
   margin: 0;
   padding: 0;
 }
 
 html.off {
   max-height: 76px;
+}
+
+html.clear {
+  max-height: 200px;
 }
 
 /*To make the gap between the title and the statistic smaller*/
@@ -25,16 +29,16 @@ html.off {
 }
 
 #error-message {
-  padding-top: 20px;
-  width: 75%;
+  padding-top: 10px;
+  height: 75px;
   margin-right: auto;
   margin-left: auto;
   text-align: center;
 }
 
 #error-message > img {
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   text-align: center;
 }
 
@@ -48,15 +52,15 @@ html.off {
   color: deepskyblue;
 }
 
-/* Remove space around the popup */
-#category-popup, #words-popup {
-  margin: 0;
-  padding: 0;
-}
 
+/* ****************************************************
+ *                      POPUPS
+ * ****************************************************/
 /* Styles the category popup */
 .targetPopup {
   position: fixed;
+  margin: 0;
+  padding: 0;
   top: 0;
   bottom: 0;
   left: 0;
@@ -74,6 +78,30 @@ html.off {
   opacity: 1;
 }
 
+.wordsPopup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  transition: all 5s ease-in-out;
+}
+
+.warningPopup {
+  border: grey 1px solid;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  background-color: white;
+}
+
+/* ****************************************************
+ *                POPUP ELEMENTS
+ * ****************************************************/
 .popupHeading {
   height: 40px;
   line-height: 40px;
@@ -86,16 +114,98 @@ html.off {
   padding-left: 40px;
 }
 
-/* Styles the category list */
-#category-list, #words-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+.popupTable {
+  padding-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
+  border-spacing: 10px 4px;
+  overflow: auto;
 }
 
+/* To style the close/back button for category popup */
+.closeButton {
+  position: absolute;
+  right: 15px;
+  transition: all 200ms;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  color: deepskyblue;
+  cursor: pointer;
+}
+
+.closeButton:hover, .back:hover {
+  color: deepskyblue;
+}
+
+.backButton {
+  top: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  font-size: 13px;
+  background-color: #f7f9fa;
+  cursor: pointer;
+}
+/* ****************************************************
+ *                      BUTTONS
+ * ****************************************************/
+
+/* To set the style of the power button */
+#power-button {
+  color: white;
+  background: #17d42a;
+}
+
+#power-button.off {
+  background: #eb3d34;
+}
+
+#power-button:hover, #reveal-blocked-button:hover {
+  filter: brightness(50%);
+}
+
+#category-button {
+  background-color: grey !important;
+  color: white !important;
+}
+
+/* To set the style for back button in categories list*/
+.back-button {
+  top: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  font-size: 13px;
+  background-color: #f7f9fa;
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background-color: #e7e8ea;
+}
+
+/* To set the style of the reveal button */
+#reveal-blocked-button {
+  color: white;
+  background: #eb3d34;
+}
+
+#reveal-blocked-button.off {
+  background: #34bdeb;
+}
+
+
+/* ****************************************************
+ *                      LISTS
+ * ****************************************************/
 .categoryList, .wordsList {
+  list-style-type: none;
   overflow: auto;
-  height: 165px;
+  height: 210px;
   width: 100%;
   padding: 0;
   margin: 0;
@@ -143,223 +253,28 @@ html.off {
   height: 40px !important;
 }
 
-.wordsPopup {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  transition: all 5s ease-in-out;
-}
 
 /* ****************************************************
- *                      BUTTONS
+ *                      OTHERS
  * ****************************************************/
-
-/* To set the style of the power button */
-#power-button {
-  color: white;
-  background: #17d42a;
+#warning-message {
+  padding-top: 5px;
+  color: red;
+  font-size: 15px;
+  text-align: center;
 }
 
-#power-button.off {
-  background: #eb3d34;
-}
-
-#power-button:hover {
-  filter: brightness(50%);
-}
-
-/* To set the colour for popup buttons */
-.popupButton {
-  background-color: grey;
-  color: white;
-}
-
-.popupButton:hover {
-  background-color: #E2E2E2;
-}
-
-/* To set the style for back button in categories list*/
-#back-button {
-  top: 0;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  padding-left: 10px;
-  font-size: 13px;
-  background-color: #f7f9fa;
-  cursor: pointer;
-}
-
-.backButton:hover {
-  background-color: #e7e8ea;
-}
-
-/* To set the style of the reveal button */
-#reveal-blocked-button {
-  color: white;
-  background: #eb3d34;
-}
-
-#reveal-blocked-button.off {
-  background: #34bdeb;
-}
-
-#reveal-blocked-button:hover {
-  filter: brightness(50%);
-}
-
-/* To style the close/back button for category popup */
-.targetPopup .close {
-  position: absolute;
-  right: 15px;
-  transition: all 200ms;
-  font-size: 20px;
-  font-weight: bold;
-  text-decoration: none;
-  color: deepskyblue;
-}
-
-.close:hover, .back:hover {
-  color: deepskyblue;
-}
-
-/*.popup-overlay {*/
-/*  position: fixed;*/
-/*  top: 0;*/
-/*  bottom: 0;*/
-/*  left: 0;*/
-/*  right: 0;*/
-/*  background: rgba(0, 0, 0, 0.7);*/
-/*  transition: opacity 500ms;*/
-/*  display: none;*/
-/*  opacity: 0;*/
-/*}*/
-
-/*.popup {*/
-/*  margin: 20px auto;*/
-/*  padding: 20px;*/
-/*  background: #fff;*/
-/*  border-radius: 5px;*/
-/*  width: 70%;*/
-/*  height: 90%;*/
-/*  position: relative;*/
-/*  transition: all 5s ease-in-out;*/
-/*}*/
-
-/*.popup .close {*/
-/*  position: absolute;*/
-/*  top: 15px;*/
-/*  right: 15px;*/
-/*  transition: all 200ms;*/
-/*  font-size: 25px;*/
-/*  font-weight: bold;*/
-/*  text-decoration: none;*/
-/*  color: #333;*/
-/*}*/
-
-.popupTable {
-  padding-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-bottom: 20px;
-}
-
-.close.arrow {
+.closeButton.arrow {
   left: 15px;
   right: unset;
 }
 
-.custom-words-table-style{
-  width:320px;
-  height:100px;
-  overflow:auto;
-}
-
-#category-list {
-  list-style-type: none;
-  overflow: hidden;
-  overflow-y: scroll;
-  height: 65%;
-}
-
-#custom-warning {
-  color: red;
-  font-size: 8px;
-}
-
-#replace-warning {
-  color: red;
-  font-size: 10px;
-}
-
-.category-custom-button {
-    margin: 2px 2px 2px 2px;
-    padding: 1px 3px 2px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #ffffff;
-    white-space: nowrap;
-    background-color: #46a546;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    text-decoration: none;
-}
-
-.category-custom-button:hover{
+.deleteCustom {
   background-color: red;
+  color: white;
+  text-align: center;
 }
 
-.category-custom-button:hover span{
-  display: none;
-}
-
-.category-custom-button:hover:after{
-  content: 'DELETE';
-}
-
-.delete-word, .delete-replacement{
-  background-color: red;
-}
-
-/*#replaced-list-button {*/
-/*  background-color: grey;*/
-/*  color: white;*/
-/*  padding: 5px;*/
-/*  text-align: center;*/
-/*  display: inline-block;*/
-/*  font-size: 12px;*/
-/*  margin: 30px 0px 10px 85px;*/
-/*  cursor: pointer;*/
-/*}*/
-
-/*#custom-categories-button {*/
-/*  background-color: grey;*/
-/*  color: white;*/
-/*  padding: 3px;*/
-/*  text-align: center;*/
-/*  display: inline-block;*/
-/*  font-size: 10px;*/
-/*  margin: 5px 5px 5px 5px;*/
-/*  cursor: pointer;*/
-/*}*/
-
-/*#custom-words-button {*/
-/*  background-color: grey;*/
-/*  color: white;*/
-/*  padding: 3px;*/
-/*  text-align: center;*/
-/*  display: inline-block;*/
-/*  font-size: 10px;*/
-/*  margin: 5px 5px 5px 5px;*/
-/*  cursor: pointer;*/
-/*}*/
-
-#custom-block-submit {
-  margin: 5px 0px 0px 0px;
+.deleteCustom:hover {
+  background-color: darkred;
 }

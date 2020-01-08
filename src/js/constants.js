@@ -28,6 +28,10 @@ const FALSE = 'false';
  **/
 const WARNED_UNSUPPORTED_TAG = 'warnedUnsupported';
 /**
+ * Constant representing warnedUnsupported tag
+ **/
+const UNSUPPORTED_PAGES_LIST = ['twitter.com'];
+/**
 * An empty function
 **/
 const EMPTY_FUNCTION = function () {};
@@ -44,9 +48,13 @@ const ACCEPTABLE_REGEX = /.*[a-zA-Z\-']+.*/;
  **/
 const NON_IDENTIFIER_REGEX = /[^a-zA-Z\-]/;
 /**
- * Constant representing the flag for a global and case-insensitive reg expression
+ * Constant representing the flag for a global and case-insensitive regex expression
  **/
 const GI_REG_EXP = 'gi';
+/**
+ * Constant representing the flag for a global regex expression
+ **/
+const G_REG_EXP = 'g';
 
 /* ****************************************************
  *                       TYPES
@@ -80,14 +88,6 @@ const WORD_BANK = 'wordBank';
  **/
 const CUSTOM_WORD_BANK = 'customWordBank';
 /**
- * Constant representing the customBlockedList key
- **/
-const CUSTOM_BLOCKED_LIST = 'customBlockedList';
-/**
- * Constant representing the replaceList key
- **/
-const REPLACE_LIST = 'replaceList';
-/**
  * Constant representing the power key
  **/
 const POWER = 'power';
@@ -99,6 +99,18 @@ const BLOCKED_LIST = 'blockedList';
  * Constant representing the blockedLabels key
  **/
 const BLOCKED_LABELS = 'blockedLabels';
+/**
+ * Constant representing the customBlockedList key
+ **/
+const CUSTOM_BLOCKED_LIST = 'customBlockedList';
+/**
+ * Constant representing the blockedLabels key
+ **/
+const CUSTOM_BLOCKED_LABELS = 'customBlockedLabels';
+/**
+ * Constant representing the replaceList key
+ **/
+const REPLACE_LIST = 'replaceList';
 /**
  * Constant representing the whitelist key
  **/
@@ -158,7 +170,15 @@ const ADD_WORD = 'add-word';
 /**
  * Constant sending command to remove blocking of a word
  **/
-const DELETE_WORD = 'delete-word';
+const REMOVE_WORD = 'remove-word';
+/**
+ * Constant sending command to add a new word to block with category of choice
+ **/
+const ADD_CUSTOM_WORD = 'add-custom-word';
+/**
+ * Constant sending command to remove blocking of a word
+ **/
+const DELETE_CUSTOM_WORD = 'delete-custom-word';
 /**
  * Constant sending command to add a replcement for a word
  **/
@@ -175,11 +195,11 @@ const DELETE_REPLACEMENT = 'delete-replacement';
 /**
  * Constant representing HTML tags to be inspected
  **/
-const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span,a,em,b,i,ul,ol,li,cite';
+const INSPECTED_TAGS = 'p,h1,h2,h3,h4,h5,h6,span,a,em,b,i,ul,ol,li,cite,strong';
 /**
  * Constant representing HTML tags contained inside another content tag
  **/
-const INNER_TAGS = new Set(['EM','I','B']);
+const OUTER_TAGS = ':not(em,i,b,strong)'; //(['EM','I','B', 'STRONG']);
 /**
  * Constant representing the 'tagName' property
  **/
@@ -203,7 +223,7 @@ const OPTION_TAG = 'option';
 /**
  * Constant representing the data initial attribute precedent for negative lookbehind
  **/
-const DATA_INITIAL_PRECEDENT = 'data-(initial|origin)=[\'|"]';
+const DATA_ATTR_PRECEDENT = 'data-(initial|origin)=[\'|"]';
 
 /* ****************** HTML ID *********************** */
 /**
@@ -213,7 +233,11 @@ const POWER_BUTTON_ID = "#power-button";
 /**
  * Constant representing blocked wrap id
  **/
-const BLOCKED_WRAP_ID = "#plugin-wrap";
+const PLUGIN_WRAP_ID = "#plugin-wrap";
+/**
+ * Constant representing data wrap id
+ **/
+const DATA_WRAP_ID = "#data-wrap";
 /**
  * Constant representing blocked data id
  **/
@@ -247,6 +271,10 @@ const BACK_BUTTON_ID = "#back-button";
  **/
 const ERROR_MESSAGE_ID = "#error-message";
 /**
+ * Constant representing category button id
+ **/
+const CATEGORY_BUTTON_ID = '#category-button';
+/**
  * Constant representing category list id
  **/
 const CATEGORY_LIST_ID = "#category-list";
@@ -263,57 +291,53 @@ const SUBMIT_BLOCK_BUTTON_ID = "#custom-block-submit";
  **/
 const CUSTOMISE_BUTTON_ID = '#custom-block-button';
 /**
- * Constant representing warning id when replacing word
- **/
-const REPLACE_WARNING_ID = "#replace-warning";
-/**
  * Constant representing warning id when adding words to be blocked
  **/
-const CUSTOM_WARNING_ID = "#custom-warning";
+const WARNING_MESSAGE_ID = "#warning-message";
 /**
- * Constant representing textbox id for word to be block
+ * Constant representing custom word input id
  **/
-const WORD_TO_BLOCK = "#custom-block-input";
+const CUSTOM_WORD_INPUT = '#custom-word-input';
 /**
- * Constant representing textbox id for category of word to be block
+ * Constant representing custom category input id
  **/
-const BLOCK_WORD_CATEGORY = "#custom-block-category";
+const CUSTOM_CATEGORY_INPUT = '#custom-category-input';
 /**
  * Constant representing textbox id for word to be replace
  **/
-const WORD_TO_REPLACE = "#before-replace";
+const REPLACE_WORD_INPUT = "#before-replace";
 /**
  * Constant representing textbox id for replacement
  **/
-const WORD_REPLACEMENT = "#after-replace";
+const REPLACEMENT_INPUT = "#after-replace";
 /**
- * Constant representing id category dropdown list
+ * Constant representing the category dropdown list id
  **/
-const CATEGORY_LIST = "#category-select-list";
+const CATEGORY_SELECT_LIST_ID = '#category-select-list';
 /**
- * Constant representing id for added words button
+ * Constant representing custom words button id
  **/
-const ADDED_WORDS_BUTTON = "#custom-words-button";
+const CUSTOM_WORDS_BUTTON = '#custom-words-button';
 /**
- * Constant representing id for added categories button
+ * Constant representing custom categories button id
  **/
-const ADDED_CATEGORIES_BUTTON = "#custom-categories-button";
-/**
- * Constant representing id for added categories
- **/
-const ADDED_CATEGORIES = "#new-category-buttons";
+const CUSTOM_CATEGORIES_BUTTON = '#custom-categories-button';
 /**
  * Constant representing id for replaced words button
  **/
 const REPLACED_WORDS_BUTTON = "#replaced-list-button";
 /**
- * Constant representing id for tbody of added words
+ * Constant representing the custom words table id (tbody)
  **/
-const ADDED_WORDS_TABLE = "#custom-words-table tbody";
+const CUSTOM_WORDS_TABLE_ID = '#custom-words-table';
+/**
+ * Constant representing the custom categories table id (tbody)
+ **/
+const CUSTOM_CATEGORIES_TABLE_ID = '#custom-categories-table';
 /**
  * Constant representing id for tbody of replaced words
  **/
-const REPLACED_WORDS_TABLE = "#replaced-words-table tbody";
+const REPLACED_WORDS_TABLE_ID = "#replaced-words-table";
 
 /* ************** HTML ATTRIBUTES ******************* */
 /**
@@ -333,6 +357,10 @@ const ORIGIN_ATTR = 'data-origin';
  **/
 const TAG_ATTR = 'data-tag';
 /**
+ * Constant representing the data attribute key for word replacement
+ **/
+const REPLACE_ATTR = 'data-replacement';
+/**
  * Constant representing the 'src' attribute
  **/
 const SRC_ATTR = 'src';
@@ -341,25 +369,10 @@ const SRC_ATTR = 'src';
  **/
 const ID_ATTR = 'id';
 /**
- * Constant representing the 'word' attribute
- **/
-const WORD_ATTR = 'word';
-/**
  * Constant representing the 'selected' attribute
  **/
 const SELECTED_ATTR = 'selected';
-/**
- * Constant representing the data attribute key for word replacement
- **/
-const REPLACE_ATTR = 'data-replace';
-/**
- * Constant representing the value key for selected category
- **/
-const VALUE_ATTR = 'value';
-/**
- * Constant representing category attribute for options
- **/
-const OPTION_CATEGORY_ATTR = 'category';
+
 
 /* **************** HTML CLASSES ******************** */
 /**
@@ -399,21 +412,17 @@ const BOX_ITEM_CLASS = 'boxItem';
  **/
 const CATEGORY_MORE_CLASS = 'more';
 /**
+ * Constant representing HTML 'closeButton' class
+ **/
+const CLOSE_BUTTON_CLASS = 'closeButton';
+/**
  * Constant representing HTML 'replaced' class
  **/
 const REPLACED_CLASS = 'replaced';
 /**
- * Constant representing HTML 'delete-word' class
+ * Constant representing HTML 'delete' class
  **/
-const DELETE_WORD_CLASS = '.delete-word';
-/**
- * Constant representing HTML 'delete-replacement' class
- **/
-const DELETE_REPLACEMENT_CLASS = '.delete-replacement';
-/**
- * Constant representing HTML 'category-custom-button' class
- **/
-const CATEGORY_BUTTON_CLASS = '.category-custom-button';
+const DELETE_CUSTOM_CLASS = 'deleteCustom';
 
 /* ****************************************************
  *                      CATEGORIES
@@ -421,11 +430,7 @@ const CATEGORY_BUTTON_CLASS = '.category-custom-button';
 /**
  * Constant representing default category
  **/
-const DEFAULT_CATEGORY = 'default';
-/**
- * Constant representing default label
- **/
-const DEFAULT_LABEL = 'Default';
+const CUSTOM_CATEGORY = 'custom';
 /**
  * Constant representing the profanity category
  **/
@@ -490,6 +495,10 @@ const AUTHENTICATION_URL = 'https://api.hatebase.org/4-4/authenticate';
  * Constant representing the URL to request vocabulary from Hatebase
  **/
 const HB_REQUEST_URL = 'https://api.hatebase.org/4-4/get_vocabulary';
+/**
+ * Milliseconds in a day
+ **/
+const MS_IN_A_DAY = 1000 * 60 * 60 * 24;
 /**
  * Constant representing the 'api_key' form key
  **/

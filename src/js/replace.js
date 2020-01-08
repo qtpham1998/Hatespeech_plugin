@@ -3,110 +3,174 @@
  *  JavaScript file for selecting categories
  *******************************************************************************/
 
- /**
-  * Sends {command} message to all tabs in the window
-  * @param command The word replacing command to send
-  * @param word The new word to be replaced
-  * @param replacement The replacement for this word
-  **/
- const sendReplaceWordCommand = function (command, word, replacement)
- {
-     browser.tabs.getAllInWindow(null, function (tabs)
-     {
-         tabs.forEach((tab) => {
-             browser.tabs.sendMessage(tab.id,
-                 {
-                     command: command,
-                     word: word,
-                     replace: replacement
-                 },
-                 function (resp)
-                 {
-                 });
-         });
-     });
- };
+/**
+ * Sends {command} message to all tabs in the window
+ * @param command The word replacing command to send
+ * @param word The new word to be replaced
+ * @param replacement The replacement for this word
+ **/
+const sendReplaceWordCommand = function (command, word, replacement)
+{
+    browser.tabs.getAllInWindow(null, function (tabs)
+    {
+        tabs.forEach((tab) =>
+        {
+            browser.tabs.sendMessage(tab.id,
+                {
+                    command: command,
+                    word: word,
+                    replace: replacement
+                });
+        });
+    });
+};
 
+/**
+ * Validates the submitted replacement
+ * @param wordInput The word to be replaced
+ * @param replaceInput The replacement for the word
+ * @param result The result containing lists for checking validity
+ * @return {boolean} Whether the input is valid or not
+ **/
+const validReplaceInput = function (wordInput, replaceInput, result)
+{
+    let valid = true;
+    const $replaceWarning = $(WARNING_MESSAGE_ID);
+    const category = result.wordBank[replaceInput] || result.customWordBank[replaceInput];
+    if (wordInput.length === 0)
+    {
+        $replaceWarning.text(WARN_EMPTY_INPUT);
+        valid = false;
+    }
+    else if (replaceInput.length === 0)
+    {
+        $replaceWarning.text(WARN_EMPTY_REPLACEMENT);
+        valid = false;
+    }
+    else if (result.replaceList[wordInput] !== undefined)
+    {
+        $replaceWarning.text(WARN_REPLACEMENT_EXISTS(wordInput));
+        valid = false;
+    }
+    else if (category !== undefined)
+    {
+        const categories = Object.assign({}, result.blockedList, result.customBlockedList);
+        const whitelist = new Set(result.whitelist);
+        if (categories[category] && !whitelist.has(replaceInput))
+        {
+            $replaceWarning.text(WARN_REPLACEMENT_BLOCKED);
+            valid = false;
+        }
+    }
+    else
+    {
+        for (let [word, replacement] of Object.entries(result.replaceList))
+        {
+            if (wordInput === replacement)
+            {
+                $replaceWarning.text(replacement + " is already replacement for " + word);
+                valid = false;
+            }
+        }
 
- $(REPLACE_SUBMIT_BUTTON_ID).click(function (){
-     $(REPLACE_WARNING_ID).hide();
-     browser.storage.sync.get([REPLACE_LIST, WORD_BANK, CUSTOM_WORD_BANK], function(result){
-       var replaceList = result.replaceList;
-       const wordInput = $(WORD_TO_REPLACE).val();
-       const replaceInput = $(WORD_REPLACEMENT).val();
+    }
+    return valid;
+};
 
-       $(WORD_TO_REPLACE).val("");
-       $(WORD_REPLACEMENT).val("");
+/**
+ * Resets the replacement form
+ **/
+const resetReplaceForm = function ()
+{
+    $(REPLACE_WORD_INPUT).val(EMPTY_STR);
+    $(REPLACEMENT_INPUT).val(EMPTY_STR);
+};
 
-       if(wordInput.length == 0){
-         $(REPLACE_WARNING_ID).html("Please enter a word to replace!");
-         $(REPLACE_WARNING_ID).show();
-         return;
-       }else if(replaceInput.length == 0){
-         $(REPLACE_WARNING_ID).html("Please enter a replacement");
-         $(REPLACE_WARNING_ID).show();
-         return;
-       }else if(replaceList[wordInput] !== undefined){
-         $(REPLACE_WARNING_ID).html("Replacement for " + wordInput +" already existed!");
-         $(REPLACE_WARNING_ID).show();
-         return;
-       }else if(result.wordBank[replaceInput] !== undefined || result.customWordBank[replaceInput] !== undefined){
-         $(REPLACE_WARNING_ID).html("Replacement word is blocked!");
-         $(REPLACE_WARNING_ID).show();
-         return;
-       }else{
-         for (let [word, replacement] of Object.entries(result.replaceList)){
-             if(wordInput === replacement){
-               $(REPLACE_WARNING_ID).html( replacement + " is already replacement for " + word);
-               $(REPLACE_WARNING_ID).show();
-               return;
-             }
-         }
+/**
+ * Adds a replacement to the list
+ * @param wordInput The word to be replaced
+ * @param replaceInput The replacement for the word
+ * @param replaceList The replacement list
+ **/
+const addReplacement = function (wordInput, replaceInput, replaceList)
+{
+    replaceList[wordInput] = replaceInput;
+    browser.storage.sync.set({replaceList: replaceList});
+    sendReplaceWordCommand(ADD_REPLACEMENT, wordInput, replaceInput);
+};
 
-       }
-       replaceList[wordInput] = replaceInput;
-       sendReplaceWordCommand(ADD_REPLACEMENT, wordInput, replaceInput);
+/**
+ * Adds a listener function to take input from user for replacements
+ **/
+const addReplaceSubmitListener = function ()
+{
+    $(REPLACE_SUBMIT_BUTTON_ID).click(function ()
+    {
+        browser.storage.sync.get([REPLACE_LIST, WORD_BANK, CUSTOM_WORD_BANK, BLOCKED_LIST, CUSTOM_BLOCKED_LIST, WHITELIST], function (result)
+        {
+            const wordInput = $(REPLACE_WORD_INPUT).val();
+            const replaceInput = $(REPLACEMENT_INPUT).val();
+            resetReplaceForm();
 
-       browser.storage.sync.set({
-           replaceList: replaceList
-       }, EMPTY_FUNCTION);
-     });
-   });
+            if (!validReplaceInput(wordInput, replaceInput, result))
+            {
+                showWaningPopup();
+                return;
+            }
 
+            addReplacement(wordInput, replaceInput, result.replaceList);
+        });
+    });
+};
 
-   $(REPLACED_WORDS_BUTTON).click(function(){
-       $(REPLACED_WORDS_TABLE).empty();
-     browser.storage.sync.get([REPLACE_LIST], function (result)
-   {
-       for (let [word, replacement] of Object.entries(result.replaceList))
-       {
-           const row = REPLACE_TABLE_ROW(word, replacement);
-           $(REPLACED_WORDS_TABLE).append(row);
-       }
-   });
-   deleteReplacement();
-   })
+/**
+ * Adds a listener function that injects replaced words into table of 'replaced-list-popup'
+ **/
+const addReplacedWordsListener = function ()
+{
+    $(REPLACED_WORDS_BUTTON).click(function ()
+    {
+        const $replacedWordsTable = $(REPLACED_WORDS_TABLE_ID);
+        $replacedWordsTable.empty();
+        browser.storage.sync.get([REPLACE_LIST], function (result)
+        {
+            for (let [word, replacement] of Object.entries(result.replaceList))
+            {
+                const row = REPLACE_TABLE_ROW(word, replacement);
+                $replacedWordsTable.append(row);
+            }
+            addDeleteReplaceListener();
+        });
+    });
+};
 
 /**
  * Injects function to delete word replacement when click on delete button
  **/
-const deleteReplacement = function(){
-  $(document).on('click',DELETE_REPLACEMENT_CLASS,function(){
-     var word = $(this).attr(WORD_ATTR);
-     var row_id = "#" + word+"-replace";
-     $(row_id).remove();
-     browser.storage.sync.get([REPLACE_LIST], function (result)
-   {
-       var replaceList = result.replaceList;
-       delete replaceList[word];
-       browser.storage.sync.set({
-           replaceList: replaceList
-       }, function ()
-       {
-       });
-       //sendBlockWordCommand(DELETE_WORD, word, undefined, undefined);
+const addDeleteReplaceListener = function ()
+{
+    $(CLASS_SELECTOR(DELETE_CUSTOM_CLASS)).click(function ()
+    {
+        const $row = $(this).parent().parent();
+        const word = $row.attr(ID_ATTR);
+        $row.remove();
+        browser.storage.sync.get([REPLACE_LIST], function (result)
+        {
+            const replaceList = result.replaceList;
+            delete replaceList[word];
+            browser.storage.sync.set({replaceList: replaceList});
 
-   });
-   sendReplaceWordCommand(DELETE_REPLACEMENT, word, undefined)
-  });
+        });
+        sendReplaceWordCommand(DELETE_REPLACEMENT, word)
+    });
 };
+
+/**
+ * Adds all listener functions related to word replacement
+ **/
+const addReplaceListener = function ()
+{
+    addReplaceSubmitListener();
+    addReplacedWordsListener();
+};
+addReplaceListener();

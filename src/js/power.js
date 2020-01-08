@@ -20,8 +20,9 @@ const sendPowerCommand = function (command)
  **/
 const switchOnPlugin = function ()
 {
+    $(HTML_TAG).removeClass(OFF_CLASS);
     $(POWER_BUTTON_ID).removeClass(OFF_CLASS);
-    $(BLOCKED_WRAP_ID).removeClass(DISPLAY_NONE_CLASS);
+    $(PLUGIN_WRAP_ID).removeClass(DISPLAY_NONE_CLASS);
     sendPowerCommand(SWITCH_ON);
     console.info(INFO_POWER_OFF);
 };
@@ -33,7 +34,7 @@ const switchOffPlugin = function ()
 {
     browser.browserAction.setIcon({path: GREY_ICON_PATH});
     $(POWER_BUTTON_ID).addClass(OFF_CLASS);
-    $(BLOCKED_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
+    $(PLUGIN_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
     $(HTML_TAG).addClass(OFF_CLASS);
     sendPowerCommand(SWITCH_OFF);
     console.info(INFO_POWER_ON);

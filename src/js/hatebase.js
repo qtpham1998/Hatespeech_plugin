@@ -144,4 +144,4 @@ function getOffensiveWordsList()
     authenticate(keyList[1]);
 }
 
-getOffensiveWordsList();
+//setInterval(getOffensiveWordsList, 5 * MS_IN_A_DAY);

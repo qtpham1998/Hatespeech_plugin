@@ -62,6 +62,7 @@ const updateToolbarIcon = function (blocked)
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
     const tabId = sender.tab !== undefined ? sender.tab.id : req.tabId;
+    let count;
     switch (req.type)
     {
         case POST_REQUEST:
@@ -84,6 +85,12 @@ browser.runtime.onMessage.addListener(function (req, sender, resp)
         default:
             break;
     }
+
+    if (count !== undefined)
+    {
+        hBlock.setData(tabId, count);
+        updateToolbarIcon(count);
+    }
 });
 
 /**
@@ -100,7 +107,7 @@ browser.tabs.onActivated.addListener(function (activeInfo)
             }
             else
             {
-                updateToolbarIcon(resp.blocked || 0);
+                updateToolbarIcon(resp.blocked);
             }
         });
 });

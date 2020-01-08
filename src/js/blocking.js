@@ -3,6 +3,9 @@
  *  JavaScript file with blocking functions
  *******************************************************************************/
 
+/* ****************************************************
+ *                     REDACTION
+ * ****************************************************/
 /**
  * Redacts the given element
  * @param $elem The element to hide
@@ -16,24 +19,50 @@ const hideDomElement = function ($elem)
     $elem.click(function (e)
     {
         e.stopPropagation();
-        $elem.text(function(_, currText)
+        $elem.text(function (_, currText)
         {
             return currText === REDACTED_TEXT ? $elem.attr(INITIAL_DATA_ATTR) : REDACTED_TEXT;
         });
     });
 };
 
-// const showRedacted = function ()
-// {
-//     $(CLASS_SELECTOR(REDACTED_CLASS)).off();
-//     $(CLASS_SELECTOR(REDACTED_CLASS)).click(function (e)
-//     {
-//         e.stopPropagation();
-//         $(this).text(function(_, currText) {
-//           return currText === REDACTED_TEXT ? $(this).attr(INITIAL_DATA_ATTR) : REDACTED_TEXT;
-//       });
-//   });
-// }
+/**
+ * Flags custom words and hides them if necessary
+ * @param word The word to flag
+ **/
+hideWord = function (word)
+{
+    $(ATTRIBUTE_SELECTOR(SPAN_TAG, ORIGIN_ATTR, word)).each((_, elem) => hideDomElement($(elem)));
+};
+
+/**
+ * Flags custom words and hides them if necessary
+ * @param word The word to flag
+ * @param category category of the words
+ * @param block Whether to block the word
+ **/
+const hideCustomWord = function (word, category, block)
+{
+    const regex = new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP);
+
+    getDomElements().each((_, elem) =>
+    {
+        const $elem = $(elem);
+        const elemText = $elem.html();
+
+        if (elemText.search(regex) !== -1)
+        {
+            $elem.html(wrapMatches(elemText, word, category, 1));
+            $elem.find(ATTRIBUTE_SELECTOR(SPAN_TAG, CATEGORY_ATTR, EMPTY_STR)).each(function (_, redactedElem) {
+                const $redactedElem = $(redactedElem);
+                if (!$redactedElem.attr(INITIAL_DATA_ATTR) === word || block)
+                {
+                    hideDomElement($redactedElem);
+                }
+            });
+        }
+    });
+};
 
 /**
  * Hides recently flagged elements if power is on and corresponding category is selected
@@ -42,39 +71,26 @@ const hideDomElement = function ($elem)
  **/
 const hideTaggedElement = function ($elem, blocked)
 {
-    browser.storage.sync.get([POWER, BLOCKED_LIST, CUSTOM_BLOCKED_LIST], function (result)
+    browser.storage.sync.get([POWER, BLOCKED_LIST, CUSTOM_BLOCKED_LIST, WHITELIST], function (result)
     {
+        const whitelist = new Set(result.whitelist);
+        const categories = Object.assign({}, result.blockedList, result.customBlockedList);
         if (result.power)
         {
-            for (let [_, category] of blocked)
+            for (let [word, category] of blocked)
             {
-                if (result.blockedList[category] || result.customBlockedList[category])
+                if (!whitelist.has(word) && categories[category])
                 {
-                    $elem.find(ATTRIBUTE_SELECTOR(SPAN_TAG, CATEGORY_ATTR, category))
-                         .each(function (_, elem)
-                         {
-                             hideDomElement($(elem));
-                         });
+                    $elem.find(ATTRIBUTE_SELECTOR(SPAN_TAG, ORIGIN_ATTR, word))
+                        .each(function (_, elem)
+                        {
+                            hideDomElement($(elem));
+                        });
                 }
             }
             notifyTabContextManager(getRedactedCount());
         }
     });
-};
-
-/**
- * Reveals a redacted given element
- * @param $elem The element to reveal
- * @param removeClass Whether the redacted class style should be removed. Defaults to true.
- **/
-const revealDomElement = function ($elem, removeClass = true)
-{
-    $elem.text($elem.attr(INITIAL_DATA_ATTR));
-    if (removeClass)
-    {
-        $elem.removeClass(REDACTED_CLASS);
-    }
-    $elem.off();
 };
 
 /**
@@ -90,37 +106,10 @@ const hideElementsByCategory = function (category)
 };
 
 /**
- * Reveals words blocked by the user
- * @param word word to be revealed
- **/
-const revealElementsByWord = function(word){
-  const $elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, ORIGIN_ATTR, word));
-  $elements.each((_, elem) => revealDomElement($(elem)));
-  $elements.each((_, elem) => removeElementCategory($(elem)));
-  return $elements.length;
-}
-
-/**
- * Reveals elements flagged as offensive with respect to the given category
- * @param category The category of words to hide
- * @return {int} The number of elements revealed
- **/
-const revealElementsByCategory = function (category, remove)
-{
-    const $elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, CATEGORY_ATTR, category));
-    $elements.each((_, elem) => revealDomElement($(elem)));
-    if(remove){
-      $elements.each((_, elem) => removeElementCategory($(elem)));
-    }
-    return $elements.length;
-};
-
-/**
  * Hides all elements flagged as offensive
  **/
-const hideAllElements =  function ()
+const hideAllElements = function ()
 {
-    replaceAllWord();
     browser.storage.sync.get([BLOCKED_LIST, CUSTOM_BLOCKED_LIST], function (result)
     {
         var allBlockedList = $.extend({}, result.blockedList, result.customBlockedList);
@@ -142,150 +131,77 @@ const hideAllRedactedElements = function ()
     $(CLASS_SELECTOR(REDACTED_CLASS)).each((_, elem) => hideDomElement($(elem)));
 };
 
+/* ****************************************************
+ *                     REVEAL
+ * ****************************************************/
+/**
+ * Reveals a redacted given element
+ * @param $elem The element to reveal
+ * @param removeClass Whether the redacted class style should be removed. Defaults to true.
+ **/
+const revealDomElement = function ($elem, removeClass = true)
+{
+    $elem.text($elem.attr(INITIAL_DATA_ATTR));
+    if (removeClass)
+    {
+        $elem.removeClass(REDACTED_CLASS);
+    }
+    $elem.off();
+};
+
+/**
+ * Reveals elements flagged as offensive with respect to the given category
+ * @param category The category of words to hide
+ * @param remove Whether to unflag elements (for custom categories)
+ * @return {int} The number of elements revealed
+ **/
+const revealElementsByCategory = function (category, remove)
+{
+    const $elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, CATEGORY_ATTR, category));
+    $elements.each((_, elem) => revealDomElement($(elem)));
+    if (remove)
+    {
+        $elements.each((_, elem) => removeElementInspection($(elem)));
+    }
+    return $elements.length;
+};
+
 /**
  * Reveals all redacted elements
  * @param removeClass Whether the redacted class style should be removed. Defaults to true.
  **/
-const revealAllElements =  function (removeClass = true)
+const revealAllElements = function (removeClass = true)
 {
-    $(CLASS_SELECTOR(REPLACED_CLASS)).each((_, elem) => revealReplacement($(elem)));
     $(CLASS_SELECTOR(REDACTED_CLASS)).each((_, elem) => revealDomElement($(elem), removeClass));
 };
 
-
 /**
- * flag elements as offensive based on user given word and hide it based on requirement
- * @param word The word to flag
- * @param  category category of the words
- * @param block to block the word or not
+ * Reveals a custom word
+ * @param word Word to be revealed
+ * @param remove Whether to remove the element from inspection
  **/
-const hideElementsByWord = function(word, category, block){
-  let divElements = getDomElements();
-  browser.storage.sync.get([WHITELIST], function (result){
-  divElements.each((_,elem) =>
-      {
-          const whitelist = new Set(result.whitelist)
-          const $elem = getContextElement($(elem));
-          if ($elem.attr(TAG_ATTR) !== undefined)
-          {
-
-              return;
-          }
-
-          const text = $elem.text();
-
-          const map = {};
-          map[word] = category;
-          const blockedWords = checkOffensiveLanguage(text, map, whitelist);
-          flagOffensiveWords($elem, blockedWords, 1);
-        });
-      });
-};
-
-/**
- * Remove the category attribute of a given elem
- * @param elem The element which category needed to be removed
- **/
-const removeElementCategory = function (elem)
+const revealWord = function (word, remove)
 {
-  const $elem = $(elem);
-  $elem.removeAttr(CATEGORY_ATTR);
-  $elem.removeAttr(INITIAL_DATA_ATTR);
-  $elem.removeAttr(ORIGIN_ATTR);
-}
-
-/**
- * Replace the given element
- * @param $elem The element to hide
- * @param wordReplacements word to be replaced and it's replacements
- **/
-const replaceWord = function ($elem, wordReplacements)
-{
-  for (let [word, replacement] of Object.entries(wordReplacements))
-  {
-    let elemText = $elem.html();
-    const wrapper = REPLACED_ELEMENT(word, replacement);
-    elemText = elemText.replace(new RegExp(word, GI_REG_EXP), wrapper);
-    $elem.html(elemText);
-  };
-};
-
-/**
- * replace word based on user given word and replacement
- * @param word The word to be replaced
- * @param  replacement replacement for the word
- **/
-const replaceElementsByWord = function(word, replacement){
-  browser.storage.sync.get([WORD_BANK, CUSTOM_WORD_BANK], function (result){
-      if(result.wordBank[word] !== undefined || result.customWordBank !== undefined){
-           const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, ORIGIN_ATTR, word)).toArray();
-           elements.forEach(function(elem){
-             const $elem = $(elem);
-             revealDomElement($elem);
-             removeElementCategory($elem);
-           });
-      }
-
-        let divElements = getDomElements();
-        divElements.each((_,elem) =>
-            {
-                const $elem = $(elem);
-                var map = {};
-                map[word] = replacement;
-                replaceWord($elem, map);
-            });
-  });
-};
-
-/**
- * Reveals a replaced given element
- * @param elem The element to reveal
- **/
-const revealReplacement = function (elem)
-{
-    const $elem = $(elem);
-    $elem.text($elem.attr(INITIAL_DATA_ATTR));
-    $elem.off();
-};
-
-
-/**
- * Remove all the replacement class for the word and reveal it's original word
- * @param word the word to be reverted
- **/
-const removeElementsReplacement = function(word){
-  browser.storage.sync.get([WORD_BANK, CUSTOM_WORD_BANK], function (result){
-
-    const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, INITIAL_DATA_ATTR, word)).toArray();
-    elements.forEach(function(elem){
-      const $elem = $(elem);
-      $elem.text($elem.attr(INITIAL_DATA_ATTR));
-      $elem.removeAttr(INITIAL_DATA_ATTR);
-      $elem.removeAttr(REPLACE_ATTR);
-      $elem.removeClass(REPLACED_CLASS);
-      $elem.off();
-
-      if(result.wordBank[word] !== undefined || result.customWordBank[word] !== undefined){
-        let elemText = $elem.html();
-        var category = result.wordBank[word] === undefined ? result.customWordBank[word] : result.wordBank[word];
-        var map = {};
-        map[word] = category;
-        flagOffensiveWords($elem, Object.entries(map), 1);
-      }
-    });
-  });
-};
-
-/**
- * Replace all the words in replaceList
- **/
-const replaceAllWord = function ()
-{
-    const elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, 'class', REPLACED_CLASS)).toArray();
-    elements.forEach(function (elem)
+    const $elements = $(ATTRIBUTE_SELECTOR(SPAN_TAG, ORIGIN_ATTR, word));
+    $elements.each((_, elem) => revealDomElement($(elem)));
+    if (remove)
     {
-        const $elem = $(elem);
-        $elem.text($elem.attr(REPLACE_ATTR));
-    });
+        $elements.each((_, elem) => removeElementInspection($(elem)));
+    }
+};
 
+/* ****************************************************
+ *                 UTILS
+ * ****************************************************/
+/**
+ * Remove the redaction attributes of a given elem
+ * @param $elem The element which category needed to be removed
+ **/
+const removeElementInspection = function ($elem)
+{
+    $elem.removeAttr(INITIAL_DATA_ATTR);
+    $elem.removeAttr(CATEGORY_ATTR);
+    $elem.removeAttr(ORIGIN_ATTR);
+    $elem.removeAttr(REPLACE_ATTR);
+    $elem.off();
 };
