@@ -12,6 +12,14 @@
  **/
 const REDACTED_TITLE = (category, score) => `Text contains ${category}${category === PROFANITY_CATEGORY ? "." : " content."} Toxicity score is ${score < 0 ? 0.5 : score.toPrecision(3)}`;
 
+/**
+ * The appropriate wordBank depending on language
+ * <ul>
+ *     <li> {0} - The language code in ISO 639-1 format </li>
+ * </ul>
+ **/
+const LANGUAGE_WORD_BANK = (language) => `${language === ENGLISH_LANGUAGE ? 'w' : (language + 'W')}ordBank`;
+
 /* ****************************************************
  *                        REGEX
  * ****************************************************/
@@ -21,7 +29,15 @@ const REDACTED_TITLE = (category, score) => `Text contains ${category}${category
  *     <li> {0} - The word substring to look for </li>
  * </ul>
  **/
-const WORD_PREFIX_REGEX = (sub) => `\\b${sub}(s|(\\w?(ing|er|able|y|ed)))?\\b`;
+const WORD_PREFIX_REGEX = (sub) => `\\b${sub}(s|ing|er|able|y|ed)?\\b`;
+
+/**
+ * Regex for exact word match
+ * <ul>
+ *     <li> {0} - The word to look for </li>
+ * </ul>
+ **/
+// const EXACT_WORD_REGEX = (word) => `\\b${word}\\b`;
 
 /**
  * Regex for expressions not preceded by 'pre'
@@ -56,7 +72,7 @@ const IDENTIFIER_SELECTOR = (identifier) => `#${identifier}`;
  * <ul>
  *     <li> {0} - The type of element </li>
  *     <li> {1} - The relevant attribute </li>
- *     <li> {2} - The attribute value to look for </li>
+ *     <li> {2} - The attribute value to look for. Can be empty </li>
  * </ul>
  **/
 const ATTRIBUTE_SELECTOR = (type, attr, value) => `${type}[${attr}` + (value === EMPTY_STR ? `]` : `~='${value}'`);
@@ -71,8 +87,21 @@ const ATTRIBUTE_SELECTOR = (type, attr, value) => `${type}[${attr}` + (value ===
  *     <li> {1} - The initial text </li>
  * </ul>
  **/
-const REDACTED_ELEMENT = (category, initial, title) => `<span title='${title}' data-category='${category}' data-initial='${initial}'>${initial}</span>`;
+const REDACTED_ELEMENT = (category, initial, title, origin) => `<span title='${title}' data-category='${category}' data-origin='${origin}' data-initial='${initial}'>${initial}</span>`;
 
+/**
+ * Wrapper element for replaced word
+ * <ul>
+ *     <li> {0} -The origin word </li>
+ *     <li> {1} - The replacement word </li>
+ *     <li> {2} - The initial word </li>
+ * </ul>
+ **/
+const REPLACED_ELEMENT = (word, replacement, initial) => `<span class='replaced' data-origin='${word}' data-replacement='${replacement}' data-initial='${initial}'>${replacement}</span>`;
+
+/* ****************************************************
+ *            HTML ELEMENTS IN POPUP
+ * ****************************************************/
 /**
  * Span element categories appearing an a list
  * <ul>
@@ -96,6 +125,43 @@ const CATEGORY_LIST_ELEMENT = (identifier, label) => `<li class='categoryItem'>$
  * <ul>
  *     <li> {0} - The word id </li>
  *     <li> {1} - The word </li>
+ *     <li> {2} - The category it belongs to </li>
  * </ul>
  **/
-const WORD_LIST_ELEMENT = (identifier, word) => `<li id='${identifier}' class='wordItem'><i class='boxItem icon square outline'></i>${word}</li>`;
+const WORD_LIST_ELEMENT = (identifier, word, category) => `<li id='${identifier}' data-category='${category}' class='wordItem'><i class='boxItem icon square outline'></i>${word}</li>`;
+
+/**
+ * Option element for selecting categories in customise
+ * <ul>
+ *     <li> {0} - The category name </li>
+ *     <li> {1} - The category id </li>
+ * </ul>
+ **/
+const SELECT_CATEGORY_OPTION = (category, label) => `<option id='${category}'>${label}</option>`;
+
+/**
+ * Table row entry for custom word
+ * <ul>
+ *     <li> {0} - The custom word </li>
+ *     <li> {1} - The category it belongs to </li>
+ * </ul>
+ **/
+const CUSTOM_WORD_TABLE_ROW = (word, category) => `<tr id='${word}' data-category='${category}'><td>${word}</td><td>${category}</td><td><button class='deleteCustom'><i class='icon trash alternate outline'></i></button></td></tr>`;
+
+/**
+ * Table row entry for custom category
+ * <ul>
+ *     <li> {0} - The custom category </li>
+ *     <li> {1} - The custom category label </li>
+ * </ul>
+ **/
+const CUSTOM_CATEGORY_TABLE_ROW = (category, label) => `<tr id='${category}'><td>${label}</td><td><button class='deleteCustom'><i class='icon trash alternate outline'></i></button></td></tr>`;
+
+/**
+ * Table row entry for custom category
+ * <ul>
+ *     <li> {0} - The word </li>
+ *     <li> {1} - The word's replacement </li>
+ * </ul>
+ **/
+const REPLACE_TABLE_ROW = (word, replacement) => `<tr id='${word}'><td>${word}</td><td>${replacement}</td><td><button class="deleteCustom"><i class='icon trash alternate outline'></i></button></td></tr>`;

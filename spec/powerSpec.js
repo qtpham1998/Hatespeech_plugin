@@ -2,7 +2,7 @@ describe('Test: power.js', function () {
     it('SwitchPowerPluginTest', function ()
     {
         const $powerButton = $(POWER_BUTTON_ID);
-        const $blockedWords = $(BLOCKED_WRAP_ID);
+        const $blockedWords = $(PLUGIN_WRAP_ID);
 
         switchOffPlugin();
         expect($powerButton).toHaveAttr(SRC_ATTR, GREEN_BUTTON_PATH);

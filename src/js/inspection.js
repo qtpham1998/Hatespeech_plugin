@@ -9,7 +9,8 @@
  **/
 const getDomElements = function ()
 {
-    return  $(INSPECTED_TAGS).filter(function (_, elem) {
+    return $(INSPECTED_TAGS).filter(function (_, elem)
+    {
         const text = $(elem).clone().children().remove().end().text();
         return ACCEPTABLE_REGEX.test(text);
     });
@@ -19,14 +20,13 @@ const getDomElements = function ()
  * Checks whether the given string contains offensive languages
  * @param text The text to check
  * @param wordBank Map of offensive words to category
- * @param whitelist Set of whitelisted words
  * @return {Array} of offensive words found
  **/
-const checkOffensiveLanguage = function (text, wordBank, whitelist)
+const checkOffensiveLanguage = function (text, wordBank)
 {
     return Object.entries(wordBank).filter(function ([word, _])
     {
-        return !whitelist.has(word) && text.search(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP)) !== -1;
+        return text.search(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP)) !== -1;
     });
 };
 
@@ -38,14 +38,15 @@ const checkOffensiveLanguage = function (text, wordBank, whitelist)
  * @param score The toxicity score of the element
  * @return {String} The flagged HTML code
  **/
-const wrapMatches = function (elemHtml, word, category, score) {
+const wrapMatches = function (elemHtml, word, category, score)
+{
     const title = REDACTED_TITLE(category, score);
     const matches = [...elemHtml.matchAll(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP))];
 
     matches.forEach(function ([initial, _])
     {
-        const wrapper = REDACTED_ELEMENT(category, initial, title);
-        const regex = new RegExp(NEGATIVE_LOOKBEHIND_REGEX(initial, DATA_INITIAL_PRECEDENT), GI_REG_EXP);
+        const wrapper = REDACTED_ELEMENT(category, initial, title, word);
+        const regex = new RegExp(NEGATIVE_LOOKBEHIND_REGEX(initial, DATA_ATTR_PRECEDENT), G_REG_EXP);
         elemHtml = elemHtml.replace(regex, wrapper);
     });
     return elemHtml;
@@ -67,13 +68,36 @@ const flagOffensiveWords = function ($elem, offensiveWords, score)
 };
 
 /**
+ * Flags words to be replaced by wrapping them in a new element
+ * @param $elem The jQuey element with offensive content
+ * @param replaceList List of words and its replacements
+ **/
+const flagReplaceWords = function ($elem, replaceList)
+{
+    let elemHtml = $elem.html();
+    for (let [word, replacement] of Object.entries(replaceList))
+    {
+        const matches = [...elemHtml.matchAll(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP))];
+
+        matches.forEach(function ([initial, _])
+        {
+            const wrapper = REPLACED_ELEMENT(word, replacement, initial);
+            const regex = new RegExp(NEGATIVE_LOOKBEHIND_REGEX(initial, DATA_ATTR_PRECEDENT), G_REG_EXP);
+            elemHtml = elemHtml.replace(regex, wrapper);
+        });
+    }
+    $elem.html(elemHtml);
+};
+
+/**
  * Checks whether the given string contains offensive languages
  * @param toAnalyse The list of sentences to analyse
  * @param info Dictionary of information regarding the text to analyse
  **/
-const sendForAnalysis = function (toAnalyse, info) {
-    browser.runtime.sendMessage(
+const sendForAnalysis = function (toAnalyse, info)
 {
+    browser.runtime.sendMessage(
+        {
             command: ANALYSE_REQUEST,
             analyse: toAnalyse,
             info: info,
@@ -102,12 +126,9 @@ const processAnalysisResponse = function (analysed, info)
  * Gets the closest ancestor that would contain a whole sentence
  * @param $elem The jQuey element
  **/
-const getContextElement = function ($elem) {
-    while (INNER_TAGS.has($elem.prop(TAG_NAME_PROP)))
-    {
-        $elem = $elem.parent();
-    }
-    return $elem;
+const getContextElement = function ($elem)
+{
+    return $elem.closest(OUTER_TAGS);
 };
 
 /**
@@ -115,38 +136,59 @@ const getContextElement = function ($elem) {
  **/
 const inspectElements = function ()
 {
-    let divElements = getDomElements();
-    browser.storage.sync.get([WORD_BANK, WHITELIST], function (result)
+    const language = getTabLanguage();
+    const divElements = getDomElements();
+    const wordBank = LANGUAGE_WORD_BANK(language);
+    browser.storage.sync.get([wordBank, CUSTOM_WORD_BANK, REPLACE_LIST], function (result)
     {
-        let tag = 0;
-        const whitelist = new Set(result.whitelist)
-        divElements.each((_, elem) =>
+        try {
+            let tag = 0;
+            for (let [word, _] of Object.entries(result.replaceList))
+            {
+                delete result[wordBank][word];
+                delete result.customWordBank[word];
+            }
+
+            divElements.each((_, elem) =>
+            {
+                const $elem = getContextElement($(elem));
+                // If this context element has been already inspected, can move on to the next one
+                if ($elem.length === 0 || $elem.attr(TAG_ATTR) !== undefined)
+                {
+                    return;
+                }
+
+                const text = $elem.text();
+                flagReplaceWords($elem, result.replaceList);
+                flagOffensiveWords($elem, Object.entries(result.customWordBank), 1, true);
+                const blockedWords = checkOffensiveLanguage(text, result[wordBank]);
+                if (blockedWords.length > 0)
+                {
+                    if (PERSPECTIVE_SUPPORTED_LANGUAGES.has(language))
+                    {
+                        const info = {tag: tag, language: language, blocked: blockedWords};
+                        sendForAnalysis(text, info);
+                        $elem.attr(TAG_ATTR, tag);
+                        tag++;
+                    }
+                    else
+                    {
+                        flagOffensiveWords($elem, blockedWords, 0.5);
+                    }
+                }
+            });
+        }
+        finally
         {
-            const $elem = getContextElement($(elem));
-            // If this context element has been already inspected, can move on to the next one
-            if ($elem.attr(TAG_ATTR) !== undefined)
-            {
-                return;
-            }
-
-            const text = $elem.text();
-            const blockedWords = checkOffensiveLanguage(text, result.wordBank, whitelist);
-
-            if (blockedWords.length > 0)
-            {
-                const info = {tag: tag, blocked: blockedWords};
-                sendForAnalysis(text, info);
-                $elem.attr(TAG_ATTR, tag);
-                tag++;
-            }
-        });
+            $(HTML_TAG).show();
+        }
     });
 };
 
 /**
  * Receive request from plugin with perspective API response to flag given texts as offensive
  **/
-browser.runtime.onMessage.addListener(function(req, _, _)
+browser.runtime.onMessage.addListener(function (req, _, _)
 {
     if (req.command === ANALYSE_REQUEST)
     {

@@ -25,15 +25,42 @@ const parseCsvData = function (data, reverse = false) {
 };
 
 /**
- * Parses the CSV file and saves data to chrome storage in the form of a map from word to category
+ * Parses the CSV file and saves languages to chrome storage in the form of a map from word to category
+ * @param data The CSV data
+ **/
+const loadLanguages = function(data)
+{
+    const languages = parseCsvData(data);
+    browser.storage.sync.set({languagesList: languages}, function ()
+    {
+        console.info(INFO_LOADED_LANGUAGES);
+        setInterval(getOffensiveWordsList, 5 * MS_IN_A_DAY);
+    });
+};
+
+/**
+ * Parses the CSV file and saves wordBank to chrome storage in the form of a map from word to category
  * @param data The CSV data
  **/
 const loadWordBank = function(data)
 {
     const words = parseCsvData(data, true);
-    browser.storage.sync.set({wordBank: words}, function ()
+    browser.storage.sync.set({wordBank: words, customWordBank: {}}, function ()
     {
         console.info(INFO_LOADED_WORDS);
+    });
+};
+
+/**
+ * Parses the CSV file and saves Spanish wordBank to chrome storage in the form of a map from word to category
+ * @param data The CSV data
+ **/
+const loadSpanishWordBank = function(data)
+{
+    const words = parseCsvData(data, true);
+    browser.storage.sync.set({esWordBank: words}, function ()
+    {
+        console.info(INFO_LOADED_SPANISH_WORDS);
     });
 };
 
@@ -53,7 +80,10 @@ const loadBlockedLists = function (data)
     browser.storage.sync.set({
         blockedList: blockedList,
         blockedLabels: blockedLabels,
-        whitelist: []
+        customBlockedList: {},
+        customBlockedLabels: {},
+        replaceList: {},
+        whitelist: [],
     }, function ()
     {
         console.info(INFO_LOADED_CATEGORIES)
@@ -76,7 +106,7 @@ const setPowerOn = function ()
  **/
 browser.runtime.onInstalled.addListener(function ()
     {
-        $.ajax(
+         $.ajax(
         {
             type: GET_REQUEST,
             url: browser.runtime.getURL(WORDS_FILE_PATH),
@@ -88,6 +118,17 @@ browser.runtime.onInstalled.addListener(function ()
         });
 
         $.ajax(
+            {
+                type: GET_REQUEST,
+                url: browser.runtime.getURL(SPANISH_WORDS_FILE_PATH),
+                dataType: TEXT_TYPE,
+                success: function (response)
+                {
+                    loadSpanishWordBank(response);
+                }
+        });
+
+        $.ajax(
         {
             type: GET_REQUEST,
             url: browser.runtime.getURL(CATEGORIES_FILE_PATH),
@@ -96,6 +137,17 @@ browser.runtime.onInstalled.addListener(function ()
             {
                 loadBlockedLists(response);
             }
+        });
+
+        $.ajax(
+            {
+                type: GET_REQUEST,
+                url: browser.runtime.getURL(LANGUAGES_FILE_PATH),
+                dataType: TEXT_TYPE,
+                success: function (response)
+                {
+                    loadLanguages(response);
+                }
         });
 
         setPowerOn();

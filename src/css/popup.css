@@ -1,8 +1,16 @@
 html, body {
   max-width: 320px;
-  max-height: 200px;
+  max-height: 240px;
   margin: 0;
   padding: 0;
+}
+
+html.off {
+  max-height: 76px;
+}
+
+html.clear {
+  max-height: 200px;
 }
 
 /*To make the gap between the title and the statistic smaller*/
@@ -15,21 +23,22 @@ html, body {
   margin-bottom: 10px;
 }
 
-/* To hide a section in the popup*/
-.displayNone {
-  display: none;
-}
-
 #error-message {
-  padding-top: 20px;
-  width: 75%;
+  padding-top: 10px;
+  height: 75px;
   margin-right: auto;
   margin-left: auto;
   text-align: center;
 }
 
+#error-message > img {
+  height: 40px;
+  width: 40px;
+  text-align: center;
+}
+
 /* To change the colour of the popup icon to red */
-#blocked-data, #error-message > i {
+#blocked-data {
   color: red;
 }
 
@@ -38,15 +47,15 @@ html, body {
   color: deepskyblue;
 }
 
-/* Remove space around the popup */
-#category-popup, #words-popup {
+
+/* ****************************************************
+ *                      POPUPS
+ * ****************************************************/
+/* Styles the category popup */
+.targetPopup {
+  position: fixed;
   margin: 0;
   padding: 0;
-}
-
-/* Styles the category popup */
-.categoryPopup {
-  position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
@@ -59,12 +68,36 @@ html, body {
   transition: all 5s ease-in-out;
 }
 
-.categoryPopup:target {
+.targetPopup:target, .popup-overlay:target {
   display: unset;
   opacity: 1;
 }
 
-.categoryHeading {
+.wordsPopup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  transition: all 5s ease-in-out;
+}
+
+.warningPopup {
+  border: grey 1px solid;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 90px;
+  background-color: white;
+}
+
+/* ****************************************************
+ *                POPUP ELEMENTS
+ * ****************************************************/
+.popupHeading {
   height: 40px;
   line-height: 40px;
   padding-left: 20px;
@@ -72,21 +105,106 @@ html, body {
   background-color: #f7f9fa;
 }
 
-/* Styles the category list */
-#category-list, #words-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+.popupHeading.innerPopup {
+  padding-left: 40px;
 }
 
-.categoryList, .wordsList {
+.popupTable {
+  padding-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
+  border-spacing: 10px 4px;
   overflow: auto;
-  height: 165px;
+}
+
+/* To style the close/back button for category popup */
+.closeButton {
+  position: absolute;
+  right: 15px;
+  transition: all 200ms;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  color: deepskyblue;
+  cursor: pointer;
+}
+
+.closeButton:hover, .back:hover {
+  color: deepskyblue;
+}
+
+.backButton {
+  top: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  font-size: 13px;
+  background-color: #f7f9fa;
+  cursor: pointer;
+}
+/* ****************************************************
+ *                      BUTTONS
+ * ****************************************************/
+
+/* To set the style of the power button */
+#power-button {
+  color: white;
+  background: #17d42a;
+}
+
+#power-button.off {
+  background: #eb3d34;
+}
+
+#power-button:hover, #reveal-blocked-button:hover {
+  filter: brightness(50%);
+}
+
+#category-button {
+  background-color: grey !important;
+  color: white !important;
+}
+
+/* To set the style for back button in categories list*/
+.back-button {
+  top: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  font-size: 13px;
+  background-color: #f7f9fa;
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background-color: #e7e8ea;
+}
+
+/* To set the style of the reveal button */
+#reveal-blocked-button {
+  color: white;
+  background: #eb3d34;
+}
+
+#reveal-blocked-button.off {
+  background: #34bdeb;
+}
+
+
+/* ****************************************************
+ *                      LISTS
+ * ****************************************************/
+.categoryList, .wordsList {
+  list-style-type: none;
+  overflow: auto;
+  height: 210px;
   width: 100%;
   padding: 0;
   margin: 0;
 }
-
 
 .categoryItem, .wordItem {
   display: flex;
@@ -130,88 +248,28 @@ html, body {
   height: 40px !important;
 }
 
-.wordsPopup {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background: #fff;
-  transition: all 5s ease-in-out;
-}
-
-#back-button {
-  top: 0;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  padding-left: 10px;
-  font-size: 13px;
-  background-color: #f7f9fa;
-  cursor: pointer;
-}
-
-.backButton:hover {
-  background-color: #e7e8ea;
-}
 
 /* ****************************************************
- *                      BUTTONS
+ *                      OTHERS
  * ****************************************************/
+#warning-message {
+  padding-top: 5px;
+  color: red;
+  font-size: 15px;
+  text-align: center;
+}
 
-/* To set the style of the power button */
-#power-button.on {
+.closeButton.arrow {
+  left: 15px;
+  right: unset;
+}
+
+.deleteCustom {
+  background-color: red;
   color: white;
-  background: #17d42a;
+  text-align: center;
 }
 
-#power-button.off {
-  color: white;
-  background: #eb3d34;
-}
-
-#power-button:hover {
-  filter: brightness(50%);
-}
-
-/* To set the colour for category button */
-#category-button {
-  background-color: grey;
-  color: white;
-}
-
-#category-button:hover {
-  background-color: #E2E2E2;
-}
-
-/* To set the style of the reveal button */
-#reveal-blocked-button.on {
-  color: white;
-  background: #eb3d34;
-}
-
-#reveal-blocked-button.off {
-  color: white;
-  background: #34bdeb;
-}
-
-#reveal-blocked-button:hover {
-  filter: brightness(50%);
-}
-
-/* To style the close button for category popup */
-.categoryPopup .close {
-  position: absolute;
-  right: 15px;
-  transition: all 200ms;
-  font-size: 20px;
-  font-weight: bold;
-  text-decoration: none;
-  color: deepskyblue;
-}
-
-.categoryPopup .close:hover {
-  color: deepskyblue;
+.deleteCustom:hover {
+  background-color: darkred;
 }

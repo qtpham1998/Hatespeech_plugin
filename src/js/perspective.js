@@ -13,7 +13,7 @@ const analysePerspective = function (tabId, toAnalyse, info)
 {
     const data =
         {
-            data: JSON.stringify([toAnalyse, (info.tag % NUMBER_OF_API_KEYS).toLocaleString()])
+            data: JSON.stringify([toAnalyse, (info.tag % NUMBER_OF_API_KEYS).toLocaleString(), info.language])
         };
 
     $.ajax(

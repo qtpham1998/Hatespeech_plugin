@@ -14,15 +14,6 @@ const formatToString = function (obj)
 };
 
 /**
- * Gets that data of the active tab
- * @return {int} The current data of the active tab
- **/
-const getCurrentData = function ()
-{
-    return parseInt($(BLOCKED_NUM_ID).text(), 10);
-};
-
-/**
  * Updates the blocked-data element according to the 'blocked' value
  * @param blocked The number of words blocked
  **/
@@ -66,36 +57,59 @@ const toggleCheckBox = function ($checkbox, select) {
  **/
 const showErrorMessage = function ()
 {
-    $(BLOCKED_WRAP_ID).addClass(DISPLAY_NONE_CLASS);
-    $(ERROR_MESSAGE_ID).removeClass(DISPLAY_NONE_CLASS);
+    $(DATA_WRAP_ID).hide();
+    $(ERROR_MESSAGE_ID).show();
+};
+
+/**
+ * Adds a listener function to all close button to clear data
+ **/
+const addCloseButtonListener = function ()
+{
+    $(CLASS_SELECTOR(CLOSE_BUTTON_CLASS)).click(function ()
+    {
+        $(CATEGORY_LIST_ID).empty();
+        $(WORDS_LIST_ID).empty();
+        $(CUSTOM_WORDS_TABLE_ID).empty();
+        $(CUSTOM_CATEGORIES_TABLE_ID).empty();
+        $(REPLACED_WORDS_TABLE_ID).empty();
+    });
+};
+addCloseButtonListener();
+
+/**
+ * Shows the waning popup message
+ **/
+const showWaningPopup = function ()
+{
+    const $warningPopup = $(WARNING_MESSAGE_ID).parent();
+    $warningPopup.show();
+    $warningPopup.find(CLASS_SELECTOR(CLOSE_BUTTON_CLASS)).click(function ()
+    {
+        $warningPopup.hide();
+    });
 };
 
 /**
  * Gets the data for given tab ID and updates the popup
- * @param power Whether the plugin is turned on or not. Defaults to true
  **/
-const updateBlockedData = function (power = true)
+const updateBlockedData = function ()
 {
-    if (!power)
+    browser.tabs.query({active: true, currentWindow: true}, function (tabs)
     {
-        updatePopupData(0);
-    }
-    else
-    {
-        browser.tabs.query({active: true, currentWindow: true}, function (tabs)
-        {
-            browser.tabs.sendMessage(tabs[0].id, {command: GET_REQUEST},
-                function (resp)
+        browser.tabs.sendMessage(tabs[0].id, {command: GET_REQUEST},
+            function (resp)
+            {
+                if (browser.runtime.lastError)
                 {
-                    if (browser.runtime.lastError)
-                    {
-                        showErrorMessage();
-                    }
-                    else
-                    {
-                        updatePopupData(resp.blocked || 0);
-                    }
-                });
-        });
-    }
+                    showErrorMessage();
+                }
+                else
+                {
+                    updatePopupData(resp.blocked || 0);
+                }
+            }
+        );
+    });
 };
+

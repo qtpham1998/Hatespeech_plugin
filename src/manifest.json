@@ -9,20 +9,21 @@
   "browser_action" : {
     "default_title" : "H8BL*CK",
     "default_popup" : "popup.html",
-    "default_icon" : "/img/plugin_darkred_icon.png"
+    "default_icon" : "/img/plugin_blue_icon.png"
   },
   "content_scripts" : [
     {
       "matches" : [
-        "*://*.twitter.com/*"
+        "http://*/*",
+        "https://*/*"
       ],
       "js" : [
+        "js/lib/jquery-3.4.1.min.js",
         "/js/api.js",
         "/js/constants.js",
-        "/js/messages.js",
-        "/js/unsupportedContentScript.js"
+        "/js/hideSite.js"
       ],
-      "run_at" : "document_idle",
+      "run_at" : "document_start",
       "all_frames" : true
     },
     {
@@ -33,24 +34,23 @@
       "js" : [
         "js/lib/jquery-3.4.1.min.js",
         "js/lib/semantic.min.js",
-        "/js/api.js",
-        "/js/constants.js",
         "/js/messages.js",
         "/js/templates.js",
         "/js/inspection.js",
         "/js/blocking.js",
+        "/js/replaceContentScript.js",
         "/js/contentScript.js"
       ],
       "css" : ["/css/contentScript.css"],
       "run_at" : "document_idle",
-      "all_frames" : true
+      "all_frames" : false
     }
   ],
   "icons" : {
-    "16" : "/img/plugin_darkred_icon.png",
-    "32" : "/img/plugin_darkred_icon.png",
-    "48" : "/img/plugin_darkred_icon.png",
-    "128" : "/img/plugin_darkred_icon.png"
+    "16" : "/img/plugin_blue_icon.png",
+    "32" : "/img/plugin_blue_icon.png",
+    "48" : "/img/plugin_blue_icon.png",
+    "128" : "/img/plugin_blue_icon.png"
   },
   "web_accessible_resources" : [
     "/csv/*.csv",

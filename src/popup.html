@@ -21,47 +21,185 @@
         </div>
         <!--  POWER BUTTON  -->
         <div class="Column" style="display: inline-block; padding-left: 75px">
-            <button id="power-button" class="circular ui icon button on">
+            <button class="circular ui icon button on" id="power-button">
                 <i class="icon power off"></i>
             </button>
         </div>
     </div>
 </div>
 
-<div id="error-message" class="label displayNone"><i class="icon exclamation circle"></i>Something went wrong, please refresh the page</div>
-<div id="blocked-wrap">
+<div id="plugin-wrap">
+    <div hidden id="error-message"><img src="img/plugin_blue_icon.png"></div>
     <!--  BLOCKED DATA  -->
-    <div class="ui container center aligned">
-        <div class="ui statistic">
-            <div id="blocked-data" class="value">
-                <i id="blocked-icon" class="icon check"></i> <span id="blocked-num"></span>
+    <div id="data-wrap">
+        <div class="ui container center aligned">
+            <div class="ui statistic">
+                <div class="value" id="blocked-data">
+                    <i class="icon check" id="blocked-icon"></i> <span id="blocked-num"></span>
+                </div>
+                <div class="label">blocked words</div>
             </div>
-            <div class="label">blocked words</div>
         </div>
     </div>
 
-    <!--  POPUP BUTTON  -->
-    <div id="button-row" class="ui container center aligned">
-        <a href="#category-popup"><button class="ui button" id="category-button">Category</button></a>
-        <button class="ui button off" id="reveal-blocked-button">Reveal Blocked Words</button>
-    </div>
-
-    <!--  CATEGORY POPUP  -->
-    <div id="category-popup" class="categoryPopup" >
-        <h4 class="categoryHeading">Pick the categories to block <a class="close" href="#">x</a></h4>
-        <div class="categoryList">
-            <ul id="category-list">
+    <!--  CATEGORY LIST POPUP  -->
+    <div class="targetPopup" id="category-popup">
+        <h4 class="popupHeading">Pick the categories to block <a class="closeButton" href="#">x</a></h4>
+            <ul id="category-list" class="categoryList">
             </ul>
-        </div>
     </div>
 
     <!-- CATEGORY WORDS LIST -->
-    <div id="words-popup" class="wordsPopup displayNone">
-        <div id="back-button" class="backButton"><i class="icon caret left"></i>Back</div>
-        <div class="wordsList">
-            <ul id="words-list">
-            </ul>
+    <div hidden class="wordsPopup" id="words-popup">
+        <div class="backButton" id="back-button"><i class="icon caret left"></i>Back</div>
+        <ul id="words-list" class="wordsList">
+        </ul>
+    </div>
+
+
+    <!-- CUSTOM WORDS & CATEGORIES POPUP -->
+    <div class="targetPopup" id="custom-block-popup">
+        <h4 class="popupHeading">Add words to be blocked <a class="closeButton" href="#">x</a></h4>
+        <table class="popupTable">
+            <tr>
+                <td>Word:</td>
+                <td>Category:</td>
+            </tr>
+            <tr>
+                <td><input id="custom-word-input" size="10" type="text"></td>
+                <td><select id="category-select-list"></select></td>
+            </tr>
+            <tr>
+                <td>Or New Category:</td>
+            </tr>
+            <tr>
+                <td><input id="custom-category-input"  size="10" type="text"></td>
+                <td>
+                    <button id="custom-block-submit" type="submit">Submit</button>
+                </td>
+            </tr>
+        </table>
+
+        <!-- CUSTOM WORDS & CATEGORIES BUTTON -->
+        <div class="ui container center aligned">
+            <a href="#custom-words-popup">
+                <button class="ui button popupButton" id="custom-words-button">Words</button>
+            </a>
+            <a href="#custom-categories-popup">
+                <button class="ui button popupButton" id="custom-categories-button">Categories</button>
+            </a>
         </div>
+    </div>
+
+    <!-- LIST OF CUSTOM WORDS POPUP -->
+    <div class="targetPopup" id="custom-words-popup">
+        <h4 class="popupHeading innerPopup">
+            <a class="closeButton arrow" href="#custom-block-popup"><</a>
+            Custom Words
+            <a class="closeButton" href="#">x</a>
+        </h4>
+        <table class="popupTable">
+            <thead>
+            <tr>
+                <th>Word</th>
+                <th>Category</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody id="custom-words-table">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- LIST OF CUSTOM CATEGORIES POPUP -->
+    <div class="targetPopup" id="custom-categories-popup">
+        <h4 class="popupHeading innerPopup">
+            <a class="closeButton arrow" href="#custom-block-popup"><</a>
+            Custom Categories
+            <a class="closeButton" href="#">x</a>
+        </h4>
+        <table class="popupTable">
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody id="custom-categories-table">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- WORD REPLACEMENT POPUP -->
+    <div class="targetPopup" id="replace-word-popup">
+        <h4 class="popupHeading">Replace Word<a class="closeButton" href="#">x</a></h4>
+        <table class="popupTable">
+            <tr>
+                <td>Word:</td>
+                <td>Replacement:</td>
+            </tr>
+            <tr>
+                <td><input id="before-replace" name="block-words" size="8" type="text"></td>
+                <td><input id="after-replace" name="block-category" size="8" type="text"></select></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button id="replace-submit" type="submit">Submit</button>
+                </td>
+            </tr>
+        </table>
+        <div class="ui container center aligned">
+            <a href="#replaced-list-popup">
+                <button class="ui button popupButton" id="replaced-list-button">Words</button>
+            </a>
+        </div>
+    </div>
+
+    <!-- LIST OF REPLACEMENTS POPUP -->
+    <div class="targetPopup" id="replaced-list-popup">
+        <h4 class="popupHeading innerPopup">
+            <a class="closeButton arrow" href="#replace-word-popup"><</a>
+            Replaced Words
+            <a class="closeButton" href="#">x</a>
+        </h4>
+        <table class="popupTable">
+            <thead>
+            <tr>
+                <th>Word</th>
+                <th>Replacement</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody id="replaced-words-table">
+            </tbody>
+        </table>
+    </div>
+
+    <!-- WARNING POPUP -->
+    <div hidden class="warningPopup">
+        <h4 class="popupHeading innerPopup">
+            <i class="icon exclamation circle"></i>Invalid input
+            <span class="closeButton">x</span>
+        </h4>
+        <div id="warning-message"><i class="icon exclamation"></i></div>
+    </div>
+
+    <!--  CUSTOM & REPLACE BUTTON  -->
+    <div class="ui container center aligned">
+        <a href="#custom-block-popup">
+            <button class="ui button popupButton" id="custom-block-button">Customise</button>
+        </a>
+        <a href="#replace-word-popup">
+            <button class="ui button popupButton" id="replace-button">Replace</button>
+        </a>
+    </div>
+
+    <!--  POPUP & CATEGORY BUTTON  -->
+    <div class="ui container center aligned">
+        <a href="#category-popup">
+            <button class="ui button popupButton" id="category-button">Category</button>
+        </a>
+        <button class="ui button off" id="reveal-blocked-button">Reveal Blocked Words</button>
     </div>
 </div>
 </body>
@@ -74,6 +212,8 @@
 <script src="js/popup.js"></script>
 <script src="js/power.js"></script>
 <script src="js/reveal.js"></script>
-<script src="js/wordsList.js"></script>
+<script src="js/whitelist.js"></script>
 <script src="js/category.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/replace.js"></script>
 </html>

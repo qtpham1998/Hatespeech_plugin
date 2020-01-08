@@ -27,6 +27,15 @@ const hBlock = {
      * Puts new tab/flag pair into the map
      * @param tabId The ID of the tab
      **/
+    resetRevealFlag: function (tabId)
+    {
+        this.revealFlag[tabId] = false;
+    },
+
+    /**
+     * Updates the tab's flag
+     * @param tabId The ID of the tab
+     **/
     setRevealFlag: function (tabId)
     {
         console.info(INFO_SET_REVEAL_FLAG, tabId, (this.revealFlag[tabId] ? 0 : 1));
@@ -53,10 +62,15 @@ const updateToolbarIcon = function (blocked)
 browser.runtime.onMessage.addListener(function (req, sender, resp)
 {
     const tabId = sender.tab !== undefined ? sender.tab.id : req.tabId;
+    let count;
     switch (req.type)
     {
         case POST_REQUEST:
             updateToolbarIcon(req.blocked);
+            if (req.newTab)
+            {
+                hBlock.resetRevealFlag(tabId);
+            }
             break;
 
         case REVEAL_FLAG_GET:
@@ -70,6 +84,12 @@ browser.runtime.onMessage.addListener(function (req, sender, resp)
 
         default:
             break;
+    }
+
+    if (count !== undefined)
+    {
+        hBlock.setData(tabId, count);
+        updateToolbarIcon(count);
     }
 });
 
@@ -87,7 +107,7 @@ browser.tabs.onActivated.addListener(function (activeInfo)
             }
             else
             {
-                updateToolbarIcon(resp.blocked || 0);
+                updateToolbarIcon(resp.blocked);
             }
         });
 });
