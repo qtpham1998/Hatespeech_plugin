@@ -11,7 +11,13 @@ const sendPowerCommand = function (command)
 {
     browser.tabs.getAllInWindow(null, function (tabs)
     {
-        tabs.forEach((tab) => browser.tabs.sendMessage(tab.id, {command: command}));
+        tabs.forEach((tab) => browser.tabs.sendMessage(tab.id, {command: command}, function (resp)
+        {
+            if (resp)
+            {
+                updateBlockedData();
+            }
+        }));
     });
 };
 

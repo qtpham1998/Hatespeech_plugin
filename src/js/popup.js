@@ -34,6 +34,7 @@ const updatePopupData = function (blocked)
         $(BLOCKED_ICON_ID).removeClass(CHECK_CLASS);
         $(BLOCKED_ICON_ID).addClass(BAN_ICON_CLASS);
     }
+    browser.browserAction.setIcon({path: (blocked ? RED_ICON_PATH : BLUE_ICON_PATH)});
 };
 
 /**

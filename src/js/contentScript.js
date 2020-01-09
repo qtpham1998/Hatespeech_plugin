@@ -105,6 +105,7 @@ browser.runtime.onMessage.addListener(function(req, _, resp)
 
         case SWITCH_ON:
             switchOn();
+            count = getRedactedCount();
             break;
         case SWITCH_OFF:
             switchOff();
