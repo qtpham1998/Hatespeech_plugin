@@ -21,7 +21,10 @@ const sendWhitelistCommand = function (command, word)
                 },
                 function (resp)
                 {
-                    updatePopupData(resp.blocked);
+                    if (resp)
+                    {
+                        updatePopupData(resp.blocked);
+                    }
                 });
         });
     });

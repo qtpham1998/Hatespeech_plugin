@@ -23,7 +23,10 @@ const sendCategoryCommand = function (command, categoryName, remove = false)
                 },
                 function (resp)
                 {
-                    updatePopupData(resp.blocked);
+                    if (resp)
+                    {
+                        updatePopupData(resp.blocked);
+                    }
                 });
         });
     });

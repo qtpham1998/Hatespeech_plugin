@@ -77,14 +77,14 @@ const flagReplaceWords = function ($elem, replaceList)
     let elemHtml = $elem.html();
     for (let [word, replacement] of Object.entries(replaceList))
     {
-        const matches = [...elemHtml.matchAll(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP))];
-
-        matches.forEach(function ([initial, _])
-        {
-            const wrapper = REPLACED_ELEMENT(word, replacement, initial);
-            const regex = new RegExp(NEGATIVE_LOOKBEHIND_REGEX(initial, DATA_ATTR_PRECEDENT), G_REG_EXP);
+        // const matches = [...elemHtml.matchAll(new RegExp(WORD_PREFIX_REGEX(word), GI_REG_EXP))];
+        //
+        // matches.forEach(function ([initial, _])
+        // {
+            const wrapper = REPLACED_ELEMENT(word, replacement, word);
+            const regex = new RegExp(NEGATIVE_LOOKBEHIND_REGEX(word, DATA_ATTR_PRECEDENT), G_REG_EXP);
             elemHtml = elemHtml.replace(regex, wrapper);
-        });
+        // });
     }
     $elem.html(elemHtml);
 };
@@ -120,6 +120,7 @@ const processAnalysisResponse = function (analysed, info)
         flagOffensiveWords($taggedElem, info.blocked, score);
     }
     $taggedElem.removeAttr(TAG_ATTR);
+    $taggedElem.removeClass(BLUR_CLASS);
 };
 
 /**
@@ -139,7 +140,7 @@ const inspectElements = function ()
     const language = getTabLanguage();
     const divElements = getDomElements();
     const wordBank = LANGUAGE_WORD_BANK(language);
-    browser.storage.sync.get([wordBank, CUSTOM_WORD_BANK, REPLACE_LIST], function (result)
+    browser.storage.sync.get([wordBank, CUSTOM_WORD_BANK, REPLACE_LIST, POWER], function (result)
     {
         try {
             let tag = 0;
@@ -169,6 +170,10 @@ const inspectElements = function ()
                         const info = {tag: tag, language: language, blocked: blockedWords};
                         sendForAnalysis(text, info);
                         $elem.attr(TAG_ATTR, tag);
+                        if (result.power)
+                        {
+                            $elem.addClass(BLUR_CLASS);
+                        }
                         tag++;
                     }
                     else

@@ -5,7 +5,7 @@
     font-weight: bold;
 }
 
-[data-tag], [data-tag] * {
+[data-tag].blur, [data-tag].blur * {
     text-shadow: 0 0 20px black;
     color: transparent !important;
 }

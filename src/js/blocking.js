@@ -163,7 +163,6 @@ const revealElementsByCategory = function (category, remove)
     {
         $elements.each((_, elem) => removeElementInspection($(elem)));
     }
-    return $elements.length;
 };
 
 /**

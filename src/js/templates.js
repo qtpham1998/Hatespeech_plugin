@@ -31,12 +31,12 @@ const LANGUAGE_WORD_BANK = (language) => `${language === ENGLISH_LANGUAGE ? 'w' 
  **/
 const WORD_PREFIX_REGEX = (sub) => `\\b${sub}(s|ing|er|able|y|ed)?\\b`;
 
-/**
- * Regex for exact word match
- * <ul>
- *     <li> {0} - The word to look for </li>
- * </ul>
- **/
+// /**
+//  * Regex for exact word match
+//  * <ul>
+//  *     <li> {0} - The word to look for </li>
+//  * </ul>
+//  **/
 // const EXACT_WORD_REGEX = (word) => `\\b${word}\\b`;
 
 /**
@@ -75,7 +75,7 @@ const IDENTIFIER_SELECTOR = (identifier) => `#${identifier}`;
  *     <li> {2} - The attribute value to look for. Can be empty </li>
  * </ul>
  **/
-const ATTRIBUTE_SELECTOR = (type, attr, value) => `${type}[${attr}` + (value === EMPTY_STR ? `]` : `~='${value}'`);
+const ATTRIBUTE_SELECTOR = (type, attr, value) => `${type}[${attr}` + (value === EMPTY_STR ? `]` : `~='${value}']`);
 
 /* ****************************************************
  *                   HTML ELEMENTS

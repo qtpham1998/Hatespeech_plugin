@@ -23,7 +23,10 @@ const sendReplaceWordCommand = function (command, word, replacement)
                 },
                 function (resp)
                 {
-                    updatePopupData(resp.blocked);
+                    if (resp)
+                    {
+                        updatePopupData(resp.blocked);
+                    }
                 });
         });
     });

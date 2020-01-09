@@ -25,7 +25,10 @@ const sendCustomWordCommand = function (command, word, category, block)
                 },
                 function (resp)
                 {
-                    updatePopupData(resp.blocked);
+                    if (resp)
+                    {
+                        updatePopupData(resp.blocked);
+                    }
                 });
         });
     });

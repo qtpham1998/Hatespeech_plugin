@@ -20,10 +20,10 @@ const sendPowerCommand = function (command)
  **/
 const switchOnPlugin = function ()
 {
+    sendPowerCommand(SWITCH_ON);
     $(HTML_TAG).removeClass(OFF_CLASS);
     $(POWER_BUTTON_ID).removeClass(OFF_CLASS);
     $(PLUGIN_WRAP_ID).show();
-    sendPowerCommand(SWITCH_ON);
     console.info(INFO_POWER_OFF);
 };
 
@@ -32,11 +32,11 @@ const switchOnPlugin = function ()
  **/
 const switchOffPlugin = function ()
 {
+    sendPowerCommand(SWITCH_OFF);
     browser.browserAction.setIcon({path: GREY_ICON_PATH});
     $(POWER_BUTTON_ID).addClass(OFF_CLASS);
     $(PLUGIN_WRAP_ID).hide();
     $(HTML_TAG).addClass(OFF_CLASS);
-    sendPowerCommand(SWITCH_OFF);
     console.info(INFO_POWER_ON);
 };
 

@@ -431,6 +431,10 @@ const REPLACED_CLASS = 'replaced';
  * Constant representing HTML 'delete' class
  **/
 const DELETE_CUSTOM_CLASS = 'deleteCustom';
+/**
+ * Constant representing HTML 'blur' class
+ **/
+const BLUR_CLASS = 'blur';
 
 /* ****************************************************
  *                      CATEGORIES
